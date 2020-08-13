@@ -1,0 +1,37 @@
+.itxia-attachment {
+  max-width: 100px;
+  max-height: 100px;
+  margin: 1em 0.4em;
+}
+.reply-text {
+  background-color: rgba(0, 0, 0, 0.03);
+  padding: 0.6em 0.6em 0.1em;
+}
+.attachment-container {
+  padding: 3px;
+  background-color: rgba(0, 0, 0, 0.02);
+  display: flex;
+  overflow: auto;
+  flex-direction: column;
+}
+
+.not-img-atech {
+  min-width: 50px;
+  min-height: 50px;
+  background-color: rgba(0, 0, 0, 0.03);
+  display: inline-block;
+  margin: 1em 0.4em;
+  padding: 6px;
+  text-align: center;
+}
+
+.not-img-icon {
+  font-size: 36px;
+}
+
+.reply-atech {
+  display: inline-block;
+}
+/*
+-------------------------------
+*/

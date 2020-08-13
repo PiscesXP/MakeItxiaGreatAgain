@@ -1,0 +1,10 @@
+.home-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 24px 8px 8px;
+}
+
+.home-footer > span {
+  font-size: 0.5rem;
+}

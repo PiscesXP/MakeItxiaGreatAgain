@@ -1,0 +1,23 @@
+#announce-list {
+  background-color: white;
+  padding: 6px;
+}
+#dash-space {
+  min-height: 20px;
+}
+
+@media (min-width: 768px) {
+  #dash-container {
+    display: flex;
+    flex-direction: row-reverse;
+  }
+  #dash-stat {
+    flex: 3;
+  }
+  #dash-space {
+    flex: 0 0 20px;
+  }
+  #dash-anno {
+    flex: 5;
+  }
+}

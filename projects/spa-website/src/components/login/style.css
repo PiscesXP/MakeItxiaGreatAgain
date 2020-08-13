@@ -1,0 +1,49 @@
+.login-form {
+  width: 90%;
+  max-width: 600px;
+  padding: 40px 40px;
+  background-color: white;
+  border-radius: 15px;
+}
+.login-form-forgot {
+  float: right;
+}
+.login-form-button {
+  width: 100%;
+}
+
+.loginPage {
+  min-width: 300px;
+  min-height: 100vh;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  background-color: rgb(240, 242, 245);
+}
+
+#loginSystemName {
+  font-size: 120%;
+  text-align: center;
+}
+
+#itxia-logo {
+  display: flex;
+  margin: 1rem auto;
+  max-width: 50%;
+}
+
+#other-login {
+  float: right;
+}
+#other-login > * {
+  display: block;
+  margin: 10px;
+}
+
+#qq-oauth-logo {
+  max-height: 1.5rem;
+}
+
+#recovery-btn {
+  float: right;
+}

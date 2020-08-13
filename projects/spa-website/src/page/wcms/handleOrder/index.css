@@ -1,0 +1,42 @@
+.order-card {
+  display: inline-block;
+  width: 100%;
+  margin: 8px 0;
+}
+
+.order-desc {
+  font-size: 1.2em;
+  background-color: rgba(0, 0, 0, 0.03);
+  padding: 0.5em;
+}
+
+.order-hr {
+  margin: 12px 0;
+}
+
+.order-btn-container > * {
+  margin: 0.4em 0.6em;
+}
+
+#sb-form-item-container > * {
+  margin: 4px 12px;
+  display: inline-block;
+}
+
+.order-card-desc {
+  padding: 0.5rem;
+  padding-bottom: 1px;
+  background-color: rgba(0, 0, 0, 0.03);
+}
+/*
+#sb-form-item-container {
+  display: flex;
+}
+#sb-form-item-container .ant-form-item > * {
+  display: inline-block;
+}
+#sb-form-item-container .ant-form-item-children {
+  display: flex;
+  margin-top: 8px;
+}
+*/

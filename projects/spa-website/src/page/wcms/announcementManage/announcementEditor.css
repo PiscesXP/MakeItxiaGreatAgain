@@ -1,0 +1,12 @@
+#announce-edit-btn-container {
+  display: flex;
+  justify-content: center;
+}
+#announce-edit-btn-container > * {
+  margin: auto 20px;
+}
+
+.announce-preview {
+  background-color: rgba(0, 0, 0, 0.03);
+  padding: 1rem;
+}
