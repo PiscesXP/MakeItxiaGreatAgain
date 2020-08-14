@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+  (async () => {
+    const token = location.hash
+      .substring(1)
+      .split("&")[0]
+      .split("=")[1];
+    location.hash = ""
+    const result = await fetch("/oauth/link/qq", {
+      body: JSON.stringify({
+        accessToken: token
+      }),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    const {code, message, payload} = await result.json()
+    if (code === 0) {
+      location.href = "https://itxia.site/houtai"
+    } else {
+      alert(`${message}, ${payload}`)
+    }
+  })()
+</script>
+</body>
+</html>
