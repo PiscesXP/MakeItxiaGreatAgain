@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Icon, List } from "antd";
-import { Attachment } from "COMPONENTS/attachment";
+import { AttachmentList } from "COMPONENTS/attachment";
 import { ReplyList } from "COMPONENTS/reply";
 import * as timeUtil from "UTIL/time";
 import { ReactMarkdown } from "UTIL/md2html";
@@ -20,7 +20,7 @@ function Announcement(props) {
     createTime,
     postBy,
     likedBy,
-    comments
+    comments,
   } = data;
 
   const [showReply, setShowReply] = useState(false);
@@ -29,8 +29,8 @@ function Announcement(props) {
 
   //是否已点赞
   const isLiked =
-    likedBy.findIndex(likedBy => {
-      return likedBy._id === userInfoContext._id;
+    likedBy.findIndex((likedBySomeone) => {
+      return likedBySomeone._id === userInfoContext._id;
     }) !== -1;
 
   async function hitLikeButton() {
@@ -63,7 +63,7 @@ function Announcement(props) {
               >
                 <Icon type="message" style={{ marginRight: 8 }} />
                 {comments.length}
-              </span>
+              </span>,
             ]
           : []
       }
@@ -76,9 +76,7 @@ function Announcement(props) {
       />
       <ReactMarkdown source={content}></ReactMarkdown>
       <br />
-      {attachments.map(value => {
-        return <Attachment key={value._id} data={value} />;
-      })}
+      <AttachmentList data={attachments} />
       <ReplyList
         visible={showReply}
         title={`公告 ${title} 的评论区`}
