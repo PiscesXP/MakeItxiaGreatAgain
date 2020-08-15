@@ -5,8 +5,8 @@ import * as timeUtil from "UTIL/time";
 import { useApi } from "HOOK";
 
 function OrderStat() {
-  const { isSuccess, payload: data } = useApi({ path: "/stat" });
-  if (!isSuccess()) {
+  const { code, payload: data } = useApi({ path: "/stat" });
+  if (code !== 0) {
     return <Loading />;
   }
   return (

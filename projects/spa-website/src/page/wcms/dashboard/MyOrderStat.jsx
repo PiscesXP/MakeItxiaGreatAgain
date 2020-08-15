@@ -7,8 +7,8 @@ import { useApi } from "HOOK";
  * 个人预约单数量统计.
  * */
 function MyOrderStat() {
-  const { isSuccess, payload } = useApi({ path: "/stat?mine" });
-  if (!isSuccess()) {
+  const { code, payload } = useApi({ path: "/stat?mine" });
+  if (code !== 0) {
     return <Loading />;
   }
   return (

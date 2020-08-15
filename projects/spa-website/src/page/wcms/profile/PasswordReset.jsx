@@ -3,26 +3,26 @@ import { Alert, Button, Col, Form, Icon, Input, Modal, Row } from "antd";
 import { useApi } from "HOOK";
 
 function PasswordResetForm({
-  form: { getFieldDecorator, validateFields, getFieldsValue, resetFields }
+  form: { getFieldDecorator, validateFields, getFieldsValue, resetFields },
 }) {
-  const { loading, send, emitter } = useApi({
+  const { loading, send } = useApi({
     path: "/member/me/password",
     method: "PUT",
-    later: true
-  });
-  emitter.onSuccess(() => {
-    Modal.success({
-      content: "密码修改成功",
-      centered: true
-    });
-    resetFields();
-  });
-  emitter.onFail(({ message }) => {
-    Modal.error({
-      title: "密码修改失败",
-      content: message,
-      centered: true
-    });
+    later: true,
+    onSuccess: () => {
+      Modal.success({
+        content: "密码修改成功",
+        centered: true,
+      });
+      resetFields();
+    },
+    onFail: ({ message }) => {
+      Modal.error({
+        title: "密码修改失败",
+        content: message,
+        centered: true,
+      });
+    },
   });
 
   function handleSubmit(e) {
@@ -32,7 +32,7 @@ function PasswordResetForm({
         return;
       }
       send({
-        newPassword: values.password
+        newPassword: values.password,
       });
     });
   }
@@ -49,9 +49,9 @@ function PasswordResetForm({
             { required: true, message: "请填写密码" },
             {
               pattern: /^\S{8,}$/,
-              message: " "
-            }
-          ]
+              message: " ",
+            },
+          ],
         })(
           <Input.Password
             prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
@@ -69,8 +69,8 @@ function PasswordResetForm({
                 callback();
               }
               callback("两次密码不一致");
-            }
-          ]
+            },
+          ],
         })(
           <Input.Password
             prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}

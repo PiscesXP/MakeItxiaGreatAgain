@@ -21,14 +21,15 @@ function AnnouncementList({ isInternal = false }) {
     path = `/custom/announcement`;
   }
 
-  const { hasData, payload, emitter, send } = useApi({ path });
-
-  emitter.onError(error => {
-    notification.error({
-      message: "获取公告失败",
-      description: error.toString(),
-      duration: 0
-    });
+  const { code, payload, send } = useApi({
+    path,
+    onError: (error) => {
+      notification.error({
+        message: "获取公告失败",
+        description: error.toString(),
+        duration: 0,
+      });
+    },
   });
 
   function handleUpdate() {
@@ -39,7 +40,7 @@ function AnnouncementList({ isInternal = false }) {
     <Card>
       <h1>公告栏</h1>
       <Divider dashed />
-      {!hasData() ? (
+      {code !== 0 ? (
         <Spin />
       ) : (
         <List
@@ -47,7 +48,7 @@ function AnnouncementList({ isInternal = false }) {
           size="default"
           split
           dataSource={payload}
-          renderItem={announceData => (
+          renderItem={(announceData) => (
             <Announcement
               id={announceData._id}
               data={announceData}

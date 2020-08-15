@@ -1,6 +1,6 @@
 import React from "react";
 import { Loading } from "COMPONENTS/loading";
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 import { routePath } from "PAGE/routePath";
 import { Modal } from "antd";
 import { useApi } from "HOOK";
@@ -21,8 +21,7 @@ function UserInfoProvider(props) {
 
   //未登录，跳转到登录页
   if (error || code !== 0) {
-    history.push(routePath.wcms.LOGIN);
-    return null;
+    return <Redirect to={routePath.wcms.LOGIN} />;
   }
 
   if (payload["requirePasswordReset"]) {
@@ -36,7 +35,7 @@ function UserInfoProvider(props) {
         history.push(routePath.SELF_INFO);
       },
       cancelText: "以后再说",
-      okCancel: true
+      okCancel: true,
     });
   }
 

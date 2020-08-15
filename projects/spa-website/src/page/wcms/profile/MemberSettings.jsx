@@ -7,28 +7,28 @@ function MemberSettingsForm(props) {
 
   const context = useMemberContext();
 
-  const { loading, send, emitter } = useApi({
+  const { loading, send } = useApi({
     path: "/member/me/profile",
     method: "PUT",
     data: null,
-    later: true
-  });
-  emitter.onSuccess(() => {
-    Modal.success({
-      content: "修改成功",
-      centered: true,
-      onOk: () => {
-        //重新加载页面，刷新context
-        window.location.reload();
-      }
-    });
-  });
-  emitter.onFail(({ message, payload }) => {
-    Modal.error({
-      title: "修改失败",
-      content: message,
-      centered: true
-    });
+    later: true,
+    onSuccess: () => {
+      Modal.success({
+        content: "修改成功",
+        centered: true,
+        onOk: () => {
+          //重新加载页面，刷新context
+          window.location.reload();
+        },
+      });
+    },
+    onFail: ({ message }) => {
+      Modal.error({
+        title: "修改失败",
+        content: message,
+        centered: true,
+      });
+    },
   });
 
   function handleSubmit(e) {
@@ -50,7 +50,7 @@ function MemberSettingsForm(props) {
       <Form.Item label="校区" hasFeedback>
         {getFieldDecorator("campus", {
           rules: [{ required: true, message: "请选择你的校区" }],
-          initialValue: context.campus
+          initialValue: context.campus,
         })(
           <Select placeholder="请选择你的校区">
             <Select.Option value={"XIANLIN"}>仙林</Select.Option>

@@ -1,14 +1,18 @@
 import React from "react";
 import { Alert, Button, Card, Col, Divider, Row } from "antd";
 import { AnnouncementList } from "COMPONENTS/announcement";
-import { useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { routePath } from "PAGE/routePath";
+import { useToggle } from "HOOK";
 
 function CustomHomePage() {
-  const history = useHistory();
+  const [gotoOrder, setGotoOrder] = useToggle(false);
 
   function handleGoToOrder() {
-    history.push(routePath.custom.ORDER);
+    setGotoOrder(true);
+  }
+  if (gotoOrder) {
+    return <Redirect push to={routePath.custom.ORDER} />;
   }
 
   const orderNotification = (

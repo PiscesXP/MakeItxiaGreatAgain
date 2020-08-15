@@ -20,7 +20,7 @@ function OauthSetting() {
   if (loading) {
     return <Loading />;
   }
-  if (!isSuccess()) {
+  if (isSuccess) {
     return (
       <Row type="flex" justify="center" align="middle" gutter={[24, 24]}>
         <Col span={16}>

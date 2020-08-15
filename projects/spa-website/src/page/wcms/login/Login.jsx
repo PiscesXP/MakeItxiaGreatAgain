@@ -1,10 +1,10 @@
 import React from "react";
 import { Button, Checkbox, Divider, Form, Icon, Input, Modal } from "antd";
 import { config } from "CONFIG";
-import { useApi, useLocalStorage, useTitleWCMS } from "HOOK";
+import { useApi, useTitleWCMS, useLocalStorage } from "HOOK";
 import { AutoLogin } from "./AutoLogin";
 import { routePath } from "PAGE/routePath";
-import { useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import "./style.css";
 
 function LoginForm(props) {
@@ -16,28 +16,25 @@ function LoginForm(props) {
   const [
     rememberedAccount,
     setRememberedAccount,
-    removeRememberedAccount
+    removeRememberedAccount,
   ] = useLocalStorage("rememberedAccount");
 
-  const { loading, send, emitter } = useApi({
+  const { loading, isSuccess, send } = useApi({
     path: "/login",
     method: "POST",
-    later: true
+    later: true,
+    onFail: ({ message }) => {
+      Modal.error({
+        title: "登录失败",
+        content: message,
+        centered: true,
+      });
+    },
   });
 
-  const history = useHistory();
-
-  emitter.onSuccess(({ code, message, payload }) => {
-    history.push(routePath.wcms.DASHBOARD);
-  });
-
-  emitter.onFail(({ message }) => {
-    Modal.error({
-      title: "登录失败",
-      content: message,
-      centered: true
-    });
-  });
+  if (isSuccess) {
+    return <Redirect push to={routePath.wcms.DASHBOARD} />;
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -70,7 +67,7 @@ function LoginForm(props) {
         <Form.Item>
           {getFieldDecorator("loginName", {
             initialValue: rememberedAccount ? rememberedAccount : "",
-            rules: [{ required: true, message: "请输入登录账号" }]
+            rules: [{ required: true, message: "请输入登录账号" }],
           })(
             <Input
               prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
@@ -80,7 +77,7 @@ function LoginForm(props) {
         </Form.Item>
         <Form.Item>
           {getFieldDecorator("password", {
-            rules: [{ required: true, message: "请输入密码" }]
+            rules: [{ required: true, message: "请输入密码" }],
           })(
             <Input.Password
               prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
@@ -91,7 +88,7 @@ function LoginForm(props) {
         <Form.Item>
           {getFieldDecorator("rememberAccount", {
             valuePropName: "checked",
-            initialValue: isRememberAccount === true
+            initialValue: isRememberAccount === true,
           })(<Checkbox>记住账号</Checkbox>)}
           <Button
             type="primary"

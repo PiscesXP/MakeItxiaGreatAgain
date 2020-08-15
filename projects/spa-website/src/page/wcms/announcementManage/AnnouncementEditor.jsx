@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import "./announcementEditor.css";
 import {
   AttachmentUpload,
-  attachmentUploadFormParser
+  attachmentUploadFormParser,
 } from "COMPONENTS/attachment";
 import { useApi, useLocalStorage, useThrottle } from "HOOK";
 
@@ -11,38 +11,30 @@ import { useApi, useLocalStorage, useThrottle } from "HOOK";
  * 公告编辑器.
  */
 function EditorForm({
-  form: { validateFields, resetFields, getFieldDecorator, setFieldsValue }
+  form: { validateFields, resetFields, getFieldDecorator, setFieldsValue },
 }) {
   const [draft, setDraft, removeDraft] = useLocalStorage("announceEditDraft");
 
-  const { loading, send, emitter } = useApi({
+  const { loading, send } = useApi({
     path: "/announcement",
     method: "POST",
-    later: true
-  });
-  emitter
-    .onSuccess(() => {
+    later: true,
+    onSuccess: () => {
       Modal.success({
         title: "发布成功",
-        centered: true
+        centered: true,
       });
       resetFields(); //发布成功后清空表单，防止重复提交
       removeDraft();
-    })
-    .onFail(({ message }) => {
+    },
+    onFail: ({ message }) => {
       Modal.error({
         title: "发布失败",
         content: message,
-        centered: true
+        centered: true,
       });
-    })
-    .onError(e => {
-      Modal.error({
-        title: "发布失败",
-        content: e.toString(),
-        centered: true
-      });
-    });
+    },
+  });
 
   /**
    * 验证表单，通过后发送请求.
@@ -80,15 +72,16 @@ function EditorForm({
         cancelText: "不用了",
         onOk: () => {
           setFieldsValue(draft);
-        }
+        },
       });
     }
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, []);
   //-----------------------------------------------------------
 
   const formItemLayout = {
     labelCol: { span: 6 },
-    wrapperCol: { span: 12 }
+    wrapperCol: { span: 12 },
   };
   return (
     <Form {...formItemLayout} onSubmit={handleSubmit} onChange={saveDraft}>
@@ -97,22 +90,22 @@ function EditorForm({
       </div>
       <Form.Item label="标题">
         {getFieldDecorator("title", {
-          rules: [{ required: true, message: "请输入标题" }]
+          rules: [{ required: true, message: "请输入标题" }],
         })(<Input />)}
       </Form.Item>
       <Form.Item label="公告类型">
         {getFieldDecorator("type", {
-          rules: [{ required: true, message: "请选择公告类型" }]
+          rules: [{ required: true, message: "请选择公告类型" }],
         })(
           <Radio.Group>
-            <Radio value="INTERNAL">内部公告</Radio>
-            <Radio value="EXTERNAL">外部公告</Radio>
+            <Radio value="INTERNAL">后台系统公告</Radio>
+            <Radio value="EXTERNAL">预约页面公告</Radio>
           </Radio.Group>
         )}
       </Form.Item>
       <Form.Item label="公告内容">
         {getFieldDecorator("content", {
-          rules: [{ required: true, message: "请填写公告内容" }]
+          rules: [{ required: true, message: "请填写公告内容" }],
         })(
           <Input.TextArea
             autoSize={{ minRows: 6 }}
