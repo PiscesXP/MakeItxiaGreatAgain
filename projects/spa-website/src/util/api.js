@@ -21,12 +21,14 @@ function buildUrl(path, query = null) {
  * @param query {string|*}
  * @param method {"GET"|"POST"|"PUT"}
  * @param requestBody {*}
+ * @param signal {AbortSignal}
  * */
 async function sendApiRequest({
   path,
   query = null,
   method = "GET",
-  requestBody = null
+  requestBody = null,
+  signal = null,
 }) {
   let body;
   if (method !== "GET" && requestBody) {
@@ -38,10 +40,11 @@ async function sendApiRequest({
       body,
       credentials: "include",
       headers: {
-        "content-type": "application/json"
+        "content-type": "application/json",
       },
       method,
-      mode: "cors"
+      mode: "cors",
+      signal,
     });
   } catch (e) {
     //TODO 改写error message

@@ -1,15 +1,35 @@
-import { useEffect, useMemo, useReducer, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer } from "react";
 import { sendApiRequest } from "UTIL/api";
-import { EventEmitter } from "UTIL/emitter";
 
 /**
  * 发起API请求的hook.
- * @param {string} path url path
+ * @param {string} path 请求的url path
  * @param query {string|*} query string object
  * @param method {"GET"|"POST"|"PUT"} HTTP method
  * @param data {*} request body data
- * @param later {boolean} 是否稍后手动发送请求
+ * @param later {boolean} 是否稍后手动发送请求(不立即发送)
  * @param cleanOnRerun {boolean}
+ * @param onLoad {function?} 加载时的回调
+ * @param onSuccess {function?} 请求成功时code===0的回调
+ * @param onFail {function?} 请求成功时code!==0的回调
+ * @param onError {function?} 请求失败的回调，网络错误等等
+ *
+ *
+ *
+ * @typedef {Object} useApiResult useApi调用的返回值
+ * @property {number} seq 请求顺序ID
+ * @property {boolean} loading 是否正在加载
+ * @property {number|null} code 请求返回值code
+ * @property {string|null} message 请求返回值message
+ * @property {Object|null} payload 请求返回值payload
+ * @property {Error|null} error 请求出错时的error
+ * @property {function} send 手动发送请求的函数
+ * @property {boolean} isSuccess 是否请求成功且code===0 (不在loading中)
+ * @property {boolean} isFail 是否请求成功且code!==0 (不在loading中)
+ * @property {boolean} isError 是否请求失败产生error (不在loading中)
+ * @property {boolean} isUnsuccessful isFail||isError (不在loading中)
+ *
+ * @return {useApiResult}
  * */
 function useApi({
   path,
@@ -17,180 +37,184 @@ function useApi({
   method = "GET",
   data = null,
   later = false,
-  cleanOnRerun = false
+  cleanOnRerun = false,
+  onLoad = () => null,
+  onSuccess = () => null,
+  onFail = () => null,
+  onError = () => null,
 }) {
-  const [loading, setLoading] = useState(!later);
-  const [code, setCode] = useState(null);
-  const [message, setMessage] = useState(null);
-  const [payload, setPayload] = useState(null);
-  const [error, setError] = useState(null);
-  const [seq, nextSeq] = useReducer(previousSeq => previousSeq + 1, 0);
+  const handleLoad = useCallback(onLoad, []);
+  const handleSuccess = useCallback(onSuccess, []);
+  const handleFail = useCallback(onFail, []);
+  const handleError = useCallback(onError, []);
 
-  const emitter = useMemo(() => new ApiEmitter(), []);
+  //初始化reducer state
+  const init = useCallback(() => {
+    return {
+      seq: 0,
+      loading: !later,
+      code: null,
+      message: null,
+      payload: null,
+      error: null,
+    };
+  }, [later]);
+
+  //reducer
+  const stateReducer = useCallback(
+    (state, action) => {
+      //判断是否是上一次的请求，不是则跳过
+      const isPreviousRequest = action.currentSeq + 1 === state.seq;
+
+      let newState;
+      switch (action.type) {
+        case "load":
+          handleLoad();
+          newState = {
+            seq: state.seq + 1,
+            loading: true,
+          };
+          break;
+        case "reset":
+          //清除已有数据
+          newState = {
+            code: null,
+            message: null,
+            payload: null,
+            error: null,
+          };
+          break;
+        case "success":
+          if (!isPreviousRequest) {
+            console.log("skipping request result.");
+            return state;
+          }
+          //请求成功，不管后端返回值是否为0
+          if (action.data.code === 0) {
+            handleSuccess(action.data);
+          } else {
+            handleFail(action.data);
+          }
+          newState = {
+            loading: false,
+            code: action.data.code,
+            message: action.data.message,
+            payload: action.data.payload,
+            error: null,
+          };
+          break;
+        case "error":
+          if (!isPreviousRequest) {
+            console.log("skipping request result.");
+            return state;
+          }
+          //网络错误等等...
+          handleError(action.error);
+          newState = {
+            loading: false,
+            code: null,
+            message: null,
+            payload: null,
+            error: action.error,
+          };
+          break;
+        case "destroy":
+          newState = {
+            seq: state.seq + 1,
+          };
+          break;
+        default:
+          console.log("Unrecognized action received");
+          return state;
+      }
+      return Object.assign({}, state, newState);
+    },
+    [handleLoad, handleSuccess, handleFail, handleError]
+  );
+
+  //状态
+  const [state, dispatch] = useReducer(stateReducer, {}, init);
+
+  //用于组件卸载时终止请求
+  const abortController = useMemo(() => new AbortController(), []);
 
   /**
-   * 发送请求.
+   * @function send
+   * @param requestBody {Object?}
+   * @param queryObject {Object?}
    * */
-  async function run({ requestBody = data, queryObject = query }) {
-    nextSeq();
-    const currentSeq = seq;
-    setLoading(true);
-    emitter.emitLoading();
-    try {
-      const result = await sendApiRequest({
-        path,
-        method,
-        query: queryObject,
-        requestBody
-      });
-      if (currentSeq === seq) {
-        setCode(result.code);
-        setMessage(result.message);
-        setPayload(result.payload);
-        if (result.code === 0) {
-          emitter.emitSuccess({
-            code: result.code,
-            message: result.message,
-            payload: result.payload
-          });
-        } else {
-          emitter.emitFail({
-            code: result.code,
-            message: result.message,
-            payload: result.payload
-          });
-          emitter.emitFailOrError();
-        }
+  const send = useCallback(
+    async (requestBody = data, queryObject = query) => {
+      const currentSeq = state.seq;
+      if (cleanOnRerun) {
+        dispatch({ type: "reset" });
       }
-    } catch (e) {
-      if (currentSeq === seq) {
-        setError(e);
-        emitter.emitError(e);
-        emitter.emitFailOrError();
+      dispatch({ type: "load", currentSeq });
+      try {
+        const result = await sendApiRequest({
+          path,
+          method,
+          query: queryObject,
+          requestBody,
+          signal: abortController.signal,
+        });
+        const resultData = {
+          code: result.code,
+          message: result.message,
+          payload: result.payload,
+        };
+        dispatch({ type: "success", currentSeq, data: resultData });
+      } catch (e) {
+        dispatch({ type: "error", currentSeq, error: e });
       }
-    } finally {
-      if (currentSeq === seq) {
-        setLoading(false);
-        emitter.emitRequestDone();
-      }
-    }
-  }
-
-  /**
-   * 手动发送请求方法.
-   * @param requestBody {*?}
-   * @param queryObject {*|string?}
-   * */
-  function send(requestBody = data, queryObject = query) {
-    if (cleanOnRerun) {
-      setCode(null);
-      setMessage(null);
-      setPayload(null);
-      setError(null);
-    }
-    run({ requestBody, queryObject });
-  }
-
-  function clean() {
-    nextSeq();
-  }
+    },
+    [
+      state.seq,
+      dispatch,
+      abortController.signal,
+      cleanOnRerun,
+      data,
+      query,
+      path,
+      method,
+    ]
+  );
 
   useEffect(() => {
+    //初始化后自动开始请求
     if (!later) {
       send();
     }
     return () => {
-      clean();
+      dispatch({ type: "destroy" });
+      abortController.abort();
     };
-  }, []);
+  }, [dispatch, abortController, later, send]);
 
-  function isSent() {
-    return seq !== 0;
-  }
+  const isSuccess = useMemo(() => {
+    return !state.loading && state.code === 0;
+  }, [state.loading, state.code]);
 
-  /**
-   * 判断是否在重新加载.
-   * 此时loading但payload中有数据.
-   * */
-  function hasData() {
-    return code === 0 && payload !== null && payload !== undefined;
-  }
+  const isFail = useMemo(() => {
+    return !state.loading && state.code !== 0;
+  }, [state.loading, state.code]);
 
-  /**
-   * 检查请求是否完成并且返回值code为0.
-   * */
-  function isSuccess() {
-    return isSent() && !loading && code === 0;
-  }
+  const isError = useMemo(() => {
+    return !state.loading && state.error !== null && state.error !== undefined;
+  }, [state.loading, state.error]);
+
+  const isUnsuccessful = useMemo(() => {
+    return isFail || isError;
+  }, [isFail, isError]);
 
   return {
-    loading,
-    code,
-    message,
-    payload,
-    error,
-    send,
+    ...state,
     isSuccess,
-    isSent,
-    hasData,
-    emitter
+    isFail,
+    isError,
+    isUnsuccessful,
+    send,
   };
-}
-
-class ApiEmitter extends EventEmitter {
-  emitLoading(...args) {
-    this.emit("loading", ...args);
-    return this;
-  }
-  onLoading(callback) {
-    this.listen("loading", callback);
-    return this;
-  }
-
-  emitSuccess(...args) {
-    this.emit("success", ...args);
-    return this;
-  }
-  onSuccess(callback) {
-    this.listen("success", callback);
-    return this;
-  }
-
-  emitFail(...args) {
-    this.emit("fail", ...args);
-    return this;
-  }
-  onFail(callback) {
-    this.listen("fail", callback);
-    return this;
-  }
-
-  emitError(...args) {
-    this.emit("error", ...args);
-    return this;
-  }
-  onError(callback) {
-    this.listen("error", callback);
-    return this;
-  }
-
-  emitFailOrError(...args) {
-    this.emit("fail or error", ...args);
-    return this;
-  }
-  onFailOrError(callback) {
-    this.listen("fail or error", callback);
-    return this;
-  }
-
-  emitRequestDone(...args) {
-    this.emit("done", ...args);
-    return this;
-  }
-  onRequestDone(callback) {
-    this.listen("done", callback);
-    return this;
-  }
 }
 
 export { useApi };
