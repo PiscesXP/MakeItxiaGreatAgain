@@ -7,36 +7,35 @@ const { host, protocol } = config.network.api;
 
 class Attachment extends React.Component {
   state = {
-    showModal: false
+    showModal: false,
   };
 
   onShowModal = () => {
     this.setState({
-      showModal: true
+      showModal: true,
     });
   };
 
   onHideModal = () => {
     this.setState({
-      showModal: false
+      showModal: false,
     });
   };
 
   render() {
-    const { _id, md5, mimeType, fileName, size } = this.props.data;
+    const { _id, mimeType, fileName, size } = this.props.data;
     const { showModal } = this.state;
     const isImage = /image/.test(mimeType);
     const url = `${protocol}://${host}/upload/${_id}`;
     const thumbnailUrl = `${url}?thumbnail`;
     const downloadUrl = `${url}?download=1`;
     return (
-      <div className="reply-atech">
+      <div className="reply-atech" onClick={this.onShowModal}>
         {isImage ? (
           <img
             src={thumbnailUrl}
             alt="无法显示图片"
             className="itxia-attachment"
-            onClick={this.onShowModal}
           />
         ) : (
           <div className="not-img-atech" onClick={this.onShowModal}>

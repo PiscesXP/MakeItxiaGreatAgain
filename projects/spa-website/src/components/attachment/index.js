@@ -1,7 +1,13 @@
 import { Attachment } from "./Attachment";
 import {
   AttachmentUpload,
-  attachmentUploadFormParser
+  attachmentUploadFormParser,
 } from "./AttachmentUpload";
+import { AttachmentList } from "COMPONENTS/attachment/AttachmentList";
 
-export { Attachment, AttachmentUpload, attachmentUploadFormParser };
+export {
+  Attachment,
+  AttachmentList,
+  AttachmentUpload,
+  attachmentUploadFormParser,
+};
