@@ -13,6 +13,7 @@ import { sendApiRequest } from "UTIL/api";
  * @param onSuccess {function?} 请求成功时code===0的回调
  * @param onFail {function?} 请求成功时code!==0的回调
  * @param onError {function?} 请求失败的回调，网络错误等等
+ * @param onUnsuccessful {function?} 请求不成功(code!==0)时的回调
  *
  *
  *
@@ -42,11 +43,13 @@ function useApi({
   onSuccess = () => null,
   onFail = () => null,
   onError = () => null,
+  onUnsuccessful = () => null,
 }) {
   const handleLoad = useCallback(onLoad, []);
   const handleSuccess = useCallback(onSuccess, []);
   const handleFail = useCallback(onFail, []);
   const handleError = useCallback(onError, []);
+  const handleUnsuccessful = useCallback(onUnsuccessful, []);
 
   //初始化reducer state
   const init = useCallback(() => {
@@ -94,6 +97,7 @@ function useApi({
             handleSuccess(action.data);
           } else {
             handleFail(action.data);
+            handleUnsuccessful(action.data);
           }
           newState = {
             loading: false,
@@ -110,6 +114,7 @@ function useApi({
           }
           //网络错误等等...
           handleError(action.error);
+          handleUnsuccessful(action.error);
           newState = {
             loading: false,
             code: null,
@@ -129,7 +134,7 @@ function useApi({
       }
       return Object.assign({}, state, newState);
     },
-    [handleLoad, handleSuccess, handleFail, handleError]
+    [handleLoad, handleSuccess, handleFail, handleError, handleUnsuccessful]
   );
 
   //状态
