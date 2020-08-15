@@ -9,12 +9,38 @@ function CenterMe(props) {
   );
 }
 
-function CenterMeResponsive(props) {
+/**
+ * @param small {boolean}
+ * @param children
+ * */
+function CenterMeResponsive({ small, children }) {
+  const normalLayout = {
+    xs: 24,
+    sm: 24,
+    md: 22,
+    lg: 20,
+    xl: 17,
+    xxl: 14,
+  };
+
+  const smallLayout = {
+    xs: 24,
+    sm: 22,
+    md: 19,
+    lg: 16,
+    xl: 14,
+    xxl: 12,
+  };
+
+  let colLayout = normalLayout;
+
+  if (small) {
+    colLayout = smallLayout;
+  }
+
   return (
     <Row gutter={[8, 0]} type="flex" justify="center" align="top">
-      <Col xs={24} sm={24} md={22} lg={20} xl={17} xxl={14}>
-        {props.children}
-      </Col>
+      <Col {...colLayout}>{children}</Col>
     </Row>
   );
 }
