@@ -10,23 +10,23 @@ function AttachmentUpload({
   label,
   getFieldDecorator,
   id = "attachments",
-  listType = "picture-card"
+  listType = "picture-card",
 }) {
   return (
     <Form.Item label={label}>
       {getFieldDecorator(id, {
         valuePropName: "fileList",
-        getValueFromEvent: e => {
+        getValueFromEvent: (e) => {
           if (Array.isArray(e)) {
             return e;
           }
           return e && e.fileList;
-        }
+        },
       })(
         <Upload
           action={actionUrl}
           headers={{
-            "X-Requested-With": null
+            "X-Requested-With": null,
           }}
           withCredentials
           listType={listType}
@@ -45,13 +45,12 @@ function attachmentUploadFormParser(uploadFormValue) {
   if (Array.isArray(uploadFormValue)) {
     return uploadFormValue
       .filter(
-        file =>
+        (file) =>
           file.percent === 100 &&
           file.status === "done" &&
           file.response.code === 0
       )
-      .map(file => file.response.payload._id)
-      .join(",");
+      .map((file) => file.response.payload._id);
   }
   return [];
 }
