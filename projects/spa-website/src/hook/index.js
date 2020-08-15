@@ -3,6 +3,7 @@ import { useMemberContext } from "./useMemberContext";
 import { useLocalStorage } from "./useLocalStorage";
 import { useTitle, useTitleCustom, useTitleWCMS } from "./useTitle";
 import { useThrottle } from "./useThrottle";
+import { useToggle } from "HOOK/useToggle";
 
 export {
   useApi,
@@ -11,5 +12,6 @@ export {
   useTitle,
   useTitleCustom,
   useTitleWCMS,
-  useThrottle
+  useThrottle,
+  useToggle,
 };
