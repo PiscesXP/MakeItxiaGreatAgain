@@ -64,78 +64,79 @@ function useApi({
   }, [later]);
 
   //reducer
-  const stateReducer = useCallback(
-    (state, action) => {
-      //判断是否是上一次的请求，不是则跳过
-      const isPreviousRequest = action.currentSeq + 1 === state.seq;
+  const stateReducer = useCallback((state, action) => {
+    //判断是否是上一次的请求，不是则跳过
+    const isPreviousRequest = action.currentSeq + 1 === state.seq;
 
-      let newState;
-      switch (action.type) {
-        case "load":
-          handleLoad();
-          newState = {
-            seq: state.seq + 1,
-            loading: true,
-          };
-          break;
-        case "reset":
-          //清除已有数据
-          newState = {
-            code: null,
-            message: null,
-            payload: null,
-            error: null,
-          };
-          break;
-        case "success":
-          if (!isPreviousRequest) {
-            console.log("skipping request result.");
-            return state;
-          }
-          //请求成功，不管后端返回值是否为0
+    let newState;
+    switch (action.type) {
+      case "load":
+        handleLoad();
+        newState = {
+          seq: state.seq + 1,
+          loading: true,
+        };
+        break;
+      case "reset":
+        //清除已有数据
+        newState = {
+          code: null,
+          message: null,
+          payload: null,
+          error: null,
+        };
+        break;
+      case "success":
+        if (!isPreviousRequest) {
+          console.log("skipping request result.");
+          return state;
+        }
+        //请求成功，不管后端返回值是否为0
+        setTimeout(() => {
           if (action.data.code === 0) {
             handleSuccess(action.data);
           } else {
             handleFail(action.data);
             handleUnsuccessful(action.data);
           }
-          newState = {
-            loading: false,
-            code: action.data.code,
-            message: action.data.message,
-            payload: action.data.payload,
-            error: null,
-          };
-          break;
-        case "error":
-          if (!isPreviousRequest) {
-            console.log("skipping request result.");
-            return state;
-          }
-          //网络错误等等...
+        }, 0);
+        newState = {
+          loading: false,
+          code: action.data.code,
+          message: action.data.message,
+          payload: action.data.payload,
+          error: null,
+        };
+        break;
+      case "error":
+        if (!isPreviousRequest) {
+          console.log("skipping request result.");
+          return state;
+        }
+        //网络错误等等...
+        setTimeout(() => {
           handleError(action.error);
           handleUnsuccessful(action.error);
-          newState = {
-            loading: false,
-            code: null,
-            message: null,
-            payload: null,
-            error: action.error,
-          };
-          break;
-        case "destroy":
-          newState = {
-            seq: state.seq + 1,
-          };
-          break;
-        default:
-          console.log("Unrecognized action received");
-          return state;
-      }
-      return Object.assign({}, state, newState);
-    },
-    [handleLoad, handleSuccess, handleFail, handleError, handleUnsuccessful]
-  );
+        }, 0);
+        newState = {
+          loading: false,
+          code: null,
+          message: null,
+          payload: null,
+          error: action.error,
+        };
+        break;
+      case "destroy":
+        newState = {
+          seq: state.seq + 1,
+        };
+        break;
+      default:
+        console.log("Unrecognized action received");
+        return state;
+    }
+    return Object.assign({}, state, newState);
+  }, []);
 
   //状态
   const [state, dispatch] = useReducer(stateReducer, {}, init);
@@ -173,16 +174,7 @@ function useApi({
         dispatch({ type: "error", currentSeq, error: e });
       }
     },
-    [
-      state.seq,
-      dispatch,
-      abortController.signal,
-      cleanOnRerun,
-      data,
-      query,
-      path,
-      method,
-    ]
+    [state.seq]
   );
 
   useEffect(() => {
