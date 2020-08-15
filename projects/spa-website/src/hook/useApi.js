@@ -189,7 +189,7 @@ function useApi({
       dispatch({ type: "destroy" });
       abortController.abort();
     };
-  }, [dispatch, abortController, later, send]);
+  }, [dispatch, abortController, later]);
 
   const isSuccess = useMemo(() => {
     return !state.loading && state.code === 0;
