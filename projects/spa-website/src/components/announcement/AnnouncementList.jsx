@@ -23,6 +23,12 @@ function AnnouncementList({ isInternal = false }) {
 
   const { code, payload, send } = useApi({
     path,
+    formatResult: (data) => {
+      //最近的公告排在前面
+      return data.sort((foo, bar) => {
+        return Date.parse(bar.createTime) - Date.parse(foo.createTime);
+      });
+    },
     onError: (error) => {
       notification.error({
         message: "获取公告失败",
