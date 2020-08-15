@@ -30,12 +30,13 @@ class Attachment extends React.Component {
     const thumbnailUrl = `${url}?thumbnail`;
     const downloadUrl = `${url}?download=1`;
     return (
-      <div className="reply-atech" onClick={this.onShowModal}>
+      <div className="reply-atech">
         {isImage ? (
           <img
             src={thumbnailUrl}
             alt="无法显示图片"
             className="itxia-attachment"
+            onClick={this.onShowModal}
           />
         ) : (
           <div className="not-img-atech" onClick={this.onShowModal}>
