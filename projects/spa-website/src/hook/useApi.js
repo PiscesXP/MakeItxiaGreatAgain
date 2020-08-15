@@ -9,6 +9,7 @@ import { sendApiRequest } from "UTIL/api";
  * @param data {*} request body data
  * @param later {boolean} 是否稍后手动发送请求(不立即发送)
  * @param cleanOnRerun {boolean}
+ * @param formatResult {function} 格式化payload，请求成功时调用
  * @param onLoad {function?} 加载时的回调
  * @param onSuccess {function?} 请求成功时code===0的回调
  * @param onFail {function?} 请求成功时code!==0的回调
@@ -39,12 +40,15 @@ function useApi({
   data = null,
   later = false,
   cleanOnRerun = false,
+  formatResult = (result) => result,
   onLoad = () => null,
   onSuccess = () => null,
   onFail = () => null,
   onError = () => null,
   onUnsuccessful = () => null,
 }) {
+  const formatPayload = useCallback(formatResult, []);
+
   const handleLoad = useCallback(onLoad, []);
   const handleSuccess = useCallback(onSuccess, []);
   const handleFail = useCallback(onFail, []);
@@ -165,12 +169,12 @@ function useApi({
           requestBody,
           signal: abortController.signal,
         });
-        const resultData = {
+        const formattedResult = {
           code: result.code,
           message: result.message,
-          payload: result.payload,
+          payload: formatPayload(result.payload),
         };
-        dispatch({ type: "success", currentSeq, data: resultData });
+        dispatch({ type: "success", currentSeq, data: formattedResult });
       } catch (e) {
         dispatch({ type: "error", currentSeq, error: e });
       }
