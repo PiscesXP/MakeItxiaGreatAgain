@@ -136,6 +136,7 @@ function useApi({
         return state;
     }
     return Object.assign({}, state, newState);
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, []);
 
   //状态
@@ -174,6 +175,7 @@ function useApi({
         dispatch({ type: "error", currentSeq, error: e });
       }
     },
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
     [state.seq]
   );
 
@@ -186,6 +188,7 @@ function useApi({
       dispatch({ type: "destroy" });
       abortController.abort();
     };
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [dispatch, abortController, later]);
 
   const isSuccess = useMemo(() => {
