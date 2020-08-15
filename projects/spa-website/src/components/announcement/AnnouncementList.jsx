@@ -43,9 +43,7 @@ function AnnouncementList({ isInternal = false }) {
   }
 
   return (
-    <Card>
-      <h1>公告栏</h1>
-      <Divider dashed />
+    <Card title="公告栏">
       {code !== 0 ? (
         <Spin />
       ) : (

@@ -1,9 +1,9 @@
 import React from "react";
-import { Alert, Button, Card, Col, Divider, Row } from "antd";
-import { AnnouncementList } from "COMPONENTS/announcement";
+import { Alert, Button, Card, Col, Row } from "antd";
 import { Redirect } from "react-router-dom";
 import { routePath } from "PAGE/routePath";
 import { useToggle } from "HOOK";
+import { CenterMeResponsive } from "COMPONENTS/layout";
 
 function CustomHomePage() {
   const [gotoOrder, setGotoOrder] = useToggle(false);
@@ -42,28 +42,26 @@ function CustomHomePage() {
   );
 
   return (
-    <Card>
-      <Card title="预约维修">
-        <Row gutter={[8, 24]} type="flex" justify="center" align="top">
-          <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
-            <img
-              src="/img/itxia-logo.jpg"
-              alt="logo"
-              style={{ display: "block" }}
-            />
-          </Col>
-          <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
-            <Button type="primary" onClick={handleGoToOrder}>
-              发起预约
-            </Button>
-          </Col>
-          <Col span={24}>
+    <Card title="预约维修">
+      <Row gutter={[8, 24]} type="flex" justify="center" align="top">
+        <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
+          <img
+            src="/img/itxia-logo.jpg"
+            alt="logo"
+            style={{ display: "block" }}
+          />
+        </Col>
+        <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
+          <Button type="primary" onClick={handleGoToOrder}>
+            发起预约
+          </Button>
+        </Col>
+        <Col span={24}>
+          <CenterMeResponsive>
             <Alert type="info" message={orderNotification} />
-          </Col>
-        </Row>
-      </Card>
-      <Divider dashed />
-      <AnnouncementList isInternal={false} />
+          </CenterMeResponsive>
+        </Col>
+      </Row>
     </Card>
   );
 }

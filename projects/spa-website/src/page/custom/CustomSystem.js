@@ -1,11 +1,13 @@
 import React from "react";
 import { Link, Redirect, Route, Switch, useLocation } from "react-router-dom";
 import { routePath } from "../routePath";
-import { BackTop, Col, Icon, Layout, Menu, Row } from "antd";
+import { BackTop, Card, Divider, Icon, Layout, Menu } from "antd";
 import { Footer as MyFooter } from "COMPONENTS/footer";
 import { CustomHomePage } from "./home";
 import { RequestOrder } from "./requestOrder";
 import { NotFound } from "COMPONENTS/notFound";
+import { CenterMeResponsive } from "COMPONENTS/layout";
+import { AnnouncementList } from "COMPONENTS/announcement";
 
 const { Header, Content, Footer } = Layout;
 
@@ -38,11 +40,13 @@ function CustomSystem() {
         </div>
       </Header>
       <Content id="home-content">
-        <Row gutter={[8, 0]} type="flex" justify="center" align="top">
-          <Col xs={24} sm={24} md={24} lg={16} xl={12}>
+        <CenterMeResponsive small>
+          <Card>
             <CustomRouter />
-          </Col>
-        </Row>
+            <Divider dashed />
+            <AnnouncementList isInternal={false} />
+          </Card>
+        </CenterMeResponsive>
         <BackTop />
       </Content>
       <Footer>
