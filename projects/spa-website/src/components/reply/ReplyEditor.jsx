@@ -5,7 +5,7 @@ import {
   AttachmentUpload,
   attachmentUploadFormParser,
 } from "COMPONENTS/attachment";
-import { CenterMe, CenterMeFlex } from "COMPONENTS/layout";
+import { CenterMeFlex } from "COMPONENTS/layout";
 
 const { TextArea } = Input;
 
