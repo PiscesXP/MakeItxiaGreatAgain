@@ -1,49 +1,11 @@
 import React from "react";
-import { Button, Card, Col, Divider, Icon, Popconfirm, Row } from "antd";
-import * as timeUtil from "UTIL/time";
-import { Attachment } from "COMPONENTS/attachment";
+import { Button, Descriptions, Popconfirm } from "antd";
+import { AttachmentList } from "COMPONENTS/attachment";
 import { ReactMarkdown } from "UTIL/md2html";
+import { parseEnumValue } from "UTIL/enumParser";
+import { utcDateToText } from "UTIL/time";
 
-const getStatusIcon = status => {
-  switch (status) {
-    case "等待处理":
-      return (
-        <Icon
-          type="calendar"
-          theme="twoTone"
-          twoToneColor="green"
-          style={{ fontSize: "1.5em" }}
-        />
-      );
-    case "正在处理":
-      return (
-        <Icon
-          type="clock-circle"
-          theme="twoTone"
-          twoToneColor="#66ccff"
-          style={{ fontSize: "1.5em" }}
-        />
-      );
-    case "已完成":
-      return (
-        <Icon
-          type="check-circle"
-          theme="twoTone"
-          style={{ fontSize: "1.5em" }}
-        />
-      );
-    case "已取消":
-      return (
-        <Icon
-          type="close-circle"
-          theme="twoTone"
-          twoToneColor="red"
-          style={{ fontSize: "1.5em" }}
-        />
-      );
-    default:
-  }
-};
+const { Item } = Descriptions;
 
 function OrderInfoCard(props) {
   const { data } = props;
@@ -59,92 +21,58 @@ function OrderInfoCard(props) {
     warranty,
     description,
     attachments,
-    status
+    status,
   } = data;
 
   const { onCancel, onBackHome } = props;
 
   return (
-    <Card className="order-card">
-      <span style={{ fontSize: "1.3em" }}>
-        {getStatusIcon(status)}
-        {"   "}
-        <span style={{ margin: "0 0 5px 0" }}>{status}</span>
-      </span>
-      <br />
-      <Divider dashed className="order-hr" />
-      <p>
-        <strong>姓名: </strong>
-        {name}
-      </p>
-      <p>
-        <strong>校区: </strong>
-        {campus}
-      </p>
-      <p>
-        <strong>电话: </strong>
-        {phone}
-      </p>
-      <p>
-        <strong>QQ: </strong>
-        {qq}
-      </p>
-      <p>
-        <strong>邮箱: </strong>
-        {email}
-      </p>
-      <p>
-        <strong>电脑型号: </strong>
-        {brandModel}
-      </p>
-      <p>
-        <strong>操作系统: </strong>
-        {os}
-      </p>
-      <p>
-        <strong>保修状况: </strong>
-        {warranty}
-      </p>
-      <p>
-        <strong>预约时间: </strong>
-        {timeUtil.utcDateToText(createTime)}
-      </p>
-      <p>
-        <strong>问题描述: </strong>
-      </p>
-      <div className="order-card-desc">
-        <ReactMarkdown source={description} />
-      </div>
-      <br />
-      {attachments.length === 0 ? null : (
-        <div>
-          <p>
-            <strong>附件:</strong>
-          </p>
-          {attachments.map(value => {
-            return <Attachment key={value._id} data={value} />;
-          })}
+    <Descriptions bordered column={1}>
+      <Item label="姓名">{name}</Item>
+      <Item label="校区">{parseEnumValue(campus)}</Item>
+      <Item label="电话">{phone}</Item>
+      <Item label="QQ">{qq}</Item>
+      <Item label="邮箱">{email}</Item>
+      <Item label="电脑型号">{brandModel}</Item>
+      <Item label="操作系统">{os}</Item>
+      <Item label="保修状况">{warranty}</Item>
+      <Item label="预约时间">{utcDateToText(createTime)}</Item>
+      <Item label="问题描述">
+        <div className="order-card-desc">
+          <ReactMarkdown source={description} />
         </div>
-      )}
-      <Divider dashed className="order-hr" />
-      <Row gutter={[8, 0]} type="flex" justify="center" align="top">
-        <Col span={6}>
-          {status === "等待处理" ? (
-            <Popconfirm
-              title="确定要取消吗?"
-              okText="确定"
-              cancelText="不了"
-              onConfirm={onCancel}
-            >
-              <Button type="danger">取消预约</Button>
-            </Popconfirm>
-          ) : null}
-          {status === "已完成" ? (
-            <Button onClick={onBackHome}>返回主页</Button>
-          ) : null}
-        </Col>
-      </Row>
-    </Card>
+      </Item>
+      <Item label="附件">
+        {attachments.length === 0 ? (
+          "无"
+        ) : (
+          <AttachmentList data={attachments} />
+        )}
+      </Item>
+      <Item label="操作">
+        {status === "PENDING" ? (
+          <Popconfirm
+            title="确定要取消吗?"
+            okText="确定"
+            cancelText="不了"
+            onConfirm={onCancel}
+          >
+            <Button type="danger">取消预约</Button>
+          </Popconfirm>
+        ) : null}
+        {status === "DONE" ? (
+          <Button type="primary" onClick={onBackHome}>
+            返回主页
+          </Button>
+        ) : null}
+        {status === "CANCELED" ? (
+          <Button type="primary" onClick={onBackHome}>
+            返回主页 / 重新预约
+          </Button>
+        ) : null}
+        {status === "HANDLING" ? "预约单处理中..." : null}
+      </Item>
+    </Descriptions>
   );
 }
 
