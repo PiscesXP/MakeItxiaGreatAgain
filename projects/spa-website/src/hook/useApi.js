@@ -19,7 +19,6 @@ import { sendApiRequest } from "UTIL/api";
  *
  *
  * @typedef {Object} useApiResult useApi调用的返回值
- * @property {number} seq 请求顺序ID
  * @property {boolean} loading 是否正在加载
  * @property {number|null} code 请求返回值code
  * @property {string|null} message 请求返回值message
@@ -70,14 +69,11 @@ function useApi({
   //reducer
   const stateReducer = useCallback((state, action) => {
     //判断是否是上一次的请求，不是则跳过
-    const isPreviousRequest = action.currentSeq + 1 === state.seq;
-
     let newState;
     switch (action.type) {
       case "load":
         handleLoad();
         newState = {
-          seq: state.seq + 1,
           loading: true,
         };
         break;
@@ -91,10 +87,6 @@ function useApi({
         };
         break;
       case "success":
-        if (!isPreviousRequest) {
-          console.log("skipping request result.");
-          return state;
-        }
         //请求成功，不管后端返回值是否为0
         setTimeout(() => {
           if (action.data.code === 0) {
@@ -113,10 +105,6 @@ function useApi({
         };
         break;
       case "error":
-        if (!isPreviousRequest) {
-          console.log("skipping request result.");
-          return state;
-        }
         //网络错误等等...
         setTimeout(() => {
           handleError(action.error);
@@ -128,11 +116,6 @@ function useApi({
           message: null,
           payload: null,
           error: action.error,
-        };
-        break;
-      case "destroy":
-        newState = {
-          seq: state.seq + 1,
         };
         break;
       default:
@@ -156,11 +139,10 @@ function useApi({
    * */
   const send = useCallback(
     async (requestBody = data, queryObject = query) => {
-      const currentSeq = state.seq;
       if (cleanOnRerun) {
         dispatch({ type: "reset" });
       }
-      dispatch({ type: "load", currentSeq });
+      dispatch({ type: "load" });
       try {
         const result = await sendApiRequest({
           path,
@@ -174,13 +156,13 @@ function useApi({
           message: result.message,
           payload: formatPayload(result.payload),
         };
-        dispatch({ type: "success", currentSeq, data: formattedResult });
+        dispatch({ type: "success", data: formattedResult });
       } catch (e) {
-        dispatch({ type: "error", currentSeq, error: e });
+        dispatch({ type: "error", error: e });
       }
     },
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
-    [state.seq]
+    []
   );
 
   useEffect(() => {
@@ -189,7 +171,6 @@ function useApi({
       send();
     }
     return () => {
-      dispatch({ type: "destroy" });
       abortController.abort();
     };
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
