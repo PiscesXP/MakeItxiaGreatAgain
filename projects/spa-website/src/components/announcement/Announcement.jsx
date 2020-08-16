@@ -1,17 +1,17 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Icon, List } from "antd";
 import { AttachmentList } from "COMPONENTS/attachment";
 import { ReplyList } from "COMPONENTS/reply";
 import * as timeUtil from "UTIL/time";
 import { ReactMarkdown } from "UTIL/md2html";
-import { UserInfoContext } from "CONTEXT/UserInfo";
 import * as api from "UTIL/api";
+import { useMemberContext } from "HOOK";
 
 /**
  * 单个公告展示.
  */
 function Announcement(props) {
-  const { data, handleUpdate, showActions } = props;
+  const { data, onUpdate, showActions } = props;
   const {
     _id,
     title,
@@ -25,7 +25,7 @@ function Announcement(props) {
 
   const [showReply, setShowReply] = useState(false);
 
-  const userInfoContext = useContext(UserInfoContext);
+  const userInfoContext = useMemberContext();
 
   //是否已点赞
   const isLiked =
@@ -36,10 +36,8 @@ function Announcement(props) {
   async function hitLikeButton() {
     try {
       await api.PUT(`/announcement/${_id}/${isLiked ? "unlike" : "like"}`);
-      handleUpdate();
-    } catch (error) {
-      //TODO
-    }
+      onUpdate();
+    } catch (error) {}
   }
 
   return (
@@ -74,7 +72,7 @@ function Announcement(props) {
           createTime
         )}`}
       />
-      <ReactMarkdown source={content}></ReactMarkdown>
+      <ReactMarkdown source={content} />
       <br />
       <AttachmentList data={attachments} />
       <ReplyList
@@ -85,9 +83,7 @@ function Announcement(props) {
         }}
         data={comments}
         postUrl={`/announcement/${_id}/comment`}
-        onReply={() => {
-          handleUpdate();
-        }}
+        onReply={onUpdate}
       />
     </List.Item>
   );

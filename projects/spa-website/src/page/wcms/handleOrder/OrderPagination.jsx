@@ -6,13 +6,7 @@ import PropTypes from "prop-types";
  * 预约单界面分页组件.
  */
 function OrderPagination(props) {
-  const {
-    currentPage,
-    totalCount,
-    onShowSizeChange,
-    onChange,
-    pageSize
-  } = props;
+  const { currentPage, totalCount, onChange, pageSize } = props;
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Pagination
@@ -33,7 +27,7 @@ OrderPagination.propTypes = {
   totalCount: PropTypes.number,
   currentPage: PropTypes.number,
   onChange: PropTypes.func,
-  onShowSizeChange: PropTypes.func
+  onShowSizeChange: PropTypes.func,
 };
 
 export { OrderPagination };

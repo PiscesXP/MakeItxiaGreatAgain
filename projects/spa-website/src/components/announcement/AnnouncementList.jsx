@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Divider, List, notification, Spin } from "antd";
+import { Card, List, notification, Spin } from "antd";
 import { Announcement } from "./Announcement";
 import { useApi } from "HOOK";
 
@@ -56,7 +56,7 @@ function AnnouncementList({ isInternal = false }) {
             <Announcement
               id={announceData._id}
               data={announceData}
-              handleUpdate={handleUpdate}
+              onUpdate={handleUpdate}
               showActions={showActions}
             />
           )}
