@@ -4,11 +4,11 @@ import { OrderResult } from "./OrderResult";
 import { Modal, Spin } from "antd";
 import * as api from "UTIL/api";
 import { useHistory } from "react-router-dom";
-import { routePath } from "ROUTE/routePath";
+import { routePath } from "PAGE/routePath";
+
+const orderIdStorageKey = "requestedOrderId";
 
 function RequestOrder() {
-  const orderIdStorageKey = "requestedOrderId";
-
   const [loading, setLoading] = useState(true);
   const [orderInfo, setOrderInfo] = useState(null);
 
@@ -22,28 +22,36 @@ function RequestOrder() {
   function handleBackHome() {
     localStorage.removeItem(orderIdStorageKey);
     setOrderInfo(null);
-    history.push(routePath.CUSTOM_HOME);
+    history.push(routePath.CUSTOM);
   }
 
   async function handleCancel() {
     const { _id } = orderInfo;
     try {
-      await api.PUT(`/custom/order/${_id}/cancel`);
-      Modal.success({
-        title: "取消成功",
-        content: "预约已取消",
-        centered: true,
-        onOk: () => {
-          setOrderInfo(null);
-          localStorage.removeItem(orderIdStorageKey);
-          history.push(routePath.CUSTOM_HOME);
-        }
-      });
-    } catch (e) {
+      const { code } = await api.PUT(`/custom/order/${_id}/cancel`);
+      if (code === 0) {
+        Modal.success({
+          title: "取消成功",
+          content: "预约已取消",
+          centered: true,
+          onOk: () => {
+            setOrderInfo(null);
+            localStorage.removeItem(orderIdStorageKey);
+            history.push(routePath.CUSTOM);
+          },
+        });
+      } else {
+        Modal.error({
+          title: "取消失败",
+          content: "请刷新查看预约单状态 (可能已经被接单)",
+          centered: true,
+        });
+      }
+    } catch (error) {
       Modal.error({
         title: "取消失败",
-        content: "请刷新查看预约单状态 (可能已经被接单)",
-        centered: true
+        content: error.toString(),
+        centered: true,
       });
     }
   }
@@ -56,11 +64,16 @@ function RequestOrder() {
     }
     (async () => {
       try {
-        const order = await api.GET(`/custom/order/${orderID}`);
-        setOrderInfo(order);
+        const { code, payload: order } = await api.GET(
+          `/custom/order/${orderID}`
+        );
+        if (code === 0) {
+          setOrderInfo(order);
+        } else {
+          //找不到对应的预约单, 重置localstorage
+          localStorage.removeItem(orderIdStorageKey);
+        }
       } catch (e) {
-        //找不到对应的预约单, 重置localstorage
-        localStorage.removeItem(orderIdStorageKey);
       } finally {
         setLoading(false);
       }

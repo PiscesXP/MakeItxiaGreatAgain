@@ -3,6 +3,7 @@ import { Alert, Button, Modal, Popconfirm } from "antd";
 import * as api from "UTIL/api";
 import { UserInfoContext } from "CONTEXT/UserInfo";
 import { ReplyList } from "COMPONENTS/reply";
+import { useApi } from "HOOK/index";
 
 /**
  * 显示预约单卡片底下的按钮.(接单/放回...)
@@ -26,7 +27,7 @@ function HandleActions(props) {
     doneByOther: false,
     canceled: false,
     deleted: false,
-    discuss: false //评论区
+    discuss: false, //评论区
   };
 
   switch (status) {
@@ -63,44 +64,54 @@ function HandleActions(props) {
    * 提交更改.(接单/放回...)
    * @param {String} actionType
    */
-  const onSubmit = actionType => async () => {
+  const onSubmit = (actionType) => async () => {
     setSubmitType(actionType);
     try {
-      await api.PUT(`/order/${_id}/${actionType}`);
-    } catch (error) {
-      return Modal.error({
-        title: "操作失败",
-        content: `${error.message}`,
-        okText: "确定",
-        centered: true
-      });
-    }
-    setSubmitType(null);
-    let actionName;
-    switch (actionType) {
-      case "accept":
-        actionName = "接受";
-        break;
-      case "done":
-        actionName = "完成";
-        break;
-      case "giveup":
-        actionName = "放回";
-        break;
-      case "delete":
-        actionName = "删除";
-        break;
-      default:
-    }
-    Modal.success({
-      title: "操作成功",
-      content: `预约单已成功${actionName}.`,
-      okText: "确定",
-      centered: true,
-      onOk: () => {
-        onHandleOrder();
+      const { code } = await api.PUT(`/order/${_id}/${actionType}`);
+      if (code === 0) {
+        let actionName;
+        switch (actionType) {
+          case "accept":
+            actionName = "接受";
+            break;
+          case "done":
+            actionName = "完成";
+            break;
+          case "giveup":
+            actionName = "放回";
+            break;
+          case "delete":
+            actionName = "删除";
+            break;
+          default:
+        }
+        Modal.success({
+          title: "操作成功",
+          content: `预约单已成功${actionName}.`,
+          okText: "确定",
+          centered: true,
+          onOk: () => {
+            onHandleOrder();
+          },
+        });
+      } else {
+        Modal.error({
+          title: "操作失败",
+          content: "请刷新后重试.(可能预约单已被接受或取消)",
+          okText: "确定",
+          centered: true,
+        });
       }
-    });
+    } catch (error) {
+      Modal.error({
+        title: "操作失败",
+        content: error.toString(),
+        okText: "确定",
+        centered: true,
+      });
+    } finally {
+      setSubmitType(null);
+    }
   };
 
   const [showDiscuss, setShowDiscuss] = useState(false);
