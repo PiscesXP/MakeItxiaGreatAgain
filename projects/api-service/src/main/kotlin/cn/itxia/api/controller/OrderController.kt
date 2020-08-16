@@ -72,7 +72,7 @@ class OrderController {
      * 处理预约单.
      * 接单、放回、完成、删除...
      * */
-    @PutMapping("/order/{oid}/{action}")
+    @PutMapping("/order/{oid}/deal/{action}")
     @RequireItxiaMember
     fun dealWithOrder(@PathVariable oid: String,
                       @PathVariable action: String,

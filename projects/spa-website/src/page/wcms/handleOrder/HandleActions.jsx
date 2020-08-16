@@ -66,7 +66,7 @@ function HandleActions(props) {
   const onSubmit = (actionType) => async () => {
     setSubmitType(actionType);
     try {
-      const { code } = await api.PUT(`/order/${_id}/${actionType}`);
+      const { code } = await api.PUT(`/order/${_id}/deal/${actionType}`);
       if (code === 0) {
         let actionName;
         switch (actionType) {
