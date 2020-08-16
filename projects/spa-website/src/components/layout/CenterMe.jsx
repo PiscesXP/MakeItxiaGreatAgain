@@ -1,5 +1,6 @@
 import React from "react";
 import { Col, Row } from "antd";
+import "./index.css";
 
 function CenterMe(props) {
   return (
@@ -7,6 +8,10 @@ function CenterMe(props) {
       <Col span={24}>{props.children}</Col>
     </Row>
   );
+}
+
+function CenterMeFlex({ children }) {
+  return <div className="center-me-flex">{children}</div>;
 }
 
 /**
@@ -44,4 +49,4 @@ function CenterMeResponsive({ small, children }) {
     </Row>
   );
 }
-export { CenterMe, CenterMeResponsive };
+export { CenterMe, CenterMeFlex, CenterMeResponsive };

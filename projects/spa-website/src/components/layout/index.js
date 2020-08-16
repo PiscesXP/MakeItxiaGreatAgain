@@ -1,3 +1,3 @@
-import { CenterMe, CenterMeResponsive } from "./CenterMe";
+import { CenterMe, CenterMeFlex, CenterMeResponsive } from "./CenterMe";
 
-export { CenterMe, CenterMeResponsive };
+export { CenterMe, CenterMeFlex, CenterMeResponsive };
