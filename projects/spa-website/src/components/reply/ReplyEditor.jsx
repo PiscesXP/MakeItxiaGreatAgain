@@ -5,6 +5,7 @@ import {
   AttachmentUpload,
   attachmentUploadFormParser,
 } from "COMPONENTS/attachment";
+import { CenterMe, CenterMeFlex } from "COMPONENTS/layout";
 
 const { TextArea } = Input;
 
@@ -57,10 +58,12 @@ function ReplyEditorForm({
         label="附件上传"
         id="attachments"
       />
-      <Form.Item>
-        <Button htmlType="submit" loading={loading} type="primary">
-          发送回复
-        </Button>
+      <Form.Item wrapperCol={{ span: 24, offset: 0 }}>
+        <CenterMeFlex>
+          <Button htmlType="submit" loading={loading} type="primary">
+            发送回复
+          </Button>
+        </CenterMeFlex>
       </Form.Item>
     </Form>
   );
