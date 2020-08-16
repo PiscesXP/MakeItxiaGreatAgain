@@ -51,7 +51,7 @@ class Attachment extends React.Component {
           onCancel={this.onHideModal}
           okText={
             <a href={downloadUrl} target="_parent">
-              下载附件
+              下载原文件
             </a>
           }
           cancelText="返回"
@@ -67,11 +67,11 @@ class Attachment extends React.Component {
             </div>
           )}
           <Divider />
-          <span>{`文件名: ${fileName}`}</span>
+          <span>{`文件原名: ${fileName}`}</span>
           <br />
-          <span>{`类  型: ${mimeType}`}</span>
+          <span>{`文件类型: ${mimeType}`}</span>
           <br />
-          <span>{`大  小: ${Math.floor(size / 1024) + 1} KB`}</span>
+          <span>{`原始大小: ${Math.floor(size / 1024) + 1} KB`}</span>
         </Modal>
       </div>
     );
