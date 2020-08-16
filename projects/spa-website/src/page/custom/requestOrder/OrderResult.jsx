@@ -1,42 +1,62 @@
-import React from "react";
-import { Alert, Col, Row } from "antd";
+import React, { useState } from "react";
+import { Alert, Card, Icon } from "antd";
 import { OrderInfoCard } from "./OrderInfoCard";
+import { CenterMe } from "COMPONENTS/layout";
 
 function OrderResult(props) {
   const { order } = props;
   const { onCancel, onBackHome } = props;
 
-  const alertPropList = [
-    {
-      status: "等待处理",
-      message: "预约成功",
-      description: "请等待IT侠接单.",
-      type: "success"
-    },
-    {
-      status: "正在处理",
-      message: "正在处理",
-      description: "请等待IT侠联系解决问题.",
-      type: "info"
-    },
-    {
-      status: "已完成",
-      message: "预约已完成",
-      type: "success"
-    }
-  ];
+  const [showOrderID, setShowOrderID] = useState(false);
 
-  let alertProps;
-  for (const prop of alertPropList) {
-    if (prop.status === order.status) {
-      alertProps = prop;
+  let title = "😶";
+  if (showOrderID) {
+    title = `预约单ID: ${order._id}`;
+  }
+
+  function handleClickEmoji() {
+    if (!showOrderID) {
+      setShowOrderID(true);
     }
   }
 
+  let alertProps;
+  switch (order.status) {
+    case "PENDING":
+      alertProps = {
+        message: "预约成功",
+        description: "请等待IT侠接单😊.",
+        type: "success",
+      };
+      break;
+    case "HANDLING":
+      alertProps = {
+        message: "正在处理",
+        description: `你的单子正由 ${order.handler.realName} 处理中，请等待ta联系解决问题😊.`,
+        type: "info",
+        icon: <Icon type="clock-circle" />,
+      };
+      break;
+    case "DONE":
+      alertProps = {
+        message: "预约已完成",
+        description: `你的单子已由 ${order.handler.realName} 处理完成.`,
+        type: "success",
+      };
+      break;
+    case "CANCELED":
+      alertProps = {
+        message: "预约已取消",
+        description: `若需要预约请返回主页重新预约.`,
+        type: "error",
+      };
+      break;
+    default:
+  }
+
   return (
-    <Row gutter={[8, 0]} type="flex" justify="center" align="top">
-      <Col span={18}>
-        <br />
+    <Card title="我的预约单">
+      <CenterMe>
         <Alert {...alertProps} showIcon />
         <br />
         <div className="desc">
@@ -46,8 +66,14 @@ function OrderResult(props) {
             onBackHome={onBackHome}
           />
         </div>
-      </Col>
-    </Row>
+        <span
+          onClick={handleClickEmoji}
+          style={{ fontSize: "0.2rem", float: "right" }}
+        >
+          {title}
+        </span>
+      </CenterMe>
+    </Card>
   );
 }
 
