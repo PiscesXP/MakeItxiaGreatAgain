@@ -20,6 +20,7 @@ function AttachmentUpload({
   getFieldDecorator,
   id = "attachments",
   listType = "picture-card",
+  children,
 }) {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
@@ -63,6 +64,7 @@ function AttachmentUpload({
             </div>
           </Upload>
         )}
+        {children}
       </Form.Item>
       <Modal
         centered

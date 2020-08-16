@@ -38,12 +38,14 @@
   border: #d9d9d9 1px solid;
   border-radius: 4px;
   padding: 6px;
-  margin-right: 8px;
+  margin: 6px 8px 0 0;
 }
 
 .attachment-list {
   display: flex;
   overflow: hidden;
+  flex-wrap: wrap;
+  max-width: 433px;
 }
 /*
 -------------------------------
