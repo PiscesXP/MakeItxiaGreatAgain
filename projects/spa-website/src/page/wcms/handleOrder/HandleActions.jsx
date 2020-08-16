@@ -3,7 +3,6 @@ import { Alert, Button, Modal, Popconfirm } from "antd";
 import * as api from "UTIL/api";
 import { UserInfoContext } from "CONTEXT/UserInfo";
 import { ReplyList } from "COMPONENTS/reply";
-import { useApi } from "HOOK/index";
 
 /**
  * 显示预约单卡片底下的按钮.(接单/放回...)
