@@ -1,12 +1,12 @@
 import React from "react";
 import { Card, Divider, Icon } from "antd";
 import * as timeUtil from "UTIL/time";
-import { Attachment } from "COMPONENTS/attachment";
+import { AttachmentList } from "COMPONENTS/attachment";
 import { HandleActions } from "./HandleActions";
 import { ReactMarkdown } from "UTIL/md2html";
 import { parseEnumValue } from "UTIL/enumParser";
 
-const getStatusIcon = status => {
+const getStatusIcon = (status) => {
   switch (status) {
     case "PENDING":
       return (
@@ -60,7 +60,7 @@ function OrderInfoCard(props) {
     warranty,
     description,
     attachments,
-    status
+    status,
   } = data;
   return (
     <Card className="order-card">
@@ -120,9 +120,7 @@ function OrderInfoCard(props) {
           <p>
             <strong>附件:</strong>
           </p>
-          {attachments.map(value => {
-            return <Attachment key={value._id} data={value} />;
-          })}
+          <AttachmentList data={attachments} />
         </div>
       )}
       <Divider dashed className="order-hr" />

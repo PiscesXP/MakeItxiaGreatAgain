@@ -2,7 +2,7 @@ import { Divider, List, Modal } from "antd";
 import React from "react";
 import { ReplyEditor } from "./ReplyEditor";
 import * as timeUtil from "UTIL/time";
-import { Attachment } from "COMPONENTS/attachment";
+import { AttachmentList } from "COMPONENTS/attachment";
 
 function ReplyList(props) {
   const { visible, title, onCancel, data, postUrl, onReply } = props;
@@ -18,7 +18,7 @@ function ReplyList(props) {
         itemLayout="vertical"
         size="default"
         dataSource={data}
-        renderItem={item => (
+        renderItem={(item) => (
           <List.Item key={item._id}>
             <List.Item.Meta
               description={`由 ${
@@ -28,18 +28,10 @@ function ReplyList(props) {
             <div className="reply-text">
               <p>{item.content}</p>
             </div>
-            {item.attachments.map(value => {
-              return (
-                <Attachment
-                  data={value}
-                  key={value._id}
-                  className="reply-atech"
-                />
-              );
-            })}
+            <AttachmentList data={item.attachments} />
           </List.Item>
         )}
-      ></List>
+      />
       <Divider />
       <h3>回复评论</h3>
       <ReplyEditor postUrl={postUrl} onReply={onReply} />
