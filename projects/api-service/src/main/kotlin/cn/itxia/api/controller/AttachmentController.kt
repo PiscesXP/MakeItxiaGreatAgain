@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse
 /**
  * 附件上传/下载.
  * */
-//TODO 支持缩略图.
 @RestController
 class AttachmentController {
 
@@ -27,10 +26,12 @@ class AttachmentController {
 
     @GetMapping("/upload/{_id}")
     fun getFile(@PathVariable _id: String,
+                @RequestParam(required = false) thumbnail: String?,
                 @RequestParam(required = false) download: String?,
-                response: HttpServletResponse): Response {
+                response: HttpServletResponse) {
         val isDownload = download != null
-        return attachmentService.getFile(_id, isDownload, response)
+        val isThumbnail = thumbnail != null
+        attachmentService.getFile(_id, isDownload, isThumbnail, response)
     }
 }
 

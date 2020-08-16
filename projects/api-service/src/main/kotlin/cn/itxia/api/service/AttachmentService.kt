@@ -3,8 +3,9 @@ package cn.itxia.api.service
 import cn.itxia.api.model.Attachment
 import cn.itxia.api.model.ItxiaMember
 import cn.itxia.api.model.repository.AttachmentRepository
-import cn.itxia.api.response.ResponseCode
 import cn.itxia.api.response.Response
+import cn.itxia.api.response.ResponseCode
+import net.coobird.thumbnailator.Thumbnails
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -32,6 +33,8 @@ class AttachmentService {
 
     @Autowired
     private lateinit var attachmentRepository: AttachmentRepository
+
+    private val maxThumbnailSize = 50.0
 
     /**
      * 处理上传文件.
@@ -67,23 +70,54 @@ class AttachmentService {
     /**
      * 获取文件.
      * */
-    fun getFile(_id: String, isDownload: Boolean, response: HttpServletResponse): Response {
+    fun getFile(_id: String, isDownload: Boolean, isThumbnail: Boolean, response: HttpServletResponse) {
         val attachment = attachmentRepository.findBy_idAndDeletedFalse(_id)
-                ?: return ResponseCode.FILE_NOT_FOUND.withoutPayload()
+                ?: return
+        val isImage = attachment.mimeType?.contains("image") ?: false
+
+        if (isThumbnail && !isImage) {
+            //非图片不生成缩略图
+            return
+        }
+
         if (isDownload) {
             //加入下载header.
             val encodedFileName = URLEncoder.encode(attachment.fileName, "UTF-8")
             val value = "attachment; filename*=UTF-8''${encodedFileName}"
             response.setHeader("Content-Disposition", value)
         }
+
         val file = File("${rootDir}${attachment.md5}")
         try {
-            response.outputStream.write(file.readBytes())
-        } catch (e: FileNotFoundException) {
+            if (isImage && isThumbnail) {
+                //生成缩略图
+                Thumbnails.of(file)
+                        .size(200, 200)
+                        .outputQuality(0.6)
+                        .keepAspectRatio(true)
+                        .toOutputStream(response.outputStream)
+            } else if (isImage && !isDownload && attachment.size < 100 * 1024) {
+                //大于100KB的图片，生成等尺寸压缩图
+                Thumbnails.of(file)
+                        .scale(1.0)
+                        .outputQuality(0.6)
+                        .toOutputStream(response.outputStream)
+            } else if (!isImage && !isDownload) {
+                //do nothing
+            } else {
+                //返回原文件
+                val fileBytes = file.readBytes()
+                response.outputStream.write(fileBytes)
+            }
+        } catch (fileNotFoundException: FileNotFoundException) {
             //TODO log this
-            return ResponseCode.FILE_NOT_FOUND.withoutPayload()
+            response.status = 404
+            return
+        } catch (ioException: IOException) {
+            response.status = 500
+            return
         }
-        return ResponseCode.SUCCESS.withoutPayload()
+        return
     }
 
     /**

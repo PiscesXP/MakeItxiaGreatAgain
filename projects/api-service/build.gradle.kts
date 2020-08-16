@@ -17,6 +17,9 @@ repositories {
 
 dependencies {
 
+    //用于生成缩略图
+    implementation("net.coobird:thumbnailator:0.4.11")
+
     //阿里云邮件服务
     implementation("com.aliyun:aliyun-java-sdk-core:4.5.6")
     implementation("com.aliyun:aliyun-java-sdk-dm:3.3.1")
