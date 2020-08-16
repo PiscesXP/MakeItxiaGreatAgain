@@ -15,6 +15,13 @@ function CustomHomePage() {
     return <Redirect push to={routePath.custom.ORDER} />;
   }
 
+  const orderID = window.localStorage.getItem("requestedOrderId");
+
+  let orderButtonText = "发起预约";
+  if (orderID) {
+    orderButtonText = "查看我的预约";
+  }
+
   const orderNotification = (
     <ul style={{ margin: "0.5em" }}>
       <li>
@@ -53,7 +60,7 @@ function CustomHomePage() {
         </Col>
         <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
           <Button type="primary" onClick={handleGoToOrder}>
-            发起预约
+            {orderButtonText}
           </Button>
         </Col>
         <Col span={24}>
