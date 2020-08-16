@@ -4,8 +4,10 @@ import { MemberSettings } from "./MemberSettings";
 import { PasswordReset } from "./PasswordReset";
 import { OauthSetting } from "./OauthSetting";
 import { BasicInfo } from "./BasicInfo";
+import { useTitleWCMS } from "HOOK";
 
 function Profile() {
+  useTitleWCMS("个人信息");
   return (
     <Row gutter={[8, 0]} type="flex" justify="center" align="top">
       <Col xs={24} sm={24} md={24} lg={16} xl={12}>

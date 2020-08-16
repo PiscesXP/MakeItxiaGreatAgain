@@ -2,10 +2,12 @@ import React from "react";
 import { Alert, Button, Card, Col, Row } from "antd";
 import { Redirect } from "react-router-dom";
 import { routePath } from "PAGE/routePath";
-import { useToggle } from "HOOK";
+import { useTitleCustom, useToggle } from "HOOK";
 import { CenterMeResponsive } from "COMPONENTS/layout";
 
 function CustomHomePage() {
+  useTitleCustom("主页");
+
   const [gotoOrder, setGotoOrder] = useToggle(false);
 
   function handleGoToOrder() {

@@ -5,10 +5,13 @@ import { Modal, Spin } from "antd";
 import * as api from "UTIL/api";
 import { useHistory } from "react-router-dom";
 import { routePath } from "PAGE/routePath";
+import { useTitleCustom } from "HOOK";
 
 const orderIdStorageKey = "requestedOrderId";
 
 function RequestOrder() {
+  useTitleCustom("预约单");
+
   const [loading, setLoading] = useState(true);
   const [orderInfo, setOrderInfo] = useState(null);
 

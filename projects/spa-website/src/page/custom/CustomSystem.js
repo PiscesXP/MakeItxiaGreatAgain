@@ -8,6 +8,7 @@ import { RequestOrder } from "./requestOrder";
 import { NotFound } from "COMPONENTS/notFound";
 import { CenterMeResponsive } from "COMPONENTS/layout";
 import { AnnouncementList } from "COMPONENTS/announcement";
+import { useTitle } from "HOOK";
 
 const { Header, Content, Footer } = Layout;
 
@@ -31,6 +32,7 @@ function CustomRouter() {
 }
 
 function CustomSystem() {
+  useTitle("IT侠预约系统");
   return (
     <Layout id="home">
       <Header id="home-header">
