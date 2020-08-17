@@ -24,7 +24,7 @@ function OrderInfoCard(props) {
     status,
   } = data;
 
-  const { onCancel, onBackHome } = props;
+  const { onCancel, onBackHome, onShowReply } = props;
 
   return (
     <Descriptions bordered column={1}>
@@ -50,6 +50,13 @@ function OrderInfoCard(props) {
         )}
       </Item>
       <Item label="操作">
+        {status === "PENDING" || status === "HANDLING" ? (
+          <Button
+            type="primary"
+            onClick={onShowReply}
+            style={{ marginRight: "16px" }}
+          >{`回复消息(${data.reply.length}条)`}</Button>
+        ) : null}
         {status === "PENDING" ? (
           <Popconfirm
             title="确定要取消吗?"

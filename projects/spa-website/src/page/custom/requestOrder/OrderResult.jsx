@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { Alert, Card, Icon } from "antd";
 import { OrderInfoCard } from "./OrderInfoCard";
 import { CenterMe } from "COMPONENTS/layout";
+import { ReplyList } from "COMPONENTS/reply";
 
 function OrderResult(props) {
   const { order } = props;
-  const { onCancel, onBackHome } = props;
+  const { onCancel, onBackHome, refreshOrderData } = props;
 
   const [showOrderID, setShowOrderID] = useState(false);
+
+  const [showReply, setShowReply] = useState(false);
 
   let title = "😶";
   if (showOrderID) {
@@ -18,6 +21,14 @@ function OrderResult(props) {
     if (!showOrderID) {
       setShowOrderID(true);
     }
+  }
+
+  function handleShowReply() {
+    setShowReply(true);
+  }
+
+  function handleHideReply() {
+    setShowReply(false);
   }
 
   let alertProps;
@@ -64,6 +75,7 @@ function OrderResult(props) {
             data={order}
             onCancel={onCancel}
             onBackHome={onBackHome}
+            onShowReply={handleShowReply}
           />
         </div>
         <span
@@ -72,6 +84,15 @@ function OrderResult(props) {
         >
           {title}
         </span>
+        <ReplyList
+          title="给IT侠留言 / 回复消息"
+          visible={showReply}
+          data={order.reply}
+          onCancel={handleHideReply}
+          onReply={refreshOrderData}
+          postUrl={`/custom/order/${order._id}/reply`}
+          anonymousName={`(我)${order.name}`}
+        />
       </CenterMe>
     </Card>
   );

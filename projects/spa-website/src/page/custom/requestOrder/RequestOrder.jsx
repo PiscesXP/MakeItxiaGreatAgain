@@ -59,6 +59,18 @@ function RequestOrder() {
     }
   }
 
+  /**
+   * 刷新预约单数据.
+   * */
+  async function refreshOrderData() {
+    if (orderInfo && orderInfo._id) {
+      const { code, payload } = await api.GET(`/custom/order/${orderInfo._id}`);
+      if (code === 0) {
+        setOrderInfo(payload);
+      }
+    }
+  }
+
   useEffect(() => {
     const orderID = localStorage.getItem(orderIdStorageKey);
     if (!!!orderID) {
@@ -71,6 +83,7 @@ function RequestOrder() {
           `/custom/order/${orderID}`
         );
         if (code === 0) {
+          //成功获取预约单
           setOrderInfo(order);
         } else {
           //找不到对应的预约单, 重置localstorage
@@ -95,6 +108,7 @@ function RequestOrder() {
         order={orderInfo}
         onCancel={handleCancel}
         onBackHome={handleBackHome}
+        refreshOrderData={refreshOrderData}
       />
     );
   }
