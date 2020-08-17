@@ -13,3 +13,7 @@
 .link-button:focus {
   text-decoration: none;
 }
+
+.ant-descriptions-item-label {
+  white-space: nowrap;
+}
