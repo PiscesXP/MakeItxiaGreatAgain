@@ -1,5 +1,7 @@
 package cn.itxia.api.service
 
+import cn.itxia.api.dto.OrderReplyDto
+import cn.itxia.api.dto.ReplyDto
 import cn.itxia.api.dto.RequestOrderDto
 import cn.itxia.api.enum.CampusEnum
 import cn.itxia.api.enum.MemberRoleEnum
@@ -26,6 +28,9 @@ class OrderService {
 
     @Autowired
     private lateinit var attachmentRepository: AttachmentRepository
+
+    @Autowired
+    private lateinit var replyService: ReplyService
 
     @Autowired
     private lateinit var emailService: EmailService
@@ -202,5 +207,32 @@ class OrderService {
         return response
     }
 
+    fun postReply(orderID: String, dto: OrderReplyDto, itxiaMember: ItxiaMember): Boolean {
+        val order = orderRepository.findBy_idAndDeletedFalse(orderID) ?: return false
+        val reply = replyService.saveReply(ReplyDto(dto.content, dto.attachments), itxiaMember)
+        order.reply.add(reply)
+        orderRepository.save(order)
+        //如果接受邮件提醒，就发送邮件
+        if (order.acceptEmailNotification) {
+            //TODO
+        }
+        return true
+    }
+
+    fun postReplyByCustom(orderID: String, dto: ReplyDto): Boolean {
+        val order = orderRepository.findBy_idAndDeletedFalse(orderID) ?: return false
+        val reply = replyService.saveReply(dto, null)
+        order.reply.add(reply)
+        orderRepository.save(order)
+        return true
+    }
+
+    fun postDiscuss(orderID: String, dto: ReplyDto, itxiaMember: ItxiaMember): Boolean {
+        val order = orderRepository.findBy_idAndDeletedFalse(orderID) ?: return false
+        val reply = replyService.saveReply(dto, itxiaMember)
+        order.discuss.add(reply)
+        orderRepository.save(order)
+        return true
+    }
 
 }

@@ -2,13 +2,15 @@ package cn.itxia.api.controller
 
 import cn.itxia.api.annotation.CurrentItxiaMember
 import cn.itxia.api.annotation.RequireItxiaMember
+import cn.itxia.api.dto.OrderReplyDto
+import cn.itxia.api.dto.ReplyDto
 import cn.itxia.api.dto.RequestOrderDto
 import cn.itxia.api.enum.CampusEnum
 import cn.itxia.api.enum.OrderActionEnum
 import cn.itxia.api.enum.OrderStatusEnum
 import cn.itxia.api.model.ItxiaMember
-import cn.itxia.api.response.ResponseCode
 import cn.itxia.api.response.Response
+import cn.itxia.api.response.ResponseCode
 import cn.itxia.api.service.OrderService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -39,9 +41,25 @@ class OrderController {
      * 查询预约单.
      * */
     @GetMapping("/custom/order/{orderID}")
-    fun getCustomOrder(@PathVariable orderID: String):Response{
+    fun getCustomOrder(@PathVariable orderID: String): Response {
         return orderService.getCustomOrder(orderID)
     }
+
+    /**
+     * (预约者)回复预约单.
+     * */
+    @PostMapping("/custom/order/{orderID}/reply")
+    fun postReplyByCustom(@PathVariable orderID: String,
+                          @RequestBody dto: ReplyDto
+    ): Response {
+        if (orderService.postReplyByCustom(orderID, dto)) {
+            return ResponseCode.SUCCESS.withoutPayload()
+        }
+        return ResponseCode.NO_SUCH_ORDER.withoutPayload()
+    }
+
+
+    //---------------------------------------------------------
 
     /**
      * 获取分页预约单.
@@ -81,5 +99,35 @@ class OrderController {
         val trueAction = OrderActionEnum.parse(action)
                 ?: return ResponseCode.INVALID_PARAM.withPayload("处理字段参数错误")
         return orderService.dealWithOrder(oid, trueAction, itxiaMember)
+    }
+
+    /**
+     * (IT侠)回复预约单.
+     * */
+    @PostMapping("/order/{orderID}/reply")
+    @RequireItxiaMember
+    fun postReply(@PathVariable orderID: String,
+                  @RequestBody dto: OrderReplyDto,
+                  @CurrentItxiaMember itxiaMember: ItxiaMember
+    ): Response {
+        if (orderService.postReply(orderID, dto, itxiaMember)) {
+            return ResponseCode.SUCCESS.withoutPayload()
+        }
+        return ResponseCode.NO_SUCH_ORDER.withoutPayload()
+    }
+
+    /**
+     * 讨论预约单.
+     * */
+    @PostMapping("/order/{orderID}/discuss")
+    @RequireItxiaMember
+    fun postDiscuss(@PathVariable orderID: String,
+                    @RequestBody dto: ReplyDto,
+                    @CurrentItxiaMember itxiaMember: ItxiaMember
+    ): Response {
+        if (orderService.postDiscuss(orderID, dto, itxiaMember)) {
+            return ResponseCode.SUCCESS.withoutPayload()
+        }
+        return ResponseCode.NO_SUCH_ORDER.withoutPayload()
     }
 }

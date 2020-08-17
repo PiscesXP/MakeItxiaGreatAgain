@@ -20,7 +20,7 @@ data class Order(
 
         val email: String?,
 
-        val acceptEmailNotification:Boolean = false,
+        val acceptEmailNotification: Boolean = false,
 
         val os: String,
 
@@ -48,10 +48,10 @@ data class Order(
         var status: OrderStatusEnum = OrderStatusEnum.PENDING,
 
         @DBRef
-        val reply:List<Reply> = listOf(),
+        val reply: MutableList<Reply> = mutableListOf(),
 
         @DBRef
-        val discuss: List<Reply> = listOf(),
+        val discuss: MutableList<Reply> = mutableListOf(),
 
         @DBRef
         val attachments: List<Attachment> = listOf()
