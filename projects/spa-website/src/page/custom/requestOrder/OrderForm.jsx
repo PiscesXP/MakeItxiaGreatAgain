@@ -42,7 +42,7 @@ function RequestOrderForm(props) {
         问题出现的<strong>前后</strong>，你有哪些操作
       </li>
       <li>
-        需要软件<strong>现象</strong>还是<strong>硬件</strong>帮助
+        需要<strong>软件</strong>还是<strong>硬件</strong>帮助
       </li>
     </ul>
   );

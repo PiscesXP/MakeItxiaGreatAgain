@@ -74,7 +74,7 @@ function ReplyEditorForm({
           {getFieldDecorator("sendEmailNotification", {
             valuePropName: "checked",
             initialValue: true,
-          })(<Checkbox>发邮件提醒ta有新消息</Checkbox>)}
+          })(<Checkbox>发邮件提醒他/她有新消息</Checkbox>)}
         </Form.Item>
       ) : null}
       <AttachmentUpload

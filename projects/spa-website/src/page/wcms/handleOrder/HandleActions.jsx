@@ -182,13 +182,13 @@ function HandleActions(props) {
       ) : null}
       {showList.delete ? (
         <Popconfirm
-          title="确定要删除预约单吗?"
+          title="确定要移到废纸篓吗?"
           okText="确定"
           cancelText="取消"
           onConfirm={onSubmit("delete")}
         >
           <Button type="danger" loading={submitType === "delete"}>
-            删除
+            废纸篓
           </Button>
         </Popconfirm>
       ) : null}
@@ -215,7 +215,7 @@ function HandleActions(props) {
       {showList.canceled ? (
         <Alert
           type="warning"
-          message={<span>此预约单已被预约人取消.</span>}
+          message={<span>此预约单已被预约者取消.</span>}
         ></Alert>
       ) : null}
       {showList.deleted ? (
