@@ -217,7 +217,6 @@ function RequestOrderForm(props) {
             type="warning"
             message="请尽可能地详细描述，包括但不限于："
             description={descriptionFieldAlertDescription}
-            showIcon
           />
         </Form.Item>
 
@@ -228,7 +227,7 @@ function RequestOrderForm(props) {
         >
           <Alert type="info" message="单个附件最大5MB." />
         </AttachmentUpload>
-        <Form.Item label="预约须知、服务条款">
+        <Form.Item label="预约须知">
           {getFieldDecorator("agreement", {
             valuePropName: "checked",
             initialValue: false,
@@ -237,7 +236,7 @@ function RequestOrderForm(props) {
                 if (value === true) {
                   callback();
                 }
-                callback("必须同意才能发起预约");
+                callback("请先阅读预约须知");
               },
             ],
           })(
