@@ -122,7 +122,8 @@ class OrderService {
                 warranty = dto.warranty,
                 campus = campus,
                 description = dto.description,
-                attachments = attachments
+                attachments = attachments,
+                acceptEmailNotification = dto.acceptEmailNotification
         )
         val savedOrder = orderRepository.save(order)
         return ResponseCode.SUCCESS.withPayload(savedOrder)
@@ -212,9 +213,9 @@ class OrderService {
         val reply = replyService.saveReply(ReplyDto(dto.content, dto.attachments), itxiaMember)
         order.reply.add(reply)
         orderRepository.save(order)
-        //如果接受邮件提醒，就发送邮件
-        if (order.acceptEmailNotification) {
-            //TODO
+        if (order.acceptEmailNotification && dto.sendEmailNotification == true && order.email != null) {
+            //发送邮件提醒
+            emailService.noticeCustomNewReply(order.email, order, reply, itxiaMember)
         }
         return true
     }

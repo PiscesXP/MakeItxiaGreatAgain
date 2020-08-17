@@ -1,9 +1,9 @@
 package cn.itxia.api.service
 
 import cn.itxia.api.enum.OrderActionEnum
-import cn.itxia.api.enum.OrderStatusEnum
 import cn.itxia.api.model.ItxiaMember
 import cn.itxia.api.model.Order
+import cn.itxia.api.model.Reply
 import com.aliyuncs.DefaultAcsClient
 import com.aliyuncs.dm.model.v20151123.SingleSendMailRequest
 import com.aliyuncs.exceptions.ClientException
@@ -45,10 +45,26 @@ class EmailService {
         }
         try {
             val response = client.getAcsResponse(request)
-            println(response.toString())
+            println("Sent email to ${address}")
         } catch (e: ClientException) {
             println(e.errMsg)
         }
+    }
+
+    fun noticeCustomNewReply(address: String, order: Order, reply: Reply, itxiaMember: ItxiaMember) {
+        sendEmail(
+                address = address,
+                title = "新回复消息",
+                content = """
+                    ${order.name}同学:
+                        你好，你的预约单有新的回复:
+                        ${itxiaMember.realName}: ${reply.content.replace("\n", " ")}
+                        
+                        请及时到预约系统查看。
+                        请勿回复此邮件。
+                    NJU IT侠
+                """.trimIndent().replace("\t", "  ")
+        )
     }
 
     fun validateMemberEmail() {

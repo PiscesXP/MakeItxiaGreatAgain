@@ -13,6 +13,8 @@ data class RequestOrderDto(
 
         val email: String?,
 
+        val acceptEmailNotification: Boolean,
+
         val os: String,
 
         val brandModel: String,
