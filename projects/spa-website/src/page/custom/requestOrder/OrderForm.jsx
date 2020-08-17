@@ -14,6 +14,7 @@ import {
   attachmentUploadFormParser,
 } from "COMPONENTS/attachment";
 import { useApi } from "HOOK/index";
+import { CenterMeFlex } from "COMPONENTS/layout";
 
 const { Option } = Select;
 
@@ -254,10 +255,12 @@ function RequestOrderForm(props) {
           )}
         </Form.Item>
 
-        <Form.Item wrapperCol={{ span: 2, offset: 11 }}>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            发起预约
-          </Button>
+        <Form.Item wrapperCol={{ span: 24, offset: 0 }}>
+          <CenterMeFlex>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              发起预约
+            </Button>
+          </CenterMeFlex>
         </Form.Item>
       </Form>
     </Card>
