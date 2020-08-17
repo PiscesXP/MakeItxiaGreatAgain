@@ -59,6 +59,7 @@ function RequestOrderForm(props) {
       //删除保存的草稿
       localStorage.removeItem(draftStorageKey);
       onSubmitSuccess(payload);
+      window.scrollTo(0, 0);
     },
     onFail: ({ message, payload }) => {
       Modal.error({

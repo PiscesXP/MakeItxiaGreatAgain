@@ -14,6 +14,7 @@ function CustomHomePage() {
     setGotoOrder(true);
   }
   if (gotoOrder) {
+    window.scrollTo(0, 0);
     return <Redirect push to={routePath.custom.ORDER} />;
   }
 
