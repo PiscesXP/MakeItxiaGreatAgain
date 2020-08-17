@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Checkbox, Form, Input, Modal } from "antd";
 import React from "react";
 import { useApi } from "HOOK";
 import {
@@ -9,10 +9,19 @@ import { CenterMeFlex } from "COMPONENTS/layout";
 
 const { TextArea } = Input;
 
+/**
+ * @param getFieldDecorator {function}
+ * @param validateFields {function}
+ * @param resetFields {function}
+ * @param postUrl {string} 发送回复请求的url path
+ * @param onReply {function} 回复成功的回调函数
+ * @param showSendEmailCheckbox {boolean} 是否显示发送邮件提醒的checkbox(预约单回复可选是否用邮件提醒)
+ * */
 function ReplyEditorForm({
   form: { getFieldDecorator, validateFields, resetFields },
   postUrl,
   onReply,
+  showSendEmailCheckbox = false,
 }) {
   const { loading, send } = useApi({
     path: postUrl,
@@ -30,6 +39,13 @@ function ReplyEditorForm({
       Modal.error({
         title: "回复失败",
         content: message,
+        centered: true,
+      });
+    },
+    onError: (error) => {
+      Modal.error({
+        title: "回复失败",
+        content: error.toString(),
         centered: true,
       });
     },
@@ -53,6 +69,14 @@ function ReplyEditorForm({
           rules: [{ required: true, message: "请填写回复内容" }],
         })(<TextArea autoSize={{ minRows: 2, maxRows: 8 }} />)}
       </Form.Item>
+      {showSendEmailCheckbox ? (
+        <Form.Item>
+          {getFieldDecorator("sendEmailNotification", {
+            valuePropName: "checked",
+            initialValue: true,
+          })(<Checkbox>发邮件提醒ta有新消息</Checkbox>)}
+        </Form.Item>
+      ) : null}
       <AttachmentUpload
         getFieldDecorator={getFieldDecorator}
         label="附件上传"
