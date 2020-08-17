@@ -34,14 +34,14 @@ class HandleOrderNew extends React.Component {
     pagination: {
       currentPage: 1,
       totalCount: 0,
-      pageSize: 10
+      pageSize: 10,
     },
     //查询条件
     condition: {
       onlyMine: false,
       campus: "",
-      status: ["等待处理", "正在处理"]
-    }
+      status: ["等待处理", "正在处理"],
+    },
   };
 
   /**
@@ -72,17 +72,27 @@ class HandleOrderNew extends React.Component {
   async fetchData() {
     try {
       this.setState({ loading: true });
-      const { payload: rawData } = await api.GET(this.buildUrl());
-      this.setState({
-        loading: false,
-        data: rawData.data,
-        pagination: rawData.pagination
-      });
-    } catch (message) {
+      const { code, message, payload: rawData } = await api.GET(
+        this.buildUrl()
+      );
+      if (code === 0) {
+        this.setState({
+          loading: false,
+          data: rawData.data,
+          pagination: rawData.pagination,
+        });
+      } else {
+        Modal.error({
+          title: "获取预约单失败",
+          content: message,
+          centered: true,
+        });
+      }
+    } catch (error) {
       Modal.error({
         title: "获取预约单失败",
-        content: message,
-        centered: true
+        content: error.toString(),
+        centered: true,
       });
     }
   }
@@ -95,7 +105,7 @@ class HandleOrderNew extends React.Component {
   handlePaginationChange(newCurrentPage, newPageSize) {
     const newPagination = Object.assign(this.state.pagination, {
       currentPage: newCurrentPage,
-      pageSize: newPageSize
+      pageSize: newPageSize,
     });
     this.setState({ pagination: newPagination });
     //刷新数据
