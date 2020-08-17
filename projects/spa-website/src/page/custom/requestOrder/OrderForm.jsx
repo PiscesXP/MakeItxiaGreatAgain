@@ -148,8 +148,30 @@ function RequestOrderForm(props) {
 
         <Form.Item label="Email" hasFeedback>
           {getFieldDecorator("email", {
-            rules: [{ required: false, message: "请输入邮箱地址" }],
+            rules: [
+              { type: "email", message: "邮箱地址看起来不对..." },
+              { required: false, message: "请输入邮箱地址" },
+            ],
           })(<Input />)}
+        </Form.Item>
+
+        <Form.Item label="邮件提醒">
+          {getFieldDecorator("acceptEmailNotification", {
+            valuePropName: "checked",
+            initialValue: false,
+            rules: [
+              (rules, value, callback) => {
+                if (value === true) {
+                  validateFields(["email"], (error, { email }) => {
+                    if (error || email === "" || email === undefined) {
+                      callback("请先填写Email地址");
+                    }
+                  });
+                }
+                callback();
+              },
+            ],
+          })(<Checkbox>IT侠回复消息时，发邮件提醒我</Checkbox>)}
         </Form.Item>
 
         <Form.Item label="操作系统" hasFeedback>
