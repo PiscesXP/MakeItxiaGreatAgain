@@ -90,14 +90,16 @@ class AttachmentService {
         val file = File("${rootDir}${attachment.md5}")
         try {
             if (isImage && isThumbnail) {
-                //生成缩略图
-                Thumbnails.of(file)
-                        .size(200, 200)
-                        .outputQuality(0.6)
-                        .keepAspectRatio(true)
-                        .toOutputStream(response.outputStream)
-            } else if (isImage && !isDownload && attachment.size < 100 * 1024) {
-                //大于100KB的图片，生成等尺寸压缩图
+                if (attachment.size > 100 * 1024) {
+                    //只为100KB以上的图片生成缩略图
+                    Thumbnails.of(file)
+                            .size(200, 200)
+                            .outputQuality(0.6)
+                            .keepAspectRatio(true)
+                            .toOutputStream(response.outputStream)
+                }
+            } else if (isImage && !isDownload && attachment.size > 100 * 1024) {
+                //大于100KB的图片，生成等尺寸压缩图(不是缩略图)
                 Thumbnails.of(file)
                         .scale(1.0)
                         .outputQuality(0.6)
