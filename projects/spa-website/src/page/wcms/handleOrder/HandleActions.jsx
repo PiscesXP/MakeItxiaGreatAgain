@@ -12,7 +12,15 @@ function HandleActions(props) {
   const { _id: userID, role } = userInfoContext; //当前登录用户的id
 
   const { data, onHandleOrder } = props;
-  const { _id, name, status, handler, discuss } = data;
+  const {
+    _id,
+    name,
+    acceptEmailNotification,
+    status,
+    handler,
+    discuss,
+    reply,
+  } = data;
 
   const isMyOrder = handler && userID === handler._id; //是否是自己的预约单
 
@@ -114,20 +122,30 @@ function HandleActions(props) {
   };
 
   const [showDiscuss, setShowDiscuss] = useState(false);
+  const [showReply, setShowReply] = useState(false);
 
   const discussCount = discuss.length;
 
+  let showSendEmailCheckbox = acceptEmailNotification === true;
+
   return (
     <div className="order-btn-container">
-      {showList.discuss ? (
+      {status === "PENDING" || status === "HANDLING" ? (
         <Button
           onClick={() => {
-            setShowDiscuss(true);
+            setShowReply(true);
           }}
         >
-          讨论区 ({discussCount}条)
+          回复消息 ({reply.length}条)
         </Button>
       ) : null}
+      <Button
+        onClick={() => {
+          setShowDiscuss(true);
+        }}
+      >
+        讨论区 ({discussCount}条)
+      </Button>
       {showList.accept ? (
         <Popconfirm
           title="确定要接单吗?"
@@ -215,9 +233,24 @@ function HandleActions(props) {
         data={discuss}
         postUrl={`/order/${_id}/discuss`}
         onReply={() => {
-          //TODO
+          onHandleOrder();
         }}
-      ></ReplyList>
+        anonymousName={name}
+      />
+      <ReplyList
+        visible={showReply}
+        title={`${name} 的预约单 - 回复消息`}
+        onCancel={() => {
+          setShowReply(false);
+        }}
+        data={reply}
+        postUrl={`/order/${_id}/reply`}
+        onReply={() => {
+          onHandleOrder();
+        }}
+        anonymousName={name}
+        showSendEmailCheckbox={showSendEmailCheckbox}
+      />
     </div>
   );
 }
