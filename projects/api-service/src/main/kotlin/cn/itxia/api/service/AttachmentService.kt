@@ -87,6 +87,8 @@ class AttachmentService {
             response.setHeader("Content-Disposition", value)
         }
 
+        response.contentType = attachment.mimeType
+
         val file = File("${rootDir}${attachment.md5}")
         try {
             if (isImage && isThumbnail) {
@@ -97,6 +99,10 @@ class AttachmentService {
                             .outputQuality(0.6)
                             .keepAspectRatio(true)
                             .toOutputStream(response.outputStream)
+                } else {
+                    //返回原文件
+                    val fileBytes = file.readBytes()
+                    response.outputStream.write(fileBytes)
                 }
             } else if (isImage && !isDownload && attachment.size > 100 * 1024) {
                 //大于100KB的图片，生成等尺寸压缩图(不是缩略图)
