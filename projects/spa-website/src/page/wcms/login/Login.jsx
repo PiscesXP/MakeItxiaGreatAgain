@@ -6,6 +6,7 @@ import { AutoLogin } from "./AutoLogin";
 import { routePath } from "PAGE/routePath";
 import { Redirect } from "react-router-dom";
 import "./style.css";
+import { GET } from "UTIL/api";
 
 function LoginForm(props) {
   useTitleWCMS("登录");
@@ -29,6 +30,23 @@ function LoginForm(props) {
         content: message,
         centered: true,
       });
+    },
+    onSuccess: async () => {
+      const { code } = await GET("/whoami");
+      if (code !== 0) {
+        Modal.error({
+          title: "无法保存登录状态",
+          content: (
+            <div>
+              <p>
+                如果你在用iPad/iPhone:请在Safari设置中关闭"阻止所有cookie"和"阻止跨网站跟踪"
+              </p>
+              <p>其它浏览器:请启用cookie</p>
+            </div>
+          ),
+          centered: true,
+        });
+      }
     },
   });
 
