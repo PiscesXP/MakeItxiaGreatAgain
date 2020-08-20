@@ -2,20 +2,17 @@ package cn.itxia.api.controller
 
 import cn.itxia.api.annotation.CurrentItxiaMember
 import cn.itxia.api.annotation.RequireItxiaMember
+import cn.itxia.api.dto.DisableMemberDto
 import cn.itxia.api.dto.PasswordModifyDto
 import cn.itxia.api.dto.memberProfileModifyDto
+import cn.itxia.api.enum.MemberRoleEnum
 import cn.itxia.api.model.ItxiaMember
 import cn.itxia.api.response.Response
 import cn.itxia.api.response.ResponseCode
-import cn.itxia.api.service.AuthenticationService
 import cn.itxia.api.service.MemberService
-import cn.itxia.api.util.MongoUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class MemberController {
@@ -48,6 +45,12 @@ class MemberController {
             @CurrentItxiaMember itxiaMember: ItxiaMember): Response {
         memberService.modifyProfile(memberProfileModifyDto, itxiaMember)
         return ResponseCode.SUCCESS.withoutPayload()
+    }
+
+    @GetMapping("/member/all")
+    @RequireItxiaMember(MemberRoleEnum.ADMIN)
+    fun getAllMemberInfo(): Response {
+        return ResponseCode.SUCCESS.withPayload(memberService.getAllMemberInfo())
     }
 
 }

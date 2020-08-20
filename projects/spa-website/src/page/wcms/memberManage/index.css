@@ -1,0 +1,7 @@
+#member-actions {
+  margin-bottom: 16px;
+}
+
+#member-actions > * {
+  margin-right: 16px;
+}

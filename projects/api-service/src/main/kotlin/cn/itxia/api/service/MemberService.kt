@@ -1,5 +1,6 @@
 package cn.itxia.api.service
 
+import cn.itxia.api.dto.DisableMemberDto
 import cn.itxia.api.dto.PasswordModifyDto
 import cn.itxia.api.dto.memberProfileModifyDto
 import cn.itxia.api.enum.CampusEnum
@@ -58,6 +59,13 @@ class MemberService {
             member.lastLogin = Date()
             memberRepository.save(member)
         }
+    }
+
+    /**
+     * 获取所有成员信息.
+     * */
+    fun getAllMemberInfo(): List<ItxiaMember> {
+        return memberRepository.findAll().map { it.also { it.password = "" } }
     }
 
 }

@@ -11,6 +11,7 @@ import { DashBoard } from "./dashboard";
 import { HandleOrder } from "./handleOrder";
 import { Profile } from "./profile";
 import { AnnouncementManage } from "./announcementManage";
+import { MemberManage } from "./memberManage";
 
 const { Header, Content, Footer } = Layout;
 
@@ -51,6 +52,9 @@ function WCMSRouter() {
         </Route>
         <Route path={routePath.wcms.ANNOUNCE_MANAGE}>
           <AnnouncementManage />
+        </Route>
+        <Route path={routePath.wcms.MEMBER_MANAGE}>
+          <MemberManage />
         </Route>
         <Route>
           <NotFound />
