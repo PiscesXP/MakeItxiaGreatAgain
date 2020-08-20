@@ -87,10 +87,12 @@ function OrderInfoCard(props) {
         <strong>电话: </strong>
         {phone}
       </p>
-      <p>
-        <strong>邮箱: </strong>
-        {email}
-      </p>
+      {email ? (
+        <p>
+          <strong>邮箱: </strong>
+          {email}
+        </p>
+      ) : null}
       <p>
         <strong>电脑型号: </strong>
         {brandModel}

@@ -43,11 +43,9 @@ function CustomSystem() {
       </Header>
       <Content id="home-content">
         <CenterMeResponsive small>
-          <Card>
-            <CustomRouter />
-            <Divider dashed />
-            <AnnouncementList isInternal={false} />
-          </Card>
+          <CustomRouter />
+          <Divider dashed />
+          <AnnouncementList isInternal={false} />
         </CenterMeResponsive>
         <BackTop />
       </Content>

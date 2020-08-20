@@ -36,14 +36,14 @@ function OrderResult(props) {
     case "PENDING":
       alertProps = {
         message: "预约成功",
-        description: "请等待IT侠接单😊.",
+        description: "请等待IT侠接单😊",
         type: "success",
       };
       break;
     case "HANDLING":
       alertProps = {
         message: "正在处理",
-        description: `你的单子正由 ${order.handler.realName} 处理中，请等待ta联系解决问题😊.`,
+        description: `你的单子正由 ${order.handler.realName} 处理中，请等待ta联系解决问题😊`,
         type: "info",
         icon: <Icon type="clock-circle" />,
       };
@@ -51,14 +51,14 @@ function OrderResult(props) {
     case "DONE":
       alertProps = {
         message: "预约已完成",
-        description: `你的单子已由 ${order.handler.realName} 处理完成.`,
+        description: `你的单子已由 ${order.handler.realName} 处理完成`,
         type: "success",
       };
       break;
     case "CANCELED":
       alertProps = {
         message: "预约已取消",
-        description: `若需要预约请返回主页重新预约.`,
+        description: `若需要预约请返回主页重新预约`,
         type: "error",
       };
       break;
