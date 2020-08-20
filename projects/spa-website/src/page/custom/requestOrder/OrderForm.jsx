@@ -24,6 +24,7 @@ function RequestOrderForm(props) {
     getFieldsValue,
     setFieldsValue,
     getFieldDecorator,
+    validateFieldsAndScroll,
   } = props.form;
   const { onSubmitSuccess } = props;
 
@@ -80,7 +81,7 @@ function RequestOrderForm(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    validateFields((err, values) => {
+    validateFieldsAndScroll((err, values) => {
       if (err) {
         return;
       }
@@ -154,7 +155,7 @@ function RequestOrderForm(props) {
               { type: "email", message: "邮箱地址看起来不对..." },
               { required: false, message: "请输入邮箱地址" },
             ],
-          })(<Input />)}
+          })(<Input type="email" />)}
         </Form.Item>
 
         <Form.Item label="邮件提醒">
