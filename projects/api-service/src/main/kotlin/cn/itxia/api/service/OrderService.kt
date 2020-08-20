@@ -35,6 +35,9 @@ class OrderService {
     @Autowired
     private lateinit var emailService: EmailService
 
+    @Autowired
+    private lateinit var memberService: MemberService
+
     /**
      * 分页查询预约单.
      * */
@@ -126,6 +129,16 @@ class OrderService {
                 acceptEmailNotification = dto.acceptEmailNotification
         )
         val savedOrder = orderRepository.save(order)
+
+        //提醒(接收邮件推送)的it侠，有新的预约单
+        memberService.getAllMemberThatReceiveEmailNotification(
+                "onMyCampusHasNewOrder", savedOrder.campus).forEach { member ->
+            member.email?.let { emailAddress ->
+                emailService.noticeItxiaMemberThatCampusHasNewOrder(emailAddress, savedOrder, member)
+            }
+        }
+
+
         return ResponseCode.SUCCESS.withPayload(savedOrder)
     }
 
@@ -203,8 +216,6 @@ class OrderService {
                 ResponseCode.ORDER_STATUS_INCORRECT.withPayload("请检查预约单状态 (也许已经被别人接单了)")
             }
         }
-        //发邮件提醒
-        emailService.noticeOrderStatusChange(order, action, itxiaMember)
         return response
     }
 
@@ -225,6 +236,19 @@ class OrderService {
         val reply = replyService.saveReply(dto, null)
         order.reply.add(reply)
         orderRepository.save(order)
+
+        val handler = memberService.getMemberByID(order.handler?._id)
+        if (handler != null && handler.emailNotification.onMyOrderHasNewReply) {
+            //发送邮件提醒预约人，有新回复
+            handler.email?.let {
+                emailService.noticeItxiaMemberThatOrderHasNewReply(
+                        address = it,
+                        order = order,
+                        reply = reply,
+                        itxiaMember = handler
+                )
+            }
+        }
         return true
     }
 

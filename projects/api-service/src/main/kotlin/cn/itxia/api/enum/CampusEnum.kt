@@ -4,7 +4,7 @@ package cn.itxia.api.enum
  * 校区参数.
  * 啥时候开新校区呢...
  * */
-enum class CampusEnum(private val campusName: String) {
+enum class CampusEnum(val campusName: String) {
     XIANLIN("仙林"),
     GULOU("鼓楼");
 
