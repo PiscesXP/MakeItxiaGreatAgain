@@ -3,7 +3,7 @@ import { useApi, useMemberContext } from "HOOK";
 import { MemberInfoTable } from "PAGE/wcms/memberManage/MemberInfoTable";
 import { MemberActionButtons } from "PAGE/wcms/memberManage/MemberActionButtons";
 import "./index.css";
-import { Modal } from "antd";
+import { Card, Modal } from "antd";
 
 function MemberManage() {
   const memberContext = useMemberContext();
@@ -74,13 +74,13 @@ function MemberManage() {
   }
 
   return (
-    <div>
+    <Card>
       <MemberActionButtons
         selectedMember={selectedMember}
         onDisableAccount={handleDisableAccount}
       />
       <MemberInfoTable data={payload} onSelectRow={handleSelect} />
-    </div>
+    </Card>
   );
 }
 
