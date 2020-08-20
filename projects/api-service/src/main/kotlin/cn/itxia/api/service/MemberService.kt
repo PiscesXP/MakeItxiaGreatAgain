@@ -43,8 +43,14 @@ class MemberService {
         if (optional.isPresent) {
             val member = optional.get()
             member.campus = dto.campus.let { CampusEnum.parse(it) } ?: member.campus
-            member.email = dto.email
-            if (!dto.email.isNullOrEmpty()) {
+            if (dto.email.isNullOrEmpty()) {
+                member.email = null
+                member.emailNotification.apply {
+                    onMyCampusHasNewOrder = false
+                    onMyOrderHasNewReply = false
+                }
+            } else {
+                member.email = dto.email
                 member.emailNotification.onMyCampusHasNewOrder = dto.emailNotification?.contains("onMyCampusHasNewOrder")
                         ?: false
                 member.emailNotification.onMyOrderHasNewReply = dto.emailNotification?.contains("onMyOrderHasNewReply")
