@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, Redirect, Route, Switch, useLocation } from "react-router-dom";
 import { routePath } from "../routePath";
-import { BackTop, Card, Divider, Icon, Layout, Menu } from "antd";
+import { BackTop, Divider, Icon, Layout, Menu } from "antd";
 import { Footer as MyFooter } from "COMPONENTS/footer";
 import { CustomHomePage } from "./home";
 import { RequestOrder } from "./requestOrder";
