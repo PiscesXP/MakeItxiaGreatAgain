@@ -34,8 +34,11 @@ data class ItxiaMember(
         @DBRef
         var inviteBy: BaseInfoOnly?,
 
-        var lastLogin: Date? = null
+        var lastLogin: Date? = null,
 
+        var email: String? = null,
+
+        var emailNotification: EmailNotificationSetting = EmailNotificationSetting()
 ) {
     @Document(collection = "users")
     data class BaseInfoOnly(
@@ -51,6 +54,10 @@ data class ItxiaMember(
     fun removeSensitiveFields(): ItxiaMember {
         return this.copy(password = "")
     }
-
 }
+
+data class EmailNotificationSetting(
+        var onMyCampusHasNewOrder: Boolean = false,
+        var onMyOrderHasNewReply: Boolean = false
+)
 

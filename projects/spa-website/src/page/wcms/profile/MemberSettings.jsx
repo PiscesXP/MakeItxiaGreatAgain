@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Col, Form, Modal, Row, Select } from "antd";
+import { Button, Checkbox, Col, Form, Input, Modal, Row, Select } from "antd";
 import { useApi, useMemberContext } from "HOOK";
 
 function MemberSettingsForm(props) {
@@ -56,6 +56,68 @@ function MemberSettingsForm(props) {
             <Select.Option value={"XIANLIN"}>仙林</Select.Option>
             <Select.Option value={"GULOU"}>鼓楼</Select.Option>
           </Select>
+        )}
+      </Form.Item>
+      <Form.Item label="Email" hasFeedback>
+        {getFieldDecorator("email", {
+          initialValue: context.email,
+          rules: [
+            { type: "email", message: "邮箱地址看起来不对..." },
+            { required: false, message: "请输入邮箱地址" },
+          ],
+        })(<Input />)}
+      </Form.Item>
+      <Form.Item label="邮件提醒">
+        {getFieldDecorator("emailNotification", {
+          initialValue: (() => {
+            const { emailNotification } = context;
+            if (emailNotification) {
+              const result = [];
+              for (const propsKey in emailNotification) {
+                if (
+                  emailNotification.hasOwnProperty(propsKey) &&
+                  emailNotification[propsKey] === true
+                ) {
+                  result.push(propsKey);
+                }
+              }
+              return result;
+            } else {
+              return [];
+            }
+          })(),
+          rules: [
+            (rule, value, callback) => {
+              if (value.length !== 0) {
+                validateFields(["email"], (error, { email }) => {
+                  if (
+                    error ||
+                    email === "" ||
+                    email === null ||
+                    email === undefined
+                  ) {
+                    callback("请先填写Email地址");
+                  }
+                });
+              }
+              callback();
+            },
+          ],
+        })(
+          <Checkbox.Group style={{ width: "100%" }}>
+            <Row>
+              <Col span={24}>
+                <Checkbox value="onMyCampusHasNewOrder">
+                  本校区有新预约单时
+                </Checkbox>
+              </Col>
+              <Col span={24}>
+                <Checkbox value="onMyOrderHasNewReply">
+                  我的预约单有新回复时
+                </Checkbox>
+              </Col>
+            </Row>
+          </Checkbox.Group>
         )}
       </Form.Item>
       <Form.Item wrapperCol={{ span: 24 }}>

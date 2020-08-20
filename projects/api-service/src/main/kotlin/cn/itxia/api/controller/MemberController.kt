@@ -2,9 +2,8 @@ package cn.itxia.api.controller
 
 import cn.itxia.api.annotation.CurrentItxiaMember
 import cn.itxia.api.annotation.RequireItxiaMember
-import cn.itxia.api.dto.DisableMemberDto
+import cn.itxia.api.dto.MemberProfileModifyDto
 import cn.itxia.api.dto.PasswordModifyDto
-import cn.itxia.api.dto.memberProfileModifyDto
 import cn.itxia.api.enum.MemberRoleEnum
 import cn.itxia.api.model.ItxiaMember
 import cn.itxia.api.response.Response
@@ -12,7 +11,10 @@ import cn.itxia.api.response.ResponseCode
 import cn.itxia.api.service.MemberService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class MemberController {
@@ -41,7 +43,7 @@ class MemberController {
     @PutMapping("/member/me/profile")
     @RequireItxiaMember
     fun modifyProfile(
-            @RequestBody @Validated memberProfileModifyDto: memberProfileModifyDto,
+            @RequestBody @Validated memberProfileModifyDto: MemberProfileModifyDto,
             @CurrentItxiaMember itxiaMember: ItxiaMember): Response {
         memberService.modifyProfile(memberProfileModifyDto, itxiaMember)
         return ResponseCode.SUCCESS.withoutPayload()

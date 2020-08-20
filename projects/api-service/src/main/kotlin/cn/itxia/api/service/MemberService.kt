@@ -1,8 +1,7 @@
 package cn.itxia.api.service
 
-import cn.itxia.api.dto.DisableMemberDto
+import cn.itxia.api.dto.MemberProfileModifyDto
 import cn.itxia.api.dto.PasswordModifyDto
-import cn.itxia.api.dto.memberProfileModifyDto
 import cn.itxia.api.enum.CampusEnum
 import cn.itxia.api.model.ItxiaMember
 import cn.itxia.api.model.repository.ItxiaMemberRepository
@@ -38,13 +37,19 @@ class MemberService {
     /**
      * 修改个人信息.
      * */
-    fun modifyProfile(dto: memberProfileModifyDto,
+    fun modifyProfile(dto: MemberProfileModifyDto,
                       itxiaMember: ItxiaMember) {
-
         val optional = memberRepository.findById(itxiaMember._id)
         if (optional.isPresent) {
             val member = optional.get()
-            member.campus = dto.campus?.let { CampusEnum.parse(it) } ?: member.campus
+            member.campus = dto.campus.let { CampusEnum.parse(it) } ?: member.campus
+            member.email = dto.email
+            if (!dto.email.isNullOrEmpty()) {
+                member.emailNotification.onMyCampusHasNewOrder = dto.emailNotification?.contains("onMyCampusHasNewOrder")
+                        ?: false
+                member.emailNotification.onMyOrderHasNewReply = dto.emailNotification?.contains("onMyOrderHasNewReply")
+                        ?: false
+            }
             memberRepository.save(member)
         }
     }
