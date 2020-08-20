@@ -21,8 +21,8 @@ function MemberSettingsForm(props) {
         content: "修改成功",
         centered: true,
         onOk: () => {
-          //重新加载页面，刷新context
-          window.location.reload();
+          //刷新context
+          context.refresh();
         },
       });
     },

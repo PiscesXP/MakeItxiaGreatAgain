@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Loading } from "COMPONENTS/loading";
 import { useHistory, Redirect } from "react-router-dom";
 import { routePath } from "PAGE/routePath";
@@ -11,11 +11,15 @@ const UserInfoContext = React.createContext(null);
  * 提供当前登录用户信息的context.
  */
 function UserInfoProvider(props) {
-  const { loading, code, payload, error } = useApi({ path: "/whoami" });
+  const { loading, code, payload, error, send } = useApi({ path: "/whoami" });
 
   const history = useHistory();
 
-  if (loading) {
+  const refresh = useCallback(() => {
+    send();
+  }, [send]);
+
+  if (loading && code !== 0) {
     return <Loading />;
   }
 
@@ -40,7 +44,7 @@ function UserInfoProvider(props) {
   }
 
   return (
-    <UserInfoContext.Provider value={payload}>
+    <UserInfoContext.Provider value={{ refresh, ...payload }}>
       {props.children}
     </UserInfoContext.Provider>
   );
