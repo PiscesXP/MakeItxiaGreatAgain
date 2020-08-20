@@ -3,6 +3,7 @@ import React from "react";
 import { ReplyEditor } from "./ReplyEditor";
 import { AttachmentList } from "COMPONENTS/attachment";
 import { utcDateToText } from "UTIL/time";
+import { MultiLinePlainText } from "COMPONENTS/text";
 
 /**
  * @param visible {boolean} Modal是否可见
@@ -49,7 +50,7 @@ function ReplyList({
                 avatar={<Avatar>{realName.charAt(realName.length - 1)}</Avatar>}
                 author={realName}
                 datetime={utcDateToText(item.createTime)}
-                content={item.content}
+                content={<MultiLinePlainText content={item.content} />}
               >
                 <AttachmentList data={item.attachments} />
               </Comment>

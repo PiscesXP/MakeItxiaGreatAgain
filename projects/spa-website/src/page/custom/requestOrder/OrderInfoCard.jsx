@@ -1,9 +1,9 @@
 import React from "react";
 import { Button, Descriptions, Popconfirm } from "antd";
 import { AttachmentList } from "COMPONENTS/attachment";
-import { ReactMarkdown } from "UTIL/md2html";
 import { parseEnumValue } from "UTIL/enumParser";
 import { utcDateToText } from "UTIL/time";
+import { MultiLinePlainText } from "COMPONENTS/text";
 
 const { Item } = Descriptions;
 
@@ -38,9 +38,7 @@ function OrderInfoCard(props) {
       <Item label="保修状况">{warranty}</Item>
       <Item label="预约时间">{utcDateToText(createTime)}</Item>
       <Item label="问题描述">
-        <div className="order-card-desc">
-          <ReactMarkdown source={description} />
-        </div>
+        <MultiLinePlainText content={description} />
       </Item>
       <Item label="附件">
         {attachments.length === 0 ? (

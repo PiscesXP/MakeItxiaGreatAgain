@@ -1,0 +1,8 @@
+.multiline-text-container {
+  padding: 0.5rem 0.5rem 1px;
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.multiline-text-container p {
+  margin-bottom: 0.5em;
+}

@@ -3,8 +3,8 @@ import { Card, Divider, Icon } from "antd";
 import * as timeUtil from "UTIL/time";
 import { AttachmentList } from "COMPONENTS/attachment";
 import { HandleActions } from "./HandleActions";
-import { ReactMarkdown } from "UTIL/md2html";
 import { parseEnumValue } from "UTIL/enumParser";
+import { MultiLinePlainText } from "COMPONENTS/text";
 
 const getStatusIcon = (status) => {
   switch (status) {
@@ -108,12 +108,7 @@ function OrderInfoCard(props) {
       <p>
         <strong>问题描述: </strong>
       </p>
-      <div className="order-card-desc">
-        <ReactMarkdown
-          escapeHtml
-          source={description.replace(/<br \/>/g, "\r\n")}
-        />
-      </div>
+      <MultiLinePlainText content={description} />
       <br />
       {attachments.length === 0 ? null : (
         <div>
