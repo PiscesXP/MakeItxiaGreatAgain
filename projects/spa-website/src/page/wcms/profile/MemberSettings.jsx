@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Checkbox, Col, Form, Input, Modal, Row, Select } from "antd";
 import { useApi, useMemberContext } from "HOOK";
+import { CenterMeFlex } from "COMPONENTS/layout";
 
 function MemberSettingsForm(props) {
   const {
@@ -125,13 +126,11 @@ function MemberSettingsForm(props) {
         )}
       </Form.Item>
       <Form.Item wrapperCol={{ span: 24 }}>
-        <Row type="flex" align="middle" justify="center">
-          <Col>
-            <Button type="primary" loading={loading} htmlType="submit">
-              更新个人信息
-            </Button>
-          </Col>
-        </Row>
+        <CenterMeFlex>
+          <Button type="primary" loading={loading} htmlType="submit">
+            更新个人信息
+          </Button>
+        </CenterMeFlex>
       </Form.Item>
     </Form>
   );
