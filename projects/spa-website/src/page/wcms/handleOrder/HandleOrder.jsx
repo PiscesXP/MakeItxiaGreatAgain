@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useApi, useMemberContext, useTitleWCMS } from "HOOK";
+import {
+  useApi,
+  useLocalStorageState,
+  useMemberContext,
+  useTitleWCMS,
+} from "HOOK";
 import { SearchCondition } from "PAGE/wcms/handleOrder/SearchCondition";
 import { CenterMeResponsive } from "COMPONENTS/layout";
 import { Divider } from "antd";
@@ -25,12 +30,19 @@ function HandleOrder() {
 
   const memberContext = useMemberContext();
 
-  const [condition, setCondition] = useState({
-    onlyMine: false,
-    campus: memberContext.campus,
-    status: "PENDING",
-    text: "",
-    orderTime: null,
+  const [condition, setCondition] = useLocalStorageState({
+    key: "orderSearchCondition",
+    init: {
+      onlyMine: false,
+      campus: memberContext.campus,
+      status: "PENDING",
+      text: "",
+      orderTime: null,
+    },
+    transform: (newCondition) => {
+      const { orderTime, ...rest } = newCondition;
+      return rest;
+    },
   });
 
   const [pagination, setPagination] = useState({ page: 1, size: 10 });
