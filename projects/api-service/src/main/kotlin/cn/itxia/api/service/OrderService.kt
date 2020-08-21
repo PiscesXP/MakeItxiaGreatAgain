@@ -18,6 +18,9 @@ import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Service
 
 @Service
@@ -38,38 +41,51 @@ class OrderService {
     @Autowired
     private lateinit var memberService: MemberService
 
+    @Autowired
+    private lateinit var mongoTemplate: MongoTemplate
+
     /**
-     * 分页查询预约单.
+     * 查询预约单.
      * */
-    fun getPageableOrder(
+    fun queryOrder(
             page: Int,
-            pageSize: Int,
-            campus: List<CampusEnum>?,
-            status: List<OrderStatusEnum>?,
-            onlyByMember: ItxiaMember?
+            size: Int,
+            onlyMine: Boolean = false,
+            campus: CampusEnum?,
+            status: OrderStatusEnum?,
+            text: String?,
+            showDeleted: Boolean = false,
+            itxiaMember: ItxiaMember
     ): OrderQueryResultVo {
-
-        //如果没有指定校区/预约单状态，则查询全部
-        val campusList = campus ?: CampusEnum.values().toList()
-        val statusList = status ?: OrderStatusEnum.values().toList()
-
-        //符合条件的总数
-        val totalCount = if (onlyByMember == null) {
-            orderRepository.countByCampusInAndStatusInAndDeletedFalse(
-                    campus = campusList,
-                    status = statusList
-            )
-        } else {
-            orderRepository.countByCampusInAndStatusInAndHandlerAndDeletedFalse(
-                    campus = campusList,
-                    status = statusList,
-                    handler = onlyByMember.toBaseInfoOnly()
+        val criteria = Criteria()
+        if (!showDeleted) {
+            criteria.and("deleted").`is`(false)
+        }
+        if (onlyMine) {
+            criteria.and("handler").`is`(itxiaMember._id)
+        }
+        if (campus != null) {
+            criteria.and("campus").`is`(campus)
+        }
+        if (status != null) {
+            criteria.and("status").`is`(status)
+        }
+        if (text != null) {
+            criteria.orOperator(
+                    Criteria.where("name").regex(text),
+                    Criteria.where("phone").regex(text),
+                    Criteria.where("email").regex(text),
+                    Criteria.where("qq").regex(text),
+                    Criteria.where("warranty").regex(text),
+                    Criteria.where("brandModel").regex(text),
+                    Criteria.where("description").regex(text)
             )
         }
+        val totalCount = mongoTemplate.count(Query.query(criteria), Order::class.java).toInt()
 
         //最大可能的页数
-        var maxPossiblePageCount = totalCount / pageSize + 1
-        if (totalCount % pageSize == 0) {
+        var maxPossiblePageCount = totalCount / size + 1
+        if (totalCount % size == 0) {
             --maxPossiblePageCount
         }
         if (maxPossiblePageCount < 1) {
@@ -79,30 +95,15 @@ class OrderService {
         //当前页码
         val currentPage = if (page < maxPossiblePageCount) page else maxPossiblePageCount
 
-        val pageable = PageRequest.of(
-                currentPage - 1, pageSize, Sort.Direction.DESC, "createTime")
-        //查询
-        val orderList = if (onlyByMember == null) {
-            orderRepository.findByCampusInAndStatusInAndDeletedFalse(
-                    campusList,
-                    statusList,
-                    pageable
-            )
-        } else {
-            orderRepository.findByCampusInAndStatusInAndHandlerAndDeletedFalse(
-                    campusList,
-                    statusList,
-                    onlyByMember.toBaseInfoOnly(),
-                    pageable
-            )
-        }
+        val pageRequest = PageRequest.of(currentPage - 1, size, Sort.Direction.DESC, "createTime")
+        val sortByCreateTime = Sort.by("createTime").descending()
 
-        return OrderQueryResultVo(
-                OrderQueryResultVo.Pagination(
-                        currentPage, totalCount, pageSize
-                ),
-                orderList
+        val data = mongoTemplate.find(
+                Query.query(criteria).with(pageRequest).with(sortByCreateTime),
+                Order::class.java
         )
+
+        return OrderQueryResultVo(OrderQueryResultVo.Pagination(currentPage = currentPage, totalCount = totalCount, pageSize = size), data = data)
     }
 
     /**

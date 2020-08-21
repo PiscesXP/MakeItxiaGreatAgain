@@ -68,21 +68,28 @@ class OrderController {
     @RequireItxiaMember
     fun getAllOrders(@RequestParam(required = false) page: Int?,
                      @RequestParam(required = false) size: Int?,
-                     @RequestParam(required = false) campus: List<String>?,
-                     @RequestParam(required = false) status: List<String>?,
+                     @RequestParam(required = false) campus: String?,
+                     @RequestParam(required = false) status: String?,
                      @RequestParam(required = false) direction: String?,
                      @RequestParam(required = false) onlyMine: String?,
+                     @RequestParam(required = false) startTime: String?,
+                     @RequestParam(required = false) endTime: String?,
+                     @RequestParam(required = false) text: String?,
                      @CurrentItxiaMember member: ItxiaMember
     ): Response {
-        val actualPage = if (page == null || page < 0) 0 else page
+        val actualPage = if (page == null || page < 1) 1 else page
         val actualSize = if (size == null || size < 10 || size > 50) 20 else size
-        val onlyByMember = if (onlyMine != null) member else null
-        val actualCampus = campus?.mapNotNull { CampusEnum.parse(it) }
-        val actualStatus = status?.mapNotNull { OrderStatusEnum.parse(it) }
 
-        val result = orderService.getPageableOrder(
-                actualPage, actualSize, actualCampus, actualStatus, onlyByMember
+        val result = orderService.queryOrder(
+                page = actualPage,
+                size = actualSize,
+                onlyMine = onlyMine != null,
+                campus = campus?.let { CampusEnum.parse(it) },
+                status = status?.let { OrderStatusEnum.parse(it) },
+                text = text,
+                itxiaMember = member
         )
+
         return ResponseCode.SUCCESS.withPayload(result)
     }
 
