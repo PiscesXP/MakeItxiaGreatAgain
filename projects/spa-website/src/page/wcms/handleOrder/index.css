@@ -17,26 +17,3 @@
 .order-btn-container > * {
   margin: 0.4em 0.6em;
 }
-
-#sb-form-item-container > * {
-  margin: 4px 12px;
-  display: inline-block;
-}
-
-.order-card-desc {
-  padding: 0.5rem;
-  padding-bottom: 1px;
-  background-color: rgba(0, 0, 0, 0.03);
-}
-/*
-#sb-form-item-container {
-  display: flex;
-}
-#sb-form-item-container .ant-form-item > * {
-  display: inline-block;
-}
-#sb-form-item-container .ant-form-item-children {
-  display: flex;
-  margin-top: 8px;
-}
-*/
