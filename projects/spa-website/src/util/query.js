@@ -7,9 +7,9 @@ function buildQueryString(query) {
   }
   if (typeof query === "string") {
     if (query.length > 1 && query.charAt(0) !== "?") {
-      return "?" + query;
+      return encodeURI("?" + query);
     }
-    return query;
+    return encodeURI(query);
   }
   if (typeof query === "object") {
     let qs = "";
@@ -26,7 +26,7 @@ function buildQueryString(query) {
     }
     qs = qs.substr(1);
     qs = "?" + qs;
-    return qs;
+    return encodeURI(qs);
   }
   return "";
 }
