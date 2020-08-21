@@ -7,7 +7,7 @@ import {
 } from "HOOK";
 import { SearchCondition } from "PAGE/wcms/handleOrder/SearchCondition";
 import { CenterMeResponsive } from "COMPONENTS/layout";
-import { Divider } from "antd";
+import { Divider, Modal } from "antd";
 import { OrderList } from "PAGE/wcms/handleOrder/OrderList";
 import { debounceFn } from "UTIL/common";
 
@@ -51,6 +51,20 @@ function HandleOrder() {
     path: "/order",
     query: condition,
     later: true,
+    onFail: ({ message }) => {
+      Modal.error({
+        title: "获取预约单失败",
+        content: message,
+        centered: true,
+      });
+    },
+    onError: (error) => {
+      Modal.error({
+        title: "获取预约单失败",
+        content: error.toString(),
+        centered: true,
+      });
+    },
   });
 
   const sendRequest = useCallback(() => {
