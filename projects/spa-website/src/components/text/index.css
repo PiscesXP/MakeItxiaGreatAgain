@@ -6,3 +6,8 @@
 .multiline-text-container p {
   margin-bottom: 0.5em;
 }
+
+.text-highlight {
+  background-color: #ffc069;
+  padding: 0;
+}

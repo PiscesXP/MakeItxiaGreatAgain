@@ -5,6 +5,7 @@ import { AttachmentList } from "COMPONENTS/attachment";
 import { HandleActions } from "./HandleActions";
 import { parseEnumValue } from "UTIL/enumParser";
 import { MultiLinePlainText } from "COMPONENTS/text";
+import { HighlightText } from "COMPONENTS/text/HighlightText";
 
 const getStatusIcon = (status) => {
   switch (status) {
@@ -48,7 +49,7 @@ const getStatusIcon = (status) => {
 };
 
 function OrderInfoCard(props) {
-  const { data, whoami, onHandleOrder } = props;
+  const { data, whoami, highlightWords, onHandleOrder } = props;
   const {
     name,
     campus,
@@ -73,7 +74,7 @@ function OrderInfoCard(props) {
       <Divider dashed className="order-hr" />
       <p>
         <strong>姓名: </strong>
-        {name}
+        <HighlightText text={name} highlightWords={highlightWords} />
       </p>
       <p>
         <strong>校区: </strong>
@@ -85,32 +86,35 @@ function OrderInfoCard(props) {
       </p>
       <p>
         <strong>电话: </strong>
-        {phone}
+        <HighlightText text={phone} highlightWords={highlightWords} />
       </p>
       {email ? (
         <p>
           <strong>邮箱: </strong>
-          {email}
+          <HighlightText text={email} highlightWords={highlightWords} />
         </p>
       ) : null}
       <p>
         <strong>电脑型号: </strong>
-        {brandModel}
+        <HighlightText text={brandModel} highlightWords={highlightWords} />
       </p>
       <p>
         <strong>操作系统: </strong>
-        {os}
+        <HighlightText text={os} highlightWords={highlightWords} />
       </p>
       {warranty ? (
         <p>
           <strong>保修: </strong>
-          {warranty}
+          <HighlightText text={warranty} highlightWords={highlightWords} />
         </p>
       ) : null}
       <p>
         <strong>问题描述: </strong>
       </p>
-      <MultiLinePlainText content={description} />
+      <MultiLinePlainText
+        content={description}
+        highlightWords={highlightWords}
+      />
       <br />
       {attachments.length === 0 ? null : (
         <div>

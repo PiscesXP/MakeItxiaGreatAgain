@@ -9,6 +9,7 @@ function OrderList({
   code,
   loading,
   payload,
+  highlightWords,
   onHandleOrder,
   onPaginationChange,
 }) {
@@ -49,6 +50,7 @@ function OrderList({
                 <OrderInfoCard
                   key={value._id}
                   data={value}
+                  highlightWords={highlightWords}
                   onHandleOrder={onHandleOrder}
                 />
               );
@@ -64,6 +66,7 @@ function OrderList({
                 <OrderInfoCard
                   key={value._id}
                   data={value}
+                  highlightWords={highlightWords}
                   onHandleOrder={onHandleOrder}
                 />
               );

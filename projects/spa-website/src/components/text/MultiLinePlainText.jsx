@@ -1,9 +1,11 @@
 import React from "react";
+import { HighlightText } from "COMPONENTS/text/HighlightText";
 
 /**
  * @param content {string}
+ * @param highlightWords {[string]?}
  * */
-function MultiLinePlainText({ content }) {
+function MultiLinePlainText({ content, highlightWords }) {
   if (!!!content || content === "") {
     return null;
   }
@@ -15,7 +17,13 @@ function MultiLinePlainText({ content }) {
   return (
     <div className="multiline-text-container">
       {content.split("\n").map((line, index) => (
-        <p key={index}>{line}</p>
+        <p key={index}>
+          {Array.isArray(highlightWords) ? (
+            <HighlightText text={line} highlightWords={highlightWords} />
+          ) : (
+            line
+          )}
+        </p>
       ))}
     </div>
   );

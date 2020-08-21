@@ -71,6 +71,13 @@ function HandleOrder() {
     sendRequest();
   }
 
+  const highlightWords = useMemo(() => {
+    if (condition && condition.text) {
+      return [condition.text];
+    }
+    return [];
+  }, [condition]);
+
   return (
     <div>
       <CenterMeResponsive>
@@ -84,6 +91,7 @@ function HandleOrder() {
         code={code}
         loading={loading}
         payload={payload}
+        highlightWords={highlightWords}
         onHandleOrder={handleHandleOrder}
         onPaginationChange={handlePaginationChange}
       />
