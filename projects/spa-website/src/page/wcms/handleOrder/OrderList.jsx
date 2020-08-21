@@ -1,27 +1,26 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Col, Row } from "antd";
 import { OrderPagination } from "./OrderPagination";
 import { EmbeddableLoading, Loading } from "COMPONENTS/loading";
 import { OrderInfoCard } from "./OrderInfoCard";
 import { OrderNotFound } from "COMPONENTS/notFound";
 
-function OrderList(props) {
-  const {
-    loading,
-    data,
-    paginationInfo,
-    onPaginationChange,
-    onHandleOrder
-  } = props;
-
+function OrderList({
+  code,
+  loading,
+  payload,
+  onHandleOrder,
+  onPaginationChange,
+}) {
   //加载中
-  if (loading && !!!data) {
+  if (code !== 0) {
     return <Loading delay={0} />;
   }
 
+  const { data, pagination } = payload;
+
   //分页组件
-  const { pageSize, totalCount, currentPage } = paginationInfo;
+  const { pageSize, totalCount, currentPage } = pagination;
   const orderPagination = (
     <OrderPagination
       pageSize={pageSize}
@@ -31,12 +30,6 @@ function OrderList(props) {
     />
   );
 
-  let lengthOfData = data.length;
-  if (!!!lengthOfData) {
-    lengthOfData = 0;
-  }
-
-  //渲染
   return (
     <EmbeddableLoading loading={loading}>
       <Row gutter={[8, 0]} type="flex" justify="center" align="top">
@@ -49,9 +42,9 @@ function OrderList(props) {
         <Col xs={24} sm={24} md={24} lg={12} xl={10}>
           {data
             .filter((value, index) => {
-              return index < lengthOfData / 2;
+              return index < data.length / 2;
             })
-            .map(value => {
+            .map((value) => {
               return (
                 <OrderInfoCard
                   key={value._id}
@@ -64,9 +57,9 @@ function OrderList(props) {
         <Col xs={24} sm={24} md={24} lg={12} xl={10}>
           {data
             .filter((value, index) => {
-              return index >= lengthOfData / 2;
+              return index >= data.length / 2;
             })
-            .map(value => {
+            .map((value) => {
               return (
                 <OrderInfoCard
                   key={value._id}
@@ -81,13 +74,5 @@ function OrderList(props) {
     </EmbeddableLoading>
   );
 }
-
-OrderList.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  data: PropTypes.array,
-  paginationInfo: PropTypes.object.isRequired,
-  onPaginationChange: PropTypes.func.isRequired,
-  onHandleOrder: PropTypes.func.isRequired
-};
 
 export { OrderList };

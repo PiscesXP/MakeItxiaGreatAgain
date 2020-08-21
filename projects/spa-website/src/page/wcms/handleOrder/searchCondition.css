@@ -1,0 +1,4 @@
+.condition-container > * {
+  padding: 0 32px;
+  display: inline-block;
+}

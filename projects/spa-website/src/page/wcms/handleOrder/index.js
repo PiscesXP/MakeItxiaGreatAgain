@@ -1,3 +1,3 @@
-import { HandleOrderNew as HandleOrder } from "./HandleOrderNew";
+import { HandleOrder } from "./HandleOrder";
 
 export { HandleOrder };
