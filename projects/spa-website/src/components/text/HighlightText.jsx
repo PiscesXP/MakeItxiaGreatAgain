@@ -12,6 +12,7 @@ function HighlightText({ highlightWords = [], text }) {
       highlightClassName="text-highlight"
       searchWords={highlightWords}
       autoEscape
+      caseSensitive={false}
       textToHighlight={text}
     />
   );

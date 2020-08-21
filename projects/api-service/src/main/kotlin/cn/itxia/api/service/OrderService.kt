@@ -77,13 +77,13 @@ class OrderService {
         }
         if (text != null) {
             criteria.orOperator(
-                    Criteria.where("name").regex(text),
-                    Criteria.where("phone").regex(text),
-                    Criteria.where("email").regex(text),
-                    Criteria.where("qq").regex(text),
-                    Criteria.where("warranty").regex(text),
-                    Criteria.where("brandModel").regex(text),
-                    Criteria.where("description").regex(text)
+                    Criteria.where("name").regex(text, "i"),
+                    Criteria.where("phone").regex(text, "i"),
+                    Criteria.where("email").regex(text, "i"),
+                    Criteria.where("qq").regex(text, "i"),
+                    Criteria.where("warranty").regex(text, "i"),
+                    Criteria.where("brandModel").regex(text, "i"),
+                    Criteria.where("description").regex(text, "i")
             )
         }
         if (startTime != null && endTime != null) {
