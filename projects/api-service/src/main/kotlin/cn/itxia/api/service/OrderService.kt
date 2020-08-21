@@ -22,6 +22,8 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Service
+import java.text.ParseException
+import java.text.SimpleDateFormat
 
 @Service
 class OrderService {
@@ -54,9 +56,12 @@ class OrderService {
             campus: CampusEnum?,
             status: OrderStatusEnum?,
             text: String?,
+            startTime: String?,
+            endTime: String?,
             showDeleted: Boolean = false,
             itxiaMember: ItxiaMember
     ): OrderQueryResultVo {
+
         val criteria = Criteria()
         if (!showDeleted) {
             criteria.and("deleted").`is`(false)
@@ -81,6 +86,18 @@ class OrderService {
                     Criteria.where("description").regex(text)
             )
         }
+        if (startTime != null && endTime != null) {
+            try {
+                val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                val start = formatter.parse(startTime)
+                val end = formatter.parse(endTime)
+                criteria.and("createTime").gte(start).lte(end)
+            } catch (e: ParseException) {
+                //ignore this param
+            }
+        }
+
+
         val totalCount = mongoTemplate.count(Query.query(criteria), Order::class.java).toInt()
 
         //最大可能的页数

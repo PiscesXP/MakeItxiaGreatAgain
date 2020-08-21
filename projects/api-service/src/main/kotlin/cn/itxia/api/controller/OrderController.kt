@@ -87,6 +87,8 @@ class OrderController {
                 campus = campus?.let { CampusEnum.parse(it) },
                 status = status?.let { OrderStatusEnum.parse(it) },
                 text = text,
+                startTime = startTime,
+                endTime = endTime,
                 itxiaMember = member
         )
 
