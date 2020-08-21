@@ -4,6 +4,7 @@ import { useLocalStorage } from "./useLocalStorage";
 import { useTitle, useTitleCustom, useTitleWCMS } from "./useTitle";
 import { useThrottle } from "./useThrottle";
 import { useToggle } from "HOOK/useToggle";
+import { useLocalStorageState } from "HOOK/useLocalStorageState";
 
 export {
   useApi,
@@ -14,4 +15,5 @@ export {
   useTitleWCMS,
   useThrottle,
   useToggle,
+  useLocalStorageState,
 };
