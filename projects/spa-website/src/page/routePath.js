@@ -5,7 +5,7 @@ const routePath = {
   CUSTOM: "/custom",
   custom: {
     HOME: "/custom/home",
-    ORDER: "/custom/order"
+    ORDER: "/custom/order",
   },
   WCMS: "/wcms",
   wcms: {
@@ -14,8 +14,9 @@ const routePath = {
     HANDLE_ORDER: "/wcms/handle-order",
     ANNOUNCE_MANAGE: "/wcms/announce-manage",
     SELF_PROFILE: "/wcms/profile",
-    MEMBER_MANAGE: "/wcms/member-manage"
-  }
+    MEMBER_MANAGE: "/wcms/member-manage",
+  },
+  OAUTH: "/oauth",
 };
 
 export { routePath };
