@@ -1,10 +1,8 @@
 import { config } from "CONFIG";
 import { buildQueryString } from "UTIL/query";
 
-const urlPrefix = (() => {
-  const { host, protocol } = config.network.api;
-  return protocol + "://" + host;
-})();
+const urlPrefix = config.network.api.prefix;
+const origin = config.network.api.origin;
 
 //-------------------------------------------------------------
 /**
@@ -38,12 +36,11 @@ async function sendApiRequest({
   try {
     response = await fetch(buildUrl(path, query), {
       body,
-      credentials: "include",
       headers: {
         "content-type": "application/json",
+        "itxia-from": origin,
       },
       method,
-      mode: "cors",
       signal,
     });
   } catch (e) {

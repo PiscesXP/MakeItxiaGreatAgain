@@ -3,8 +3,6 @@ import { config } from "CONFIG";
 import "./index.css";
 import { Divider, Icon, Modal } from "antd";
 
-const { host, protocol } = config.network.api;
-
 class Attachment extends React.Component {
   state = {
     showModal: false,
@@ -26,7 +24,7 @@ class Attachment extends React.Component {
     const { _id, mimeType, fileName, size } = this.props.data;
     const { showModal } = this.state;
     const isImage = /image/.test(mimeType);
-    const url = `${protocol}://${host}/upload/${_id}`;
+    const url = `${config.network.api.prefix}/upload/${_id}`;
     const thumbnailUrl = `${url}?thumbnail`;
     const downloadUrl = `${url}?download=1`;
     return (

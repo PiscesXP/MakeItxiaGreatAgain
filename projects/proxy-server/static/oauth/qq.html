@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <script>
+      const token = location.hash.substring(1).split("&")[0].split("=")[1];
+      location.hash = "";
+      //redirect to main site
+      location = `https://nju.itxia.cn/oauth?token=${token}`;
+    </script>
+  </body>
+</html>
