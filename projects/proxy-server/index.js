@@ -2,8 +2,16 @@ const express = require("express");
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const config = require("./config");
 
-// mount `exampleProxy` in web server
 const app = express();
+
+//QQ OAuth
+app.use("/oauth/qq", (req, res, next) => {
+  if (req.headers && req.headers["host"] === "api.itxia.site") {
+    return res.redirect("/oauth/qq.html");
+  }
+  next();
+});
+app.use(express.static("static"));
 
 //API service
 app.use(
@@ -18,6 +26,7 @@ app.use(
   })
 );
 
+//Front end
 app.use(
   "/",
   createProxyMiddleware("**", {
