@@ -11,6 +11,7 @@ import okhttp3.Request
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @Service
@@ -27,13 +28,13 @@ class OAuthService {
     /**
      * 通过QQ OAuth登录.
      * */
-    fun qqOAuthLogin(accessToken: String, httpServletResponse: HttpServletResponse): Response {
+    fun qqOAuthLogin(accessToken: String, httpServletRequest: HttpServletRequest, httpServletResponse: HttpServletResponse): Response {
         val openID = getOpenID(accessToken)
         if (openID != null) {
             val oauth = oAuthRepository.findByQqOpenID(openID)
             if (oauth != null) {
                 val member = oauth.member
-                authenticationService.login(member, httpServletResponse)
+                authenticationService.login(member, httpServletRequest, httpServletResponse)
                 return ResponseCode.SUCCESS.withPayload("登录成功")
             }
         }

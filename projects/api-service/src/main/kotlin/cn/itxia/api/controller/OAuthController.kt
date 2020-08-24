@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
+import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @RestController
@@ -41,9 +42,10 @@ class OAuthController {
     @PostMapping("/oauth/link/qq")
     fun qqOAuthLogin(@RequestBody qqoAuthDto: QQOAuthDto,
                      @CurrentItxiaMember itxiaMember: ItxiaMember?,
+                     httpServletRequest: HttpServletRequest,
                      httpServletResponse: HttpServletResponse): Response {
         return if (itxiaMember == null) {
-            oAuthService.qqOAuthLogin(qqoAuthDto.accessToken, httpServletResponse)
+            oAuthService.qqOAuthLogin(qqoAuthDto.accessToken, httpServletRequest, httpServletResponse)
         } else {
             oAuthService.bindQQOAuth(qqoAuthDto.accessToken, itxiaMember)
         }
