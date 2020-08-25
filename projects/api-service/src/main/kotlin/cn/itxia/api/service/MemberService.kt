@@ -6,7 +6,6 @@ import cn.itxia.api.enum.CampusEnum
 import cn.itxia.api.model.ItxiaMember
 import cn.itxia.api.model.repository.ItxiaMemberRepository
 import cn.itxia.api.util.PasswordUtil
-import com.mongodb.client.MongoClients
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
@@ -19,6 +18,9 @@ class MemberService {
 
     @Autowired
     private lateinit var memberRepository: ItxiaMemberRepository
+
+    @Autowired
+    private lateinit var mongoTemplate: MongoTemplate
 
     /**
      * 修改密码.
@@ -85,9 +87,7 @@ class MemberService {
 
 
     fun getAllMemberThatReceiveEmailNotification(notificationName: String, campus: CampusEnum): List<ItxiaMember> {
-        //TODO 将MongoTemplate移动到helper类中
-        val op = MongoTemplate(MongoClients.create(), "itxia")
-        return op.query(ItxiaMember::class.java).matching(
+        return mongoTemplate.query(ItxiaMember::class.java).matching(
                 Query.query(
                         Criteria.where("emailNotification.${notificationName}").`is`(true)
                                 .and("campus").`is`(campus)
