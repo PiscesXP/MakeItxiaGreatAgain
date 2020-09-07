@@ -17,7 +17,7 @@ function buildUrl(path, query = null) {
 /**
  * @param path {string}
  * @param query {string|*}
- * @param method {"GET"|"POST"|"PUT"}
+ * @param method {"GET"|"POST"|"PUT"|"DELETE"}
  * @param requestBody {*}
  * @param signal {AbortSignal}
  * */
@@ -70,5 +70,8 @@ const POST = (path, data, query) => {
 const PUT = (path, data, query) => {
   return sendApiRequest({ path, query, method: "PUT", requestBody: data });
 };
+const DELETE = (path, query) => {
+  return sendApiRequest({ path, query, method: "DELETE" });
+};
 
-export { sendApiRequest, GET, POST, PUT };
+export { sendApiRequest, GET, POST, PUT, DELETE };
