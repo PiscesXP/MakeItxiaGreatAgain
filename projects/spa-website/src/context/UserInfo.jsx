@@ -36,7 +36,7 @@ function UserInfoProvider(props) {
       centered: true,
       okText: "马上去修改",
       onOk: () => {
-        history.push(routePath.SELF_INFO);
+        history.push(routePath.wcms.SELF_PROFILE);
       },
       cancelText: "以后再说",
       okCancel: true,
