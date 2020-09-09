@@ -15,6 +15,8 @@ import {
 } from "COMPONENTS/attachment";
 import { useApi } from "HOOK/index";
 import { CenterMeFlex } from "COMPONENTS/layout";
+import { useHistory } from "react-router-dom";
+import { routePath } from "PAGE/routePath";
 
 const { Option } = Select;
 
@@ -123,12 +125,32 @@ function RequestOrderForm(props) {
     }
   }, [setFieldsValue]);
 
+  const history = useHistory();
+
+  function handleRetrieveOrder() {
+    history.push(routePath.custom.RETRIEVE);
+  }
+
   const formItemLayout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 14 },
   };
   return (
-    <Card title="你好,请提交你的维修预约">
+    <Card
+      title={
+        <span>
+          你好,请提交你的维修预约 （已有预约?
+          <Button
+            type="link"
+            style={{ padding: "0 0 0 0.5em " }}
+            onClick={handleRetrieveOrder}
+          >
+            找回预约单
+          </Button>
+          ）
+        </span>
+      }
+    >
       <Form {...formItemLayout} onSubmit={handleSubmit} onChange={saveDraft}>
         <Form.Item label="姓名" hasFeedback>
           {getFieldDecorator("name", {

@@ -6,6 +6,7 @@ const routePath = {
   custom: {
     HOME: "/custom/home",
     ORDER: "/custom/order",
+    RETRIEVE: "/custom/retrieve",
   },
   WCMS: "/wcms",
   wcms: {

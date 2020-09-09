@@ -5,6 +5,7 @@ import cn.itxia.api.annotation.RequireItxiaMember
 import cn.itxia.api.dto.OrderReplyDto
 import cn.itxia.api.dto.ReplyDto
 import cn.itxia.api.dto.RequestOrderDto
+import cn.itxia.api.dto.RetrieveOrderDto
 import cn.itxia.api.enum.CampusEnum
 import cn.itxia.api.enum.OrderActionEnum
 import cn.itxia.api.enum.OrderStatusEnum
@@ -58,6 +59,21 @@ class OrderController {
         return ResponseCode.NO_SUCH_ORDER.withoutPayload()
     }
 
+    /**
+     * 通过姓名、手机号找回预约单.
+     * 若找到，返回预约单ID号.
+     * */
+    @PostMapping("/custom/order/retrieve")
+    fun retrieveOrder(
+            @RequestBody retrieveOrderDto: RetrieveOrderDto
+    ): Response {
+        val orderID = orderService.retrieveOrder(retrieveOrderDto)
+        return if (orderID != null) {
+            ResponseCode.SUCCESS.withPayload(orderID)
+        } else {
+            ResponseCode.NO_SUCH_ORDER.withoutPayload()
+        }
+    }
 
     //---------------------------------------------------------
 

@@ -9,6 +9,7 @@ import { NotFound } from "COMPONENTS/notFound";
 import { CenterMeResponsive } from "COMPONENTS/layout";
 import { AnnouncementList } from "COMPONENTS/announcement";
 import { useTitle } from "HOOK";
+import { RetrieveOrder } from "PAGE/custom/retrieveOrder";
 
 const { Header, Content, Footer } = Layout;
 
@@ -23,6 +24,9 @@ function CustomRouter() {
       </Route>
       <Route path={routePath.custom.ORDER}>
         <RequestOrder />
+      </Route>
+      <Route path={routePath.custom.RETRIEVE}>
+        <RetrieveOrder />
       </Route>
       <Route path="*">
         <NotFound />
