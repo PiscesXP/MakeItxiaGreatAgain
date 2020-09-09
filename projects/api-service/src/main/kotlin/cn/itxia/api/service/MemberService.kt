@@ -1,15 +1,20 @@
 package cn.itxia.api.service
 
 import cn.itxia.api.dto.MemberProfileModifyDto
+import cn.itxia.api.dto.MemberRoleChangeDto
 import cn.itxia.api.dto.PasswordModifyDto
 import cn.itxia.api.enum.CampusEnum
+import cn.itxia.api.enum.MemberRoleEnum
 import cn.itxia.api.model.ItxiaMember
 import cn.itxia.api.model.repository.ItxiaMemberRepository
+import cn.itxia.api.response.Response
+import cn.itxia.api.response.ResponseCode
 import cn.itxia.api.util.PasswordUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.core.query.Update
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -104,5 +109,26 @@ class MemberService {
             return optional.get()
         }
         return null
+    }
+
+    /**
+     * 更改指定成员的权限.
+     * */
+    fun changeMemberRole(memberID: String,
+                         dto: MemberRoleChangeDto,
+                         requester: ItxiaMember): Boolean {
+        val criteria = Criteria.where("_id").`is`(memberID)
+        if (requester.role == MemberRoleEnum.ADMIN) {
+            if (dto.role == MemberRoleEnum.SUPER_ADMIN) {
+                return false
+            }
+            criteria.and("role").ne(MemberRoleEnum.SUPER_ADMIN)
+        }
+        val result = mongoTemplate.updateFirst(
+                Query.query(criteria),
+                Update.update("role", dto.role),
+                ItxiaMember::class.java
+        )
+        return result.modifiedCount == 1L
     }
 }

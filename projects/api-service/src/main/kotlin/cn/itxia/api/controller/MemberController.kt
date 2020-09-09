@@ -3,6 +3,7 @@ package cn.itxia.api.controller
 import cn.itxia.api.annotation.CurrentItxiaMember
 import cn.itxia.api.annotation.RequireItxiaMember
 import cn.itxia.api.dto.MemberProfileModifyDto
+import cn.itxia.api.dto.MemberRoleChangeDto
 import cn.itxia.api.dto.PasswordModifyDto
 import cn.itxia.api.enum.MemberRoleEnum
 import cn.itxia.api.model.ItxiaMember
@@ -10,11 +11,9 @@ import cn.itxia.api.response.Response
 import cn.itxia.api.response.ResponseCode
 import cn.itxia.api.service.MemberService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class MemberController {
@@ -55,4 +54,14 @@ class MemberController {
         return ResponseCode.SUCCESS.withPayload(memberService.getAllMemberInfo())
     }
 
+    @PutMapping("/member/{memberID}/role")
+    @RequireItxiaMember(MemberRoleEnum.ADMIN)
+    fun changeMemberRole(@PathVariable memberID: String,
+                         @RequestBody dto: MemberRoleChangeDto,
+                         @CurrentItxiaMember itxiaMember: ItxiaMember): Response {
+        if (memberService.changeMemberRole(memberID, dto, itxiaMember)) {
+            return ResponseCode.SUCCESS.withoutPayload()
+        }
+        return ResponseCode.UNKNOWN_ERROR.withPayload("请检查成员ID或权限.")
+    }
 }
