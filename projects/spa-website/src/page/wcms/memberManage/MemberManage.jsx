@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useApi, useMemberContext, useTitleWCMS } from "HOOK";
 import { MemberInfoTable } from "PAGE/wcms/memberManage/MemberInfoTable";
 import { MemberActionButtons } from "PAGE/wcms/memberManage/MemberActionButtons";
@@ -10,7 +10,7 @@ function MemberManage() {
 
   const memberContext = useMemberContext();
 
-  const { code, payload } = useApi({ path: "/member/all" });
+  const { code, payload, send } = useApi({ path: "/member/all" });
 
   const disableApi = useApi({
     path: "/member/disable",
@@ -49,6 +49,10 @@ function MemberManage() {
     }
   }, [memberContext.role]);
 
+  const handleRefreshData = useCallback(() => {
+    send();
+  }, [send]);
+
   if (code !== 0) {
     return null;
   }
@@ -82,7 +86,11 @@ function MemberManage() {
         selectedMember={selectedMember}
         onDisableAccount={handleDisableAccount}
       />
-      <MemberInfoTable data={payload} onSelectRow={handleSelect} />
+      <MemberInfoTable
+        data={payload}
+        onSelectRow={handleSelect}
+        onRefreshData={handleRefreshData}
+      />
     </Card>
   );
 }

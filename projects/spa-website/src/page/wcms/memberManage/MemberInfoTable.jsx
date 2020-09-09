@@ -3,20 +3,26 @@ import { Button, Table, Icon, Input, Dropdown, Menu } from "antd";
 import { parseEnumValue, parseRoleAuthLevel } from "UTIL/enumParser";
 import { utcDateToText } from "UTIL/time";
 import Highlighter from "react-highlight-words";
+import { MemberActionModal } from "PAGE/wcms/memberManage/MemberActionModal";
 
 /**
  *
  * @param data {Object} 成员信息数据
  * @param onSelectRow {function} 勾选表格行时的回调
  * */
-function MemberInfoTable({ data, onSelectRow }) {
+function MemberInfoTable({ data, onSelectRow, onRefreshData }) {
   const [searchInput, setSearchInput] = useState(null);
   const [searchedColumn, setSearchedColumn] = useState("");
   const [searchText, setSearchText] = useState("");
 
-  function handleAction({ record, key }) {
-    console.log(record);
-    console.log(key);
+  const [action, setAction] = useState(null);
+
+  function handleAction({ member, type }) {
+    setAction({ member, type });
+  }
+
+  function handleHideModal() {
+    setAction(null);
   }
 
   const getColumnSearchProps = useCallback(
@@ -207,21 +213,21 @@ function MemberInfoTable({ data, onSelectRow }) {
             overlay={
               <Menu
                 onClick={({ key }) => {
-                  handleAction({ record, key });
+                  handleAction({ member: record, type: key });
                 }}
               >
-                <Menu.Item key="pwdReset">
-                  <Icon type="lock" />
-                  修改密码
-                </Menu.Item>
-                <Menu.Item key="changeRole">
-                  <Icon type="user" />
-                  更改权限
-                </Menu.Item>
-                <Menu.Item key="detailInfo">
-                  <Icon type="solution" />
-                  详细信息
-                </Menu.Item>
+                {record.disabled ? null : (
+                  <Menu.Item key="passwordReset">
+                    <Icon type="lock" />
+                    修改密码
+                  </Menu.Item>
+                )}
+                {record.disabled ? null : (
+                  <Menu.Item key="changeRole">
+                    <Icon type="user" />
+                    更改权限
+                  </Menu.Item>
+                )}
                 <Menu.Item key="changeDisable">
                   {record.disabled ? (
                     <>
@@ -255,13 +261,21 @@ function MemberInfoTable({ data, onSelectRow }) {
   }, [getColumnSearchProps]);
 
   return (
-    <Table
-      columns={columns}
-      dataSource={data}
-      rowKey={(member) => member._id}
-      scroll={{ x: 1600 }}
-      rowSelection={{ columnTitle: "选择", onSelect: onSelectRow }}
-    />
+    <>
+      <Table
+        columns={columns}
+        dataSource={data}
+        rowKey={(member) => member._id}
+        scroll={{ x: 1600 }}
+        rowSelection={{ columnTitle: "选择", onSelect: onSelectRow }}
+      />
+      <MemberActionModal
+        actionType={action && action.type}
+        member={action && action.member}
+        onHide={handleHideModal}
+        onRefreshData={onRefreshData}
+      />
+    </>
   );
 }
 
