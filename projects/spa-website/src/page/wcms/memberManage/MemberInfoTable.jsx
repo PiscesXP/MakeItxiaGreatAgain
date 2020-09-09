@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Button, Table, Icon, Input } from "antd";
+import { Button, Table, Icon, Input, Dropdown, Menu } from "antd";
 import { parseEnumValue, parseRoleAuthLevel } from "UTIL/enumParser";
 import { utcDateToText } from "UTIL/time";
 import Highlighter from "react-highlight-words";
@@ -13,6 +13,11 @@ function MemberInfoTable({ data, onSelectRow }) {
   const [searchInput, setSearchInput] = useState(null);
   const [searchedColumn, setSearchedColumn] = useState("");
   const [searchText, setSearchText] = useState("");
+
+  function handleAction({ record, key }) {
+    console.log(record);
+    console.log(key);
+  }
 
   const getColumnSearchProps = useCallback(
     (dataIndex, title) => ({
@@ -189,15 +194,62 @@ function MemberInfoTable({ data, onSelectRow }) {
         title: "ID",
         key: "ID",
         dataIndex: "_id",
-        width: 220,
+        width: 256,
         ...getColumnSearchProps("_id", "ID"),
       },
       {
-        title: "Action",
+        title: "",
         key: "operation",
         fixed: "right",
         width: 100,
-        render: () => <Button>更多</Button>,
+        render: (text, record) => (
+          <Dropdown
+            overlay={
+              <Menu
+                onClick={({ key }) => {
+                  handleAction({ record, key });
+                }}
+              >
+                <Menu.Item key="pwdReset">
+                  <Icon type="lock" />
+                  修改密码
+                </Menu.Item>
+                <Menu.Item key="changeRole">
+                  <Icon type="user" />
+                  更改权限
+                </Menu.Item>
+                <Menu.Item key="detailInfo">
+                  <Icon type="solution" />
+                  详细信息
+                </Menu.Item>
+                <Menu.Item key="changeDisable">
+                  {record.disabled ? (
+                    <>
+                      <Icon
+                        type="check-circle"
+                        className="member-action-enable"
+                      />
+                      启用账号
+                    </>
+                  ) : (
+                    <>
+                      <Icon
+                        type="close-circle"
+                        className="member-action-disable"
+                      />
+                      禁用账号
+                    </>
+                  )}
+                </Menu.Item>
+              </Menu>
+            }
+          >
+            <Button type="link">
+              操作
+              <Icon type="down" />
+            </Button>
+          </Dropdown>
+        ),
       },
     ];
   }, [getColumnSearchProps]);
@@ -207,7 +259,7 @@ function MemberInfoTable({ data, onSelectRow }) {
       columns={columns}
       dataSource={data}
       rowKey={(member) => member._id}
-      scroll={{ x: 1500 }}
+      scroll={{ x: 1600 }}
       rowSelection={{ columnTitle: "选择", onSelect: onSelectRow }}
     />
   );
