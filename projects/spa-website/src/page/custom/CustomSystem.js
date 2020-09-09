@@ -84,6 +84,11 @@ function CustomNavigate() {
           发起预约
           <Link to={routePath.custom.ORDER} />
         </Menu.Item>
+        <Menu.Item key={routePath.custom.RETRIEVE}>
+          <Icon type="file-search" />
+          找回预约单
+          <Link to={routePath.custom.RETRIEVE} />
+        </Menu.Item>
       </SubMenu>
       <Menu.Item key={routePath.WCMS}>
         <Icon type="solution" />
