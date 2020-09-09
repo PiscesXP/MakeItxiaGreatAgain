@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useApi, useMemberContext } from "HOOK";
+import { useApi, useMemberContext, useTitleWCMS } from "HOOK";
 import { MemberInfoTable } from "PAGE/wcms/memberManage/MemberInfoTable";
 import { MemberActionButtons } from "PAGE/wcms/memberManage/MemberActionButtons";
 import "./index.css";
 import { Card, Modal } from "antd";
 
 function MemberManage() {
+  useTitleWCMS("成员管理");
+
   const memberContext = useMemberContext();
 
   const { code, payload } = useApi({ path: "/member/all" });
