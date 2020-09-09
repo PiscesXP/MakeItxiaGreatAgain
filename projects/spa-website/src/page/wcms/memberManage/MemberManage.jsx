@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useApi, useMemberContext } from "HOOK";
 import { MemberInfoTable } from "PAGE/wcms/memberManage/MemberInfoTable";
 import { MemberActionButtons } from "PAGE/wcms/memberManage/MemberActionButtons";
@@ -38,13 +38,14 @@ function MemberManage() {
 
   const [selectedMember, setSelectedMember] = useState([]);
 
-  if (memberContext.role === "MEMBER") {
-    Modal.info({
-      content: "只有管理员才能使用此功能.",
-      centered: true,
-    });
-    return null;
-  }
+  useEffect(() => {
+    if (memberContext.role === "MEMBER") {
+      Modal.info({
+        content: "只有管理员才能使用此功能.",
+        centered: true,
+      });
+    }
+  }, [memberContext.role]);
 
   if (code !== 0) {
     return null;
