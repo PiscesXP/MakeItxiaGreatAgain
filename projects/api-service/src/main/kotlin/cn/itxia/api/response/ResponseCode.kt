@@ -18,6 +18,7 @@ enum class ResponseCode(val code: Int, val message: String) {
     REQUEST_SIZE_EXCEEDED(10, "附件过大"),
     NO_OAUTH_ID_FOUND(11, "未找到OAuth ID"),
     ACCOUNT_NOT_ENABLE(12, "此账号未启用"),
+    NO_SUCH_MEMBER(13, "无此账号"),
     UNKNOWN_ERROR(999, "未知错误"),
 
     ;

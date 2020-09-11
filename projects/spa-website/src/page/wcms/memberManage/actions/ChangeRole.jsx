@@ -1,32 +1,13 @@
 import React, { useMemo } from "react";
 import { Button, Form, Modal, Select } from "antd";
-import { useApi, useMemberContext } from "HOOK/index";
-import { CenterMeFlex } from "COMPONENTS/layout";
+import { useMemberContext } from "HOOK/useMemberContext";
 import { authTest } from "UTIL/authTest";
+import { useApi } from "HOOK/useApi";
+import { CenterMeFlex } from "COMPONENTS/layout";
 
-function MemberActionModal({ actionType, member, onHide, onRefreshData }) {
-  return (
-    <>
-      <Modal
-        title={`更改 ${member && member.realName} 的账号权限`}
-        centered={true}
-        visible={actionType === "changeRole"}
-        footer={null}
-        onCancel={onHide}
-        destroyOnClose
-      >
-        <ChangeRole
-          member={member}
-          onHide={onHide}
-          onRefreshData={onRefreshData}
-        />
-      </Modal>
-    </>
-  );
-}
-
-const ChangeRole = Form.create()(ChangeRoleForm);
-
+/**
+ * 更改账号权限的表单.
+ * */
 function ChangeRoleForm({
   member,
   onHide,
@@ -108,4 +89,6 @@ function ChangeRoleForm({
   );
 }
 
-export { MemberActionModal };
+const ChangeRole = Form.create()(ChangeRoleForm);
+
+export { ChangeRole };

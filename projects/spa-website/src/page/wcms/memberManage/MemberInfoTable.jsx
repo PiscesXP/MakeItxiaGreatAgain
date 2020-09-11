@@ -3,12 +3,15 @@ import { Button, Table, Icon, Input, Dropdown, Menu } from "antd";
 import { parseEnumValue, parseRoleAuthLevel } from "UTIL/enumParser";
 import { utcDateToText } from "UTIL/time";
 import Highlighter from "react-highlight-words";
-import { MemberActionModal } from "PAGE/wcms/memberManage/MemberActionModal";
+import { MemberActionModal } from "PAGE/wcms/memberManage/actions/MemberActionModal";
+import { authTest } from "UTIL/authTest";
+import { useMemberContext } from "HOOK/index";
 
 /**
  *
  * @param data {Object} 成员信息数据
  * @param onSelectRow {function} 勾选表格行时的回调
+ * @param onRefreshData {function} 更新数据的回调
  * */
 function MemberInfoTable({ data, onSelectRow, onRefreshData }) {
   const [searchInput, setSearchInput] = useState(null);
@@ -17,12 +20,14 @@ function MemberInfoTable({ data, onSelectRow, onRefreshData }) {
 
   const [action, setAction] = useState(null);
 
+  const memberContext = useMemberContext();
+
   function handleAction({ member, type }) {
     setAction({ member, type });
   }
 
   function handleHideModal() {
-    setAction(null);
+    setAction({ member: action.member });
   }
 
   const getColumnSearchProps = useCallback(
@@ -113,6 +118,7 @@ function MemberInfoTable({ data, onSelectRow, onRefreshData }) {
         dataIndex: "realName",
         key: "name",
         fixed: "left",
+        width: 180,
         ...getColumnSearchProps("realName", "姓名"),
       },
       {
@@ -208,54 +214,62 @@ function MemberInfoTable({ data, onSelectRow, onRefreshData }) {
         key: "operation",
         fixed: "right",
         width: 100,
-        render: (text, record) => (
-          <Dropdown
-            overlay={
-              <Menu
-                onClick={({ key }) => {
-                  handleAction({ member: record, type: key });
-                }}
-              >
-                {record.disabled ? null : (
-                  <Menu.Item key="passwordReset">
-                    <Icon type="lock" />
-                    修改密码
-                  </Menu.Item>
-                )}
-                {record.disabled ? null : (
-                  <Menu.Item key="changeRole">
-                    <Icon type="user" />
-                    更改权限
-                  </Menu.Item>
-                )}
-                <Menu.Item key="changeDisable">
-                  {record.disabled ? (
-                    <>
-                      <Icon
-                        type="check-circle"
-                        className="member-action-enable"
-                      />
-                      启用账号
-                    </>
-                  ) : (
-                    <>
-                      <Icon
-                        type="close-circle"
-                        className="member-action-disable"
-                      />
-                      禁用账号
-                    </>
+        render: (text, record) => {
+          if (!authTest.notLessThan(memberContext.role, record.role)) {
+            return null;
+          }
+          if (memberContext._id === record._id) {
+            return null;
+          }
+          return (
+            <Dropdown
+              overlay={
+                <Menu
+                  onClick={({ key }) => {
+                    handleAction({ member: record, type: key });
+                  }}
+                >
+                  {!record.disabled && (
+                    <Menu.Item key="passwordReset">
+                      <Icon type="lock" />
+                      修改密码
+                    </Menu.Item>
                   )}
-                </Menu.Item>
-              </Menu>
-            }
-          >
-            <Button type="link">
-              操作
-              <Icon type="down" />
-            </Button>
-          </Dropdown>
-        ),
+                  {!record.disabled && (
+                    <Menu.Item key="changeRole">
+                      <Icon type="user" />
+                      更改权限
+                    </Menu.Item>
+                  )}
+                  <Menu.Item key="changeDisable">
+                    {record.disabled ? (
+                      <>
+                        <Icon
+                          type="check-circle"
+                          className="member-action-enable"
+                        />
+                        启用账号
+                      </>
+                    ) : (
+                      <>
+                        <Icon
+                          type="close-circle"
+                          className="member-action-disable"
+                        />
+                        禁用账号
+                      </>
+                    )}
+                  </Menu.Item>
+                </Menu>
+              }
+            >
+              <Button type="link">
+                操作
+                <Icon type="down" />
+              </Button>
+            </Dropdown>
+          );
+        },
       },
     ];
   }, [getColumnSearchProps]);

@@ -2,6 +2,7 @@ package cn.itxia.api.controller
 
 import cn.itxia.api.annotation.CurrentItxiaMember
 import cn.itxia.api.annotation.RequireItxiaMember
+import cn.itxia.api.dto.MemberDisabledStatusChangeDto
 import cn.itxia.api.dto.MemberProfileModifyDto
 import cn.itxia.api.dto.MemberRoleChangeDto
 import cn.itxia.api.dto.PasswordModifyDto
@@ -11,7 +12,6 @@ import cn.itxia.api.response.Response
 import cn.itxia.api.response.ResponseCode
 import cn.itxia.api.service.MemberService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
@@ -63,5 +63,27 @@ class MemberController {
             return ResponseCode.SUCCESS.withoutPayload()
         }
         return ResponseCode.UNKNOWN_ERROR.withPayload("请检查成员ID或权限.")
+    }
+
+    @PutMapping("/member/{memberID}/disabled")
+    @RequireItxiaMember(MemberRoleEnum.ADMIN)
+    fun changeMemberDisabledStatus(@PathVariable memberID: String,
+                                   @RequestBody dto: MemberDisabledStatusChangeDto,
+                                   @CurrentItxiaMember itxiaMember: ItxiaMember): Response {
+        if (memberService.changeMemberDisabledStatus(memberID, dto, itxiaMember)) {
+            return ResponseCode.SUCCESS.withoutPayload()
+        }
+        return ResponseCode.UNKNOWN_ERROR.withPayload("请检查成员ID或权限.")
+    }
+
+    /**
+     * 直接重置密码.
+     * 返回随机生成的密码.
+     * */
+    @PostMapping("/member/{memberID}/password")
+    @RequireItxiaMember(MemberRoleEnum.ADMIN)
+    fun resetMemberPassword(@PathVariable memberID: String,
+                            @CurrentItxiaMember requester: ItxiaMember): Response {
+        return memberService.resetMemberPassword(memberID, requester)
     }
 }

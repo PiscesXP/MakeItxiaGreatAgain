@@ -118,6 +118,13 @@ class AuthenticationService {
     }
 
     /**
+     * 删除member对应的所有session.
+     * */
+    fun removeAllSessionOfMember(itxiaMember: ItxiaMember.BaseInfoOnly) {
+        sessionRepository.deleteAllByMember(itxiaMember)
+    }
+
+    /**
      * 从请求中获取对应的session.
      * @return 当前请求的session model. 若没有session则为null.
      * */

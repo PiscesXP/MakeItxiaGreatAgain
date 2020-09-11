@@ -1,5 +1,6 @@
 package cn.itxia.api.service
 
+import cn.itxia.api.dto.MemberDisabledStatusChangeDto
 import cn.itxia.api.dto.MemberProfileModifyDto
 import cn.itxia.api.dto.MemberRoleChangeDto
 import cn.itxia.api.dto.PasswordModifyDto
@@ -10,6 +11,8 @@ import cn.itxia.api.model.repository.ItxiaMemberRepository
 import cn.itxia.api.response.Response
 import cn.itxia.api.response.ResponseCode
 import cn.itxia.api.util.PasswordUtil
+import com.mongodb.client.result.UpdateResult
+import org.apache.commons.lang3.RandomStringUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
@@ -26,6 +29,9 @@ class MemberService {
 
     @Autowired
     private lateinit var mongoTemplate: MongoTemplate
+
+    @Autowired
+    private lateinit var authenticationService: AuthenticationService
 
     /**
      * 修改密码.
@@ -117,18 +123,78 @@ class MemberService {
     fun changeMemberRole(memberID: String,
                          dto: MemberRoleChangeDto,
                          requester: ItxiaMember): Boolean {
-        val criteria = Criteria.where("_id").`is`(memberID)
+        val criteria = Criteria()
         if (requester.role == MemberRoleEnum.ADMIN) {
             if (dto.role == MemberRoleEnum.SUPER_ADMIN) {
                 return false
             }
             criteria.and("role").ne(MemberRoleEnum.SUPER_ADMIN)
         }
+        return modifyOneMember(
+                memberID = memberID,
+                criteria = criteria,
+                update = Update.update("role", dto.role)
+        )
+                .modifiedCount == 1L
+    }
+
+    /**
+     * 更改指定成员的禁用状态.
+     * */
+    fun changeMemberDisabledStatus(memberID: String,
+                                   dto: MemberDisabledStatusChangeDto,
+                                   requester: ItxiaMember): Boolean {
+        val criteria = Criteria()
+        if (requester.role == MemberRoleEnum.ADMIN) {
+            criteria.and("role").ne(MemberRoleEnum.SUPER_ADMIN)
+        }
+
+        //清空该成员对应的session
+        val memberToChange = this.getMemberByID(memberID) ?: return false
+        authenticationService.removeAllSessionOfMember(memberToChange.toBaseInfoOnly())
+
+        return modifyOneMember(
+                memberID = memberID,
+                criteria = criteria,
+                update = Update.update("disabled", dto.disabled)
+        )
+                .modifiedCount == 1L
+    }
+
+    /**
+     * 重置成员的密码.
+     * */
+    fun resetMemberPassword(memberID: String, requester: ItxiaMember): Response {
+        val member = getMemberByID(memberID) ?: return ResponseCode.NO_SUCH_MEMBER.withoutPayload()
+        if (!requester.role.isEnoughFor(member.role)) {
+            //权限不够
+            return ResponseCode.UNAUTHORIZED.withoutPayload()
+        }
+        val newPassword = RandomStringUtils.randomAlphanumeric(16)
         val result = mongoTemplate.updateFirst(
-                Query.query(criteria),
-                Update.update("role", dto.role),
+                Query.query(Criteria.where("_id").`is`(memberID)),
+                Update.update("password", newPassword).set("requirePasswordReset", true),
                 ItxiaMember::class.java
         )
-        return result.modifiedCount == 1L
+        return if (result.modifiedCount == 1L) {
+            ResponseCode.SUCCESS.withPayload(newPassword)
+        } else {
+            ResponseCode.UNKNOWN_ERROR.withPayload("密码未重置")
+        }
+    }
+
+    /**
+     * 更新一个成员的数据.
+     * */
+    fun modifyOneMember(memberID: String,
+                        criteria: Criteria = Criteria(),
+                        update: Update = Update()
+    ): UpdateResult {
+        criteria.and("_id").`is`(memberID)
+        return mongoTemplate.updateFirst(
+                Query.query(criteria),
+                update,
+                ItxiaMember::class.java
+        )
     }
 }

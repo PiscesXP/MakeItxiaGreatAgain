@@ -10,7 +10,13 @@ function MemberManage() {
 
   const memberContext = useMemberContext();
 
-  const { code, payload, send } = useApi({ path: "/member/all" });
+  const { code, payload, send } = useApi({ path: "/member/all",
+    formatResult:(result)=>{
+      if (Array.isArray(result)){
+        return  result.reverse()
+      }
+      return result
+    }, });
 
   const disableApi = useApi({
     path: "/member/disable",
