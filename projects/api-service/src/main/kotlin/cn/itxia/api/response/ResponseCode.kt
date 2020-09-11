@@ -19,6 +19,8 @@ enum class ResponseCode(val code: Int, val message: String) {
     NO_OAUTH_ID_FOUND(11, "未找到OAuth ID"),
     ACCOUNT_NOT_ENABLE(12, "此账号未启用"),
     NO_SUCH_MEMBER(13, "无此账号"),
+    INVALID_REDEEM_CODE(14, "邀请码无效"),
+    LOGIN_NAME_ALREADY_EXISTED(15, "登录ID已存在"),
     UNKNOWN_ERROR(999, "未知错误"),
 
     ;

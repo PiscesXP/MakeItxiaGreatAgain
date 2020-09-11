@@ -1,22 +1,25 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useApi, useMemberContext, useTitleWCMS } from "HOOK";
-import { MemberInfoTable } from "PAGE/wcms/memberManage/MemberInfoTable";
-import { MemberActionButtons } from "PAGE/wcms/memberManage/MemberActionButtons";
+import { MemberInfoTable } from "./MemberInfoTable";
+import { MemberActionButtons } from "./MemberActionButtons";
 import "./index.css";
-import { Card, Modal } from "antd";
+import { Card, Divider, Modal } from "antd";
+import { MemberRecruit } from "./MemberRecruit";
 
 function MemberManage() {
   useTitleWCMS("成员管理");
 
   const memberContext = useMemberContext();
 
-  const { code, payload, send } = useApi({ path: "/member/all",
-    formatResult:(result)=>{
-      if (Array.isArray(result)){
-        return  result.reverse()
+  const { code, payload, send } = useApi({
+    path: "/member/all",
+    formatResult: (result) => {
+      if (Array.isArray(result)) {
+        return result.reverse();
       }
-      return result
-    }, });
+      return result;
+    },
+  });
 
   const disableApi = useApi({
     path: "/member/disable",
@@ -87,17 +90,23 @@ function MemberManage() {
   }
 
   return (
-    <Card>
-      <MemberActionButtons
-        selectedMember={selectedMember}
-        onDisableAccount={handleDisableAccount}
-      />
-      <MemberInfoTable
-        data={payload}
-        onSelectRow={handleSelect}
-        onRefreshData={handleRefreshData}
-      />
-    </Card>
+    <>
+      <Card title="系统成员">
+        <MemberActionButtons
+          selectedMember={selectedMember}
+          onDisableAccount={handleDisableAccount}
+        />
+        <MemberInfoTable
+          data={payload}
+          onSelectRow={handleSelect}
+          onRefreshData={handleRefreshData}
+        />
+      </Card>
+      <Divider dashed />
+      <Card title="我的邀请">
+        <MemberRecruit />
+      </Card>
+    </>
   );
 }
 

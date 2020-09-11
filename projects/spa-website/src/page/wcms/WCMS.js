@@ -13,6 +13,7 @@ import { Profile } from "./profile";
 import { AnnouncementManage } from "./announcementManage";
 import { MemberManage } from "./memberManage";
 import { useLocalStorageState } from "HOOK";
+import { Join } from "PAGE/wcms/join/Join";
 
 const { Header, Content, Footer } = Layout;
 
@@ -54,6 +55,9 @@ function WCMS() {
       </Route>
       <Route path={routePath.wcms.LOGIN}>
         <Login />
+      </Route>
+      <Route path={routePath.wcms.JOIN}>
+        <Join />
       </Route>
       <Route>
         <ItxiaPage />

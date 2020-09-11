@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Button, Table, Icon, Input, Dropdown, Menu } from "antd";
 import { parseEnumValue, parseRoleAuthLevel } from "UTIL/enumParser";
 import { utcDateToText } from "UTIL/time";
@@ -272,7 +272,7 @@ function MemberInfoTable({ data, onSelectRow, onRefreshData }) {
         },
       },
     ];
-  }, [getColumnSearchProps]);
+  }, [getColumnSearchProps, memberContext]);
 
   return (
     <>

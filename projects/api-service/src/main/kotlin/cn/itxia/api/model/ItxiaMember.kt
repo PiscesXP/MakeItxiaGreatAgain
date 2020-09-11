@@ -38,7 +38,12 @@ data class ItxiaMember(
 
         var email: String? = null,
 
-        var emailNotification: EmailNotificationSetting = EmailNotificationSetting()
+        var emailNotification: EmailNotificationSetting = EmailNotificationSetting(),
+
+        /**
+         * (被邀请的新成员)等待审核.
+         * */
+        val pendingAudit: Boolean = false
 ) {
     @Document(collection = "users")
     data class BaseInfoOnly(

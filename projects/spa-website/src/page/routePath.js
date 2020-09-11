@@ -11,6 +11,7 @@ const routePath = {
   WCMS: "/wcms",
   wcms: {
     LOGIN: "/wcms/login",
+    JOIN: "/wcms/join",
     DASHBOARD: "/wcms/dashboard",
     HANDLE_ORDER: "/wcms/handle-order",
     ANNOUNCE_MANAGE: "/wcms/announce-manage",

@@ -2,10 +2,7 @@ package cn.itxia.api.controller
 
 import cn.itxia.api.annotation.CurrentItxiaMember
 import cn.itxia.api.annotation.RequireItxiaMember
-import cn.itxia.api.dto.MemberDisabledStatusChangeDto
-import cn.itxia.api.dto.MemberProfileModifyDto
-import cn.itxia.api.dto.MemberRoleChangeDto
-import cn.itxia.api.dto.PasswordModifyDto
+import cn.itxia.api.dto.*
 import cn.itxia.api.enum.MemberRoleEnum
 import cn.itxia.api.model.ItxiaMember
 import cn.itxia.api.response.Response
@@ -86,4 +83,62 @@ class MemberController {
                             @CurrentItxiaMember requester: ItxiaMember): Response {
         return memberService.resetMemberPassword(memberID, requester)
     }
+
+    /**
+     * 通过生成邀请码，邀请新成员加入.
+     * */
+    @PostMapping("/member/recruit")
+    @RequireItxiaMember(MemberRoleEnum.ADMIN)
+    fun recruitNewMemberByRedeemCode(@CurrentItxiaMember requester: ItxiaMember): Response {
+        return ResponseCode.SUCCESS.withPayload(memberService.recruitNewMemberByRedeemCode(requester))
+    }
+
+    /**
+     * 获取所有邀请码.
+     * */
+    @GetMapping("/member/recruit")
+    @RequireItxiaMember(MemberRoleEnum.ADMIN)
+    fun getMyRedeemCode(@CurrentItxiaMember requester: ItxiaMember): Response {
+        return ResponseCode.SUCCESS.withPayload(memberService.getMyRedeemCode(requester))
+    }
+
+    @DeleteMapping("/member/recruit/{redeemCodeID}")
+    @RequireItxiaMember(MemberRoleEnum.ADMIN)
+    fun deleteRedeemCode(@PathVariable redeemCodeID: String): Response {
+        memberService.deleteRedeemCode(redeemCodeID)
+        return ResponseCode.SUCCESS.withoutPayload()
+    }
+
+    /**
+     * 验证邀请码是否有效.
+     * */
+    @PostMapping("/member/recruit/validate")
+    fun validateRecruitRedeemCode(@RequestBody redeemCodeValue: String): Response {
+        return if (memberService.validateRecruitRedeemCode(redeemCodeValue)) {
+            ResponseCode.SUCCESS.withoutPayload()
+        } else {
+            ResponseCode.INVALID_REDEEM_CODE.withoutPayload()
+        }
+    }
+
+    /**
+     * 检查登录ID是否已经使用.
+     * */
+    @PostMapping("/member/id/check")
+    fun checkIfLoginNameAlreadyExisted(@RequestBody loginName: String): Response {
+        return if (memberService.checkIfLoginNameAlreadyExisted(loginName)) {
+            ResponseCode.LOGIN_NAME_ALREADY_EXISTED.withoutPayload()
+        } else {
+            ResponseCode.SUCCESS.withoutPayload()
+        }
+    }
+
+    /**
+     * 通过邀请码，注册新成员.
+     * */
+    @PostMapping("/member/recruit/register")
+    fun registerNewMemberByRedeemCode(@RequestBody memberRecruitDto: MemberRecruitDto): Response {
+        return memberService.registerNewMemberByRedeemCode(memberRecruitDto)
+    }
+
 }
