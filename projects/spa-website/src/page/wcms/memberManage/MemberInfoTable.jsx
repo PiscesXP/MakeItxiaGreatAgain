@@ -10,10 +10,9 @@ import { useMemberContext } from "HOOK/index";
 /**
  *
  * @param data {Object} 成员信息数据
- * @param onSelectRow {function} 勾选表格行时的回调
  * @param onRefreshData {function} 更新数据的回调
  * */
-function MemberInfoTable({ data, onSelectRow, onRefreshData }) {
+function MemberInfoTable({ data, onRefreshData }) {
   const [searchInput, setSearchInput] = useState(null);
   const [searchedColumn, setSearchedColumn] = useState("");
   const [searchText, setSearchText] = useState("");
@@ -349,7 +348,6 @@ function MemberInfoTable({ data, onSelectRow, onRefreshData }) {
         dataSource={data}
         rowKey={(member) => member._id}
         scroll={{ x: 1600 }}
-        rowSelection={{ columnTitle: "选择", onSelect: onSelectRow }}
       />
       <MemberActionModal
         actionType={action && action.type}
