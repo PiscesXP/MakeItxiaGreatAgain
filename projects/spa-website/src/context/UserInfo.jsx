@@ -23,8 +23,7 @@ function UserInfoProvider(props) {
     if (payload && payload["requirePasswordReset"]) {
       Modal.warning({
         title: "请尽快修改密码",
-        content:
-          "由于旧系统存储明文密码，存在密码泄露的风险，因此请尽快修改密码.",
+        content: "密码已过期，请尽快修改.",
         centered: true,
         okText: "马上去修改",
         onOk: () => {

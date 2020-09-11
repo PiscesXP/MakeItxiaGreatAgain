@@ -174,7 +174,7 @@ class MemberService {
         val newPassword = RandomStringUtils.randomAlphanumeric(16)
         val result = mongoTemplate.updateFirst(
                 Query.query(Criteria.where("_id").`is`(memberID)),
-                Update.update("password", newPassword).set("requirePasswordReset", true),
+                Update.update("password", PasswordUtil.encrypt(newPassword)).set("requirePasswordReset", true),
                 ItxiaMember::class.java
         )
         return if (result.modifiedCount == 1L) {

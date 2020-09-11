@@ -25,9 +25,9 @@ function MemberInfoTable({ data, onRefreshData }) {
     setAction({ member, type, visible: true });
   }
 
-  function handleHideModal() {
+  const handleHideModal = useCallback(() => {
     setAction({ member: action.member, visible: false });
-  }
+  }, [action]);
 
   const getColumnSearchProps = useCallback(
     (dataIndex, title) => ({
