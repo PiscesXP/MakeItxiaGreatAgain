@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { parseQueryString } from "UTIL/query";
-import { useApi } from "HOOK";
+import { useApi, useTitleWCMS } from "HOOK";
 import { useHistory, Redirect } from "react-router-dom";
 import { routePath } from "PAGE/routePath";
 import { Loading } from "COMPONENTS/loading";
 import { Modal, notification } from "antd";
 
 function OAuthPage() {
+  useTitleWCMS("OAuth登录");
   const history = useHistory();
 
   const { code, send } = useApi({
@@ -31,7 +32,7 @@ function OAuthPage() {
         ),
         centered: true,
         onOk: () => {
-          history.push(routePath.wcms);
+          history.push(routePath.WCMS);
         },
       });
     },
