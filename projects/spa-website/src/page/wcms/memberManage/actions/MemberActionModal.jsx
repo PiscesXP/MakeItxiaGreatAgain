@@ -1,14 +1,18 @@
 import React from "react";
 import { Modal } from "antd";
 import { ChangeRole } from "./ChangeRole";
-import { ChangeDisable } from "PAGE/wcms/memberManage/actions/ChangeDisable";
-import { ResetPassword } from "PAGE/wcms/memberManage/actions/ResetPassword";
+import { ChangeDisable } from "./ChangeDisable";
+import { ResetPassword } from "./ResetPassword";
 
 function MemberActionModal({ actionType, member, onHide, onRefreshData }) {
+  if (!!!member) {
+    return null;
+  }
+
   return (
     <>
       <Modal
-        title={`更改 ${member && member.realName} 的密码`}
+        title={`更改 ${member.realName} 的密码`}
         centered={true}
         visible={actionType === "passwordReset"}
         footer={null}
@@ -21,7 +25,7 @@ function MemberActionModal({ actionType, member, onHide, onRefreshData }) {
         <ChangeDisable member={member} onRefreshData={onRefreshData} />
       )}
       <Modal
-        title={`更改 ${member && member.realName} 的账号权限`}
+        title={`更改 ${member.realName} 的账号权限`}
         centered={true}
         visible={actionType === "changeRole"}
         footer={null}

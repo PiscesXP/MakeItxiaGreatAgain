@@ -21,11 +21,11 @@ function ChangeRoleForm({
   ]);
 
   const canIChangeIt = useMemo(() => {
-    return authTest.notLessThan(memberContext.role, member && member.role);
+    return authTest.notLessThan(memberContext.role, member.role);
   }, [memberContext.role, member]);
 
   const { loading, send } = useApi({
-    path: `/member/${member && member._id}/role`,
+    path: `/member/${member._id}/role`,
     method: "PUT",
     later: true,
     onSuccess: () => {
@@ -62,7 +62,7 @@ function ChangeRoleForm({
       <Form.Item label="账号身份" hasFeedback>
         {getFieldDecorator("role", {
           rules: [{ required: true, message: "请选择账号权限" }],
-          initialValue: member && member.role,
+          initialValue: member.role,
         })(
           <Select placeholder="请选择账号权限" disabled={!canIChangeIt}>
             <Select.Option value={"MEMBER"}>普通成员</Select.Option>

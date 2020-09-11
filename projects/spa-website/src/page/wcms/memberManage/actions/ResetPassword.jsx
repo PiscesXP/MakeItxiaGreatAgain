@@ -5,7 +5,7 @@ import { Button, Modal, Typography } from "antd";
 
 function ResetPassword({ member }) {
   const { code, loading, payload, send } = useApi({
-    path: `/member/${member && member._id}/password`,
+    path: `/member/${member._id}/password`,
     method: "POST",
     later: true,
     onFail: ({ message }) => {
