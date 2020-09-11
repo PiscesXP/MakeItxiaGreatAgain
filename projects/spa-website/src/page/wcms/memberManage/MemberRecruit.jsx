@@ -39,6 +39,17 @@ function MemberRecruit() {
     },
     [send]
   );
+  function handleRecruit() {
+    POST("/member/recruit")
+      .then(() => {
+        notification.success({
+          message: "邀请码已生成",
+          duration: 2,
+        });
+        send();
+      })
+      .catch(() => {});
+  }
 
   const columnProps = useMemo(
     () => [
@@ -72,16 +83,19 @@ function MemberRecruit() {
       },
       {
         title: "新成员",
+        width: 800,
         children: [
           {
             title: "姓名",
             dataIndex: "receiver.realName",
             key: "name",
+            width: 150,
           },
           {
             title: "校区",
             dataIndex: "receiver.campus",
             key: "campus",
+            width: 150,
             filters: [
               {
                 text: "鼓楼",
@@ -93,13 +107,22 @@ function MemberRecruit() {
               },
             ],
             filterMultiple: false,
-            onFilter: (value, record) => record.campus === value,
+            onFilter: (value, record) =>
+              record.receiver && record.receiver.campus === value,
             render: (campus) => campus && parseEnumValue(campus),
           },
           {
             title: "登录账号",
             dataIndex: "receiver.loginName",
             key: "loginName",
+            width: 200,
+          },
+          {
+            title: "系统ID",
+            dataIndex: "receiver._id",
+            key: "_id",
+            //这里如果设置width，右边会有白边，原因未明
+            maxWidth: 200,
           },
         ],
       },
@@ -107,7 +130,8 @@ function MemberRecruit() {
         title: "操作",
         dataIndex: "action",
         key: "action",
-        width: 240,
+        width: 220,
+        fixed: "right",
         render: (text, record) => {
           if (record.hasRedeemed) {
             return null;
@@ -140,14 +164,6 @@ function MemberRecruit() {
     [handleCopyLink, handleDeleteRecruit]
   );
 
-  function handleRecruit() {
-    POST("/member/recruit")
-      .then(() => {
-        send();
-      })
-      .catch(() => {});
-  }
-
   return (
     <>
       <div style={{ marginBottom: "1em" }}>
@@ -161,6 +177,7 @@ function MemberRecruit() {
         columns={columnProps}
         dataSource={payload}
         rowKey="_id"
+        scroll={{ x: 1400 }}
       />
     </>
   );

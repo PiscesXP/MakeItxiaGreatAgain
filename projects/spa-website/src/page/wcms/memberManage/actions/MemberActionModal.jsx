@@ -4,7 +4,13 @@ import { ChangeRole } from "./ChangeRole";
 import { ChangeDisable } from "./ChangeDisable";
 import { ResetPassword } from "./ResetPassword";
 
-function MemberActionModal({ actionType, member, onHide, onRefreshData }) {
+function MemberActionModal({
+  actionType,
+  member,
+  visible,
+  onHide,
+  onRefreshData,
+}) {
   if (!!!member) {
     return null;
   }
@@ -12,22 +18,26 @@ function MemberActionModal({ actionType, member, onHide, onRefreshData }) {
   return (
     <>
       <Modal
-        title={`更改 ${member.realName} 的密码`}
+        title={`重置 ${member.realName} 的密码`}
         centered={true}
-        visible={actionType === "passwordReset"}
+        visible={visible && actionType === "passwordReset"}
         footer={null}
         onCancel={onHide}
         destroyOnClose
       >
         <ResetPassword member={member} />
       </Modal>
-      {actionType === "changeDisable" && (
-        <ChangeDisable member={member} onRefreshData={onRefreshData} />
+      {visible && actionType === "changeDisable" && (
+        <ChangeDisable
+          member={member}
+          onRefreshData={onRefreshData}
+          onHide={onHide}
+        />
       )}
       <Modal
         title={`更改 ${member.realName} 的账号权限`}
         centered={true}
-        visible={actionType === "changeRole"}
+        visible={visible && actionType === "changeRole"}
         footer={null}
         onCancel={onHide}
         destroyOnClose

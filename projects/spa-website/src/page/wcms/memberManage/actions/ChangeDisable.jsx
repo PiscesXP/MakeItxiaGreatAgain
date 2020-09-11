@@ -5,7 +5,7 @@ import { PUT } from "UTIL/api";
 /**
  * 改变账号的禁用状态.
  * */
-function ChangeDisable({ member, onRefreshData }) {
+function ChangeDisable({ visible, member, onRefreshData, onHide }) {
   useEffect(() => {
     if (!!!member) {
       return;
@@ -41,8 +41,11 @@ function ChangeDisable({ member, onRefreshData }) {
           onRefreshData();
         } catch (e) {}
       },
+      onCancel: () => {
+        onHide();
+      },
     });
-  }, [member, onRefreshData]);
+  }, [visible, member, onRefreshData, onHide]);
   return null;
 }
 
