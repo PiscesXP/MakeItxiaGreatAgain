@@ -4,6 +4,8 @@ function notLessThan(myRole, hisOrHerRole) {
       return false;
     case "ADMIN":
       return hisOrHerRole !== "SUPER_ADMIN";
+    case "SUPER_ADMIN":
+      return true;
     default:
       return false;
   }

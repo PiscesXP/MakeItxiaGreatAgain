@@ -284,9 +284,7 @@ function MemberInfoTable({ data, onRefreshData }) {
           if (!authTest.notLessThan(memberContext.role, record.role)) {
             return null;
           }
-          if (memberContext._id === record._id) {
-            return null;
-          }
+          const isMyself = memberContext._id === record._id;
           return (
             <Dropdown
               overlay={
@@ -295,7 +293,7 @@ function MemberInfoTable({ data, onRefreshData }) {
                     handleAction({ member: record, type: key });
                   }}
                 >
-                  {!record.disabled && (
+                  {!record.disabled && !isMyself && (
                     <Menu.Item key="passwordReset">
                       <Icon type="lock" />
                       重置密码
@@ -307,25 +305,27 @@ function MemberInfoTable({ data, onRefreshData }) {
                       更改权限
                     </Menu.Item>
                   )}
-                  <Menu.Item key="changeDisable">
-                    {record.disabled ? (
-                      <>
-                        <Icon
-                          type="check-circle"
-                          className="member-action-enable"
-                        />
-                        启用账号
-                      </>
-                    ) : (
-                      <>
-                        <Icon
-                          type="close-circle"
-                          className="member-action-disable"
-                        />
-                        禁用账号
-                      </>
-                    )}
-                  </Menu.Item>
+                  {!isMyself && (
+                    <Menu.Item key="changeDisable">
+                      {record.disabled ? (
+                        <>
+                          <Icon
+                            type="check-circle"
+                            className="member-action-enable"
+                          />
+                          启用账号
+                        </>
+                      ) : (
+                        <>
+                          <Icon
+                            type="close-circle"
+                            className="member-action-disable"
+                          />
+                          禁用账号
+                        </>
+                      )}
+                    </Menu.Item>
+                  )}
                 </Menu>
               }
             >
