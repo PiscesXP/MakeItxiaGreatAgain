@@ -286,9 +286,14 @@ class OrderService {
      * */
     fun retrieveOrder(dto: RetrieveOrderDto): String? {
         val order = mongoTemplate.findOne(
-                Query.query(Criteria.where("name").`is`(dto.name).and("phone").`is`(dto.phone)).with(
-                        Sort.by("createTime").descending()
-                ),
+                Query.query(
+                        Criteria.where("name").`is`(dto.name)
+                                .and("phone").`is`(dto.phone)
+                                .and("deleted").ne(true)
+                )
+                        .with(
+                                Sort.by("createTime").descending()
+                        ),
                 Order::class.java
         )
         return order?._id
