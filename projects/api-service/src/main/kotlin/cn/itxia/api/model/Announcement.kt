@@ -19,6 +19,10 @@ data class Announcement(
 
         val createTime: Date = Date(),
 
+        val deleted: Boolean = false,
+
+        val order: Int = 0,
+
 
         @DBRef
         val postBy: ItxiaMember.BaseInfoOnly,

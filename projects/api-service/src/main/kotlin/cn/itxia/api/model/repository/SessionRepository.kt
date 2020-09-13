@@ -12,4 +12,6 @@ interface SessionRepository : CrudRepository<Session, String> {
 
     fun findByValue(sessionValue: String): Session?
 
+    fun deleteAllByMember(member: ItxiaMember.BaseInfoOnly)
+
 }

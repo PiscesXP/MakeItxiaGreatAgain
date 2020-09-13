@@ -3,9 +3,24 @@ import { sendApiRequest } from "UTIL/api";
 
 /**
  * 发起API请求的hook.
+ *
+ *
+ * @typedef {Object} useApiResult useApi调用的返回值
+ * @property {boolean} loading 是否正在加载
+ * @property {number} code 请求返回值code
+ * @property {string} message 请求返回值message
+ * @property {Object} payload 请求返回值payload
+ * @property {Error} error 请求出错时的error
+ * @property {function} send 手动发送请求的函数
+ * @property {function} mutate 直接更新payload数据
+ * @property {boolean} isSuccess 是否请求成功且code===0 (不在loading中)
+ * @property {boolean} isFail 是否请求成功且code!==0 (不在loading中)
+ * @property {boolean} isError 是否请求失败产生error (不在loading中)
+ * @property {boolean} isUnsuccessful isFail||isError (不在loading中)
+ *
  * @param {string} path 请求的url path
  * @param query {string|*} query string object
- * @param method {"GET"|"POST"|"PUT"} HTTP method
+ * @param method {"GET"|"POST"|"PUT"|"DELETE"} HTTP method
  * @param data {*} request body data
  * @param later {boolean} 是否稍后手动发送请求(不立即发送)
  * @param cleanOnRerun {boolean}
@@ -15,20 +30,6 @@ import { sendApiRequest } from "UTIL/api";
  * @param onFail {function?} 请求成功时code!==0的回调
  * @param onError {function?} 请求失败的回调，网络错误等等
  * @param onUnsuccessful {function?} 请求不成功(code!==0)时的回调
- *
- *
- *
- * @typedef {Object} useApiResult useApi调用的返回值
- * @property {boolean} loading 是否正在加载
- * @property {number|null} code 请求返回值code
- * @property {string|null} message 请求返回值message
- * @property {Object|null} payload 请求返回值payload
- * @property {Error|null} error 请求出错时的error
- * @property {function} send 手动发送请求的函数
- * @property {boolean} isSuccess 是否请求成功且code===0 (不在loading中)
- * @property {boolean} isFail 是否请求成功且code!==0 (不在loading中)
- * @property {boolean} isError 是否请求失败产生error (不在loading中)
- * @property {boolean} isUnsuccessful isFail||isError (不在loading中)
  *
  * @return {useApiResult}
  * */
@@ -118,6 +119,11 @@ function useApi({
           error: action.error,
         };
         break;
+      case "mutate":
+        newState = {
+          payload: action.data,
+        };
+        break;
       default:
         console.log("Unrecognized action received");
         return state;
@@ -192,14 +198,23 @@ function useApi({
     return isFail || isError;
   }, [isFail, isError]);
 
-  return {
-    ...state,
+  const mutate = useCallback((newData) => {
+    dispatch({ type: "mutate", data: newData });
+  }, []);
+
+  /**
+   * @type useApiResult
+   * */
+  const result = Object.assign({}, state, {
+    send,
+    mutate,
     isSuccess,
     isFail,
     isError,
     isUnsuccessful,
-    send,
-  };
+  });
+
+  return result;
 }
 
 export { useApi };

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Loading } from "COMPONENTS/loading";
 import { useHistory, Redirect } from "react-router-dom";
 import { routePath } from "PAGE/routePath";
@@ -19,6 +19,22 @@ function UserInfoProvider(props) {
     send();
   }, [send]);
 
+  useEffect(() => {
+    if (payload && payload["requirePasswordReset"]) {
+      Modal.warning({
+        title: "请尽快修改密码",
+        content: "密码已过期，请尽快修改.",
+        centered: true,
+        okText: "马上去修改",
+        onOk: () => {
+          history.push(routePath.wcms.SELF_PROFILE);
+        },
+        cancelText: "以后再说",
+        okCancel: true,
+      });
+    }
+  }, [history, payload]);
+
   if (loading && code !== 0) {
     return <Loading />;
   }
@@ -26,21 +42,6 @@ function UserInfoProvider(props) {
   //未登录，跳转到登录页
   if (error || code !== 0) {
     return <Redirect to={routePath.wcms.LOGIN} />;
-  }
-
-  if (payload["requirePasswordReset"]) {
-    Modal.warning({
-      title: "请尽快修改密码",
-      content:
-        "由于旧系统存储明文密码，存在密码泄露的风险，因此请尽快修改密码.",
-      centered: true,
-      okText: "马上去修改",
-      onOk: () => {
-        history.push(routePath.SELF_INFO);
-      },
-      cancelText: "以后再说",
-      okCancel: true,
-    });
   }
 
   return (

@@ -3,8 +3,7 @@ import { Form, Icon, Modal, Upload } from "antd";
 import { config } from "CONFIG";
 import "./AttachmentUpload.css";
 
-const actionUrl =
-  config.network.api.protocol + "://" + config.network.api.host + "/upload";
+const actionUrl = config.network.api.prefix + "/upload";
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -51,10 +50,6 @@ function AttachmentUpload({
         })(
           <Upload
             action={actionUrl}
-            headers={{
-              "X-Requested-With": null,
-            }}
-            withCredentials
             listType={listType}
             onPreview={handlePreview}
           >

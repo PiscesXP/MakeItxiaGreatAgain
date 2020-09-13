@@ -9,7 +9,15 @@ function OauthSetting() {
   const [showModal, setShowModal] = useState(false);
 
   function openOAuthWindow() {
-    window.open(config.oauth.qq, "_blank");
+    if (window.location.host !== "nju.itxia.cn") {
+      Modal.info({
+        title: "这里暂不支持绑定",
+        content: "请到新网站 https://nju.itxia.cn 进行绑定.",
+        centered: true,
+      });
+    } else {
+      window.open(config.oauth.qq, "_blank");
+    }
   }
 
   function handleClickThisDemo(e) {

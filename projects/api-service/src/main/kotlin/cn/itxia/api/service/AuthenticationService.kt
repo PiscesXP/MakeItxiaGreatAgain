@@ -38,7 +38,7 @@ class AuthenticationService {
      * 若登录成功，会给response添加token.
      * @return 验证是否成功.
      * */
-    fun loginByPassword(loginName: String, password: String, httpServletResponse: HttpServletResponse): Response {
+    fun loginByPassword(loginName: String, password: String, httpServletRequest: HttpServletRequest, httpServletResponse: HttpServletResponse): Response {
         val member = itxiaMemberRepository.findByLoginName(loginName)
                 ?: return ResponseCode.INCORRECT_PASSWORD.withoutPayload()
         val verifyResult = PasswordUtil.verify(password, member.password)
@@ -47,7 +47,7 @@ class AuthenticationService {
                 //检查是否已禁用
                 return ResponseCode.ACCOUNT_NOT_ENABLE.withoutPayload()
             }
-            this.login(member, httpServletResponse)
+            this.login(member, httpServletRequest, httpServletResponse)
             return ResponseCode.SUCCESS.withPayload("登录成功.")
         }
         return ResponseCode.INCORRECT_PASSWORD.withPayload("登录失败.")
@@ -56,7 +56,7 @@ class AuthenticationService {
     /**
      * 直接授予登录.
      * */
-    fun login(member: ItxiaMember, httpServletResponse: HttpServletResponse) {
+    fun login(member: ItxiaMember, httpServletRequest: HttpServletRequest, httpServletResponse: HttpServletResponse) {
         val sessionValue = this.generateSessionValue()
         //保存session到数据库
         val session = Session(
@@ -68,7 +68,7 @@ class AuthenticationService {
         sessionRepository.save(session)
 
         //将session存储到cookie中
-        cookieService.assignCookie(sessionValue, httpServletResponse)
+        cookieService.assignCookie(sessionValue, httpServletRequest, httpServletResponse)
 
         //记录最后登录时间
         memberService.recordLastLogin(member)
@@ -79,7 +79,7 @@ class AuthenticationService {
      * 会将cookie清空.
      * */
     fun logout(request: HttpServletRequest, response: HttpServletResponse): Response {
-        cookieService.invalidCookie(response)
+        cookieService.invalidCookie(request, response)
         //删除数据库中的session
         val session = getSessionFromRequest(request)
         if (session != null) {
@@ -115,6 +115,13 @@ class AuthenticationService {
             return optional.get()
         }
         return null
+    }
+
+    /**
+     * 删除member对应的所有session.
+     * */
+    fun removeAllSessionOfMember(itxiaMember: ItxiaMember.BaseInfoOnly) {
+        sessionRepository.deleteAllByMember(itxiaMember)
     }
 
     /**

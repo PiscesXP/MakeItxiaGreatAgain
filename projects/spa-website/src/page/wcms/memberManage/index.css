@@ -5,3 +5,11 @@
 #member-actions > * {
   margin-right: 16px;
 }
+
+.member-action-disable {
+  color: red;
+}
+
+.member-action-enable {
+  color: #1890ff;
+}

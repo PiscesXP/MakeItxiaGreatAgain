@@ -15,18 +15,12 @@ class CookieService {
     @Value("\${itxia.cookie.maxAge}")
     private var cookieMaxAge: Int = 1
 
-    @Value("\${itxia.cookie.secure}")
-    private var cookieSecure: Boolean = false
-
-    @Value("\${itxia.cookie.domain}")
-    private var cookieDomain: String = ""
-
-    fun invalidCookie(response: HttpServletResponse) {
-        setCookie("", 0, response)
+    fun invalidCookie(request: HttpServletRequest, response: HttpServletResponse) {
+        setCookie("", 0, request, response)
     }
 
-    fun assignCookie(cookieValue: String, response: HttpServletResponse) {
-        setCookie(cookieValue, cookieMaxAge, response)
+    fun assignCookie(cookieValue: String, request: HttpServletRequest, response: HttpServletResponse) {
+        setCookie(cookieValue, cookieMaxAge, request, response)
     }
 
     fun getCookieFromRequest(request: HttpServletRequest): Cookie? {
@@ -37,23 +31,40 @@ class CookieService {
         return cookieMaxAge
     }
 
-
-    private fun setCookie(cookieValue: String, maxAge: Int, response: HttpServletResponse) {
+    private fun setCookie(cookieValue: String, maxAge: Int, request: HttpServletRequest, response: HttpServletResponse) {
         var value = """
             |${cookieName}=${cookieValue};
             |Max-Age=${maxAge};
             |httpOnly;
-            |Path=/;
-            |SameSite=None
+            |Path=/api;
+            |SameSite=Strict
         """.trimMargin().trim()
-        if (cookieSecure) {
-            value += ";Secure"
+
+        val origin = request.getHeader("itxia-from")
+        if ((!origin.isNullOrEmpty()) && origin.split("//").size == 2) {
+
+            //Secure field
+            val protocol = origin.split("//")[0]
+            if (protocol == "https:") {
+                value += ";Secure"
+            }
+
+            //Domain field
+            val host = origin.split("//")[1]
+            if (isOurDomain(host)) {
+                value += ";Domain=${host}"
+            } else if (Regex("^localhost:\\d+$").matches(host)) {
+                value += ";Domain=localhost"
+            }
         }
-        if (cookieDomain.isNotEmpty()) {
-            value += ";Domain=${cookieDomain}"
-        }
+
+        value = value.replace("\n", "")
         response.addHeader("Set-Cookie", value)
     }
 
+    private fun isOurDomain(domain: String): Boolean {
+        val domainList = listOf("nju.itxia.cn", "itxia.site", "api.itxia.cn")
+        return domainList.contains(domain)
+    }
 
 }

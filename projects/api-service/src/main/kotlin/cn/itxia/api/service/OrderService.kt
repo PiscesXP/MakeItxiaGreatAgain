@@ -3,6 +3,7 @@ package cn.itxia.api.service
 import cn.itxia.api.dto.OrderReplyDto
 import cn.itxia.api.dto.ReplyDto
 import cn.itxia.api.dto.RequestOrderDto
+import cn.itxia.api.dto.RetrieveOrderDto
 import cn.itxia.api.enum.CampusEnum
 import cn.itxia.api.enum.MemberRoleEnum
 import cn.itxia.api.enum.OrderActionEnum
@@ -276,6 +277,26 @@ class OrderService {
         order.discuss.add(reply)
         orderRepository.save(order)
         return true
+    }
+
+    /**
+     * 找回预约单.
+     * 如果有多个满足条件，会返回最近的一个.
+     * @return 返回预约单对应的ID.
+     * */
+    fun retrieveOrder(dto: RetrieveOrderDto): String? {
+        val order = mongoTemplate.findOne(
+                Query.query(
+                        Criteria.where("name").`is`(dto.name)
+                                .and("phone").`is`(dto.phone)
+                                .and("deleted").ne(true)
+                )
+                        .with(
+                                Sort.by("createTime").descending()
+                        ),
+                Order::class.java
+        )
+        return order?._id
     }
 
 }

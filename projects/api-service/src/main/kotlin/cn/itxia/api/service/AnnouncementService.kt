@@ -1,6 +1,8 @@
 package cn.itxia.api.service
 
+import cn.itxia.api.dto.AnnouncementModifyDto
 import cn.itxia.api.dto.AnnouncementPublishDto
+import cn.itxia.api.dto.AnnouncementReorderDto
 import cn.itxia.api.dto.ReplyDto
 import cn.itxia.api.enum.AnnouncementTypeEnum
 import cn.itxia.api.model.Announcement
@@ -8,6 +10,9 @@ import cn.itxia.api.model.ItxiaMember
 import cn.itxia.api.model.repository.AnnouncementRepository
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Sort
+import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.query.*
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -26,13 +31,16 @@ class AnnouncementService {
     @Autowired
     private lateinit var replyService: ReplyService
 
+    @Autowired
+    private lateinit var mongoTemplate: MongoTemplate
+
     /**
      * 获取内部公告.
      * (后台系统)
      * @return 公告列表
      * */
     fun getInternalAnnouncements(): List<Announcement> {
-        return announcementRepository.findByType(AnnouncementTypeEnum.INTERNAL)
+        return getAnnouncementByType(AnnouncementTypeEnum.INTERNAL)
     }
 
     /**
@@ -41,7 +49,31 @@ class AnnouncementService {
      * @return 公告列表
      * */
     fun getExternalAnnouncements(): List<Announcement> {
-        return announcementRepository.findByType(AnnouncementTypeEnum.EXTERNAL)
+        return getAnnouncementByType(AnnouncementTypeEnum.EXTERNAL)
+    }
+
+    private fun getAnnouncementByType(type: AnnouncementTypeEnum): List<Announcement> {
+        return getAllAnnouncement(type)
+    }
+
+    fun getAllAnnouncement(type: AnnouncementTypeEnum? = null,
+                           includeDeleted: Boolean = false
+    ): List<Announcement> {
+        val criteria = Criteria()
+        if (type != null) {
+            criteria.and("type").`is`(type)
+        }
+        if (!includeDeleted) {
+            criteria.and("deleted").ne(true)
+        }
+        return mongoTemplate.find(
+                Query.query(
+                        criteria
+                ).with(
+                        Sort.by("order").ascending()
+                ),
+                Announcement::class.java
+        )
     }
 
     /**
@@ -105,6 +137,46 @@ class AnnouncementService {
         announcement.comments = list
         announcementRepository.save(announcement)
         return true
+    }
+
+    /**
+     * 删除公告.
+     * */
+    fun deleteAnnouncement(announcementID: String): Boolean {
+        val result = mongoTemplate.updateFirst(
+                Query.query(Criteria.where("_id").`is`(announcementID)),
+                Update.update("deleted", true),
+                Announcement::class.java
+        )
+        return result.modifiedCount == 1L
+    }
+
+    /**
+     * 给公告排序.
+     * */
+    fun reorderAnnouncement(reorderDto: List<AnnouncementReorderDto>) {
+        reorderDto.forEach {
+            mongoTemplate.updateFirst(
+                    Query.query(Criteria.where("_id").`is`(it._id)),
+                    Update.update("order", it.order),
+                    Announcement::class.java
+            )
+        }
+    }
+
+    /**
+     * 修改公告.
+     * */
+    fun modifyAnnouncement(
+            announcementID: String,
+            dto: AnnouncementModifyDto
+    ): Boolean {
+        val result = mongoTemplate.updateFirst(
+                Query.query(Criteria.where("_id").`is`(announcementID)),
+                Update.update("title", dto.title).set("content", dto.content),
+                Announcement::class.java
+        )
+        return result.modifiedCount == 1L
     }
 
     private fun findAnnouncementByID(announcementID: String): Announcement? {

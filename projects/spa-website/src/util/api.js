@@ -1,10 +1,8 @@
 import { config } from "CONFIG";
 import { buildQueryString } from "UTIL/query";
 
-const urlPrefix = (() => {
-  const { host, protocol } = config.network.api;
-  return protocol + "://" + host;
-})();
+const urlPrefix = config.network.api.prefix;
+const origin = config.network.api.origin;
 
 //-------------------------------------------------------------
 /**
@@ -19,7 +17,7 @@ function buildUrl(path, query = null) {
 /**
  * @param path {string}
  * @param query {string|*}
- * @param method {"GET"|"POST"|"PUT"}
+ * @param method {"GET"|"POST"|"PUT"|"DELETE"}
  * @param requestBody {*}
  * @param signal {AbortSignal}
  * */
@@ -38,12 +36,11 @@ async function sendApiRequest({
   try {
     response = await fetch(buildUrl(path, query), {
       body,
-      credentials: "include",
       headers: {
         "content-type": "application/json",
+        "itxia-from": origin,
       },
       method,
-      mode: "cors",
       signal,
     });
   } catch (e) {
@@ -73,5 +70,8 @@ const POST = (path, data, query) => {
 const PUT = (path, data, query) => {
   return sendApiRequest({ path, query, method: "PUT", requestBody: data });
 };
+const DELETE = (path, query) => {
+  return sendApiRequest({ path, query, method: "DELETE" });
+};
 
-export { sendApiRequest, GET, POST, PUT };
+export { sendApiRequest, GET, POST, PUT, DELETE };

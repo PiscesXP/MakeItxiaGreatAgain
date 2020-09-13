@@ -1,18 +1,33 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Button, Table, Icon, Input } from "antd";
+import { Button, Table, Icon, Input, Dropdown, Menu } from "antd";
 import { parseEnumValue, parseRoleAuthLevel } from "UTIL/enumParser";
 import { utcDateToText } from "UTIL/time";
 import Highlighter from "react-highlight-words";
+import { MemberActionModal } from "./actions/MemberActionModal";
+import { authTest } from "UTIL/authTest";
+import { useMemberContext } from "HOOK/index";
 
 /**
  *
  * @param data {Object} 成员信息数据
- * @param onSelectRow {function} 勾选表格行时的回调
+ * @param onRefreshData {function} 更新数据的回调
  * */
-function MemberInfoTable({ data, onSelectRow }) {
+function MemberInfoTable({ data, onRefreshData }) {
   const [searchInput, setSearchInput] = useState(null);
   const [searchedColumn, setSearchedColumn] = useState("");
   const [searchText, setSearchText] = useState("");
+
+  const [action, setAction] = useState(null);
+
+  const memberContext = useMemberContext();
+
+  function handleAction({ member, type }) {
+    setAction({ member, type, visible: true });
+  }
+
+  const handleHideModal = useCallback(() => {
+    setAction({ member: action.member, visible: false });
+  }, [action]);
 
   const getColumnSearchProps = useCallback(
     (dataIndex, title) => ({
@@ -102,6 +117,7 @@ function MemberInfoTable({ data, onSelectRow }) {
         dataIndex: "realName",
         key: "name",
         fixed: "left",
+        width: 150,
         ...getColumnSearchProps("realName", "姓名"),
       },
       {
@@ -128,7 +144,7 @@ function MemberInfoTable({ data, onSelectRow }) {
         key: "disabled",
         filters: [
           { text: "正常", value: false },
-          { text: "已禁用", value: true },
+          { text: "未启用", value: true },
         ],
         filterMultiple: false,
         onFilter: (value, record) => record.disabled === value,
@@ -137,11 +153,16 @@ function MemberInfoTable({ data, onSelectRow }) {
             return (
               <span>
                 <Icon type="close-circle" style={{ color: "red" }} />
-                已禁用
+                未启用
               </span>
             );
           } else {
-            return "正常";
+            return (
+              <span>
+                <Icon type="check-circle" style={{ color: "green" }} />
+                正常
+              </span>
+            );
           }
         },
       },
@@ -161,6 +182,63 @@ function MemberInfoTable({ data, onSelectRow }) {
         },
         render: (role) => parseEnumValue(role),
       },
+      {
+        title: "email",
+        dataIndex: "email",
+        key: "email",
+      },
+      {
+        title: "邮件提醒",
+        children: [
+          {
+            title: "新预约单",
+            dataIndex: "emailNotification.onMyCampusHasNewOrder",
+            key: "emailNotification.onMyCampusHasNewOrder",
+            width: 120,
+            filters: [
+              { text: "接受", value: true },
+              { text: "不接受", value: false },
+            ],
+            filterMultiple: false,
+            onFilter: (value, record) =>
+              record.emailNotification.onMyCampusHasNewOrder === value,
+            render: (onMyCampusHasNewOrder) => {
+              return onMyCampusHasNewOrder ? "接收" : "";
+            },
+          },
+          {
+            title: "预约单回复",
+            dataIndex: "emailNotification.onMyOrderHasNewReply",
+            key: "emailNotification.onMyOrderHasNewReply",
+            width: 120,
+            filters: [
+              { text: "接受", value: true },
+              { text: "不接受", value: false },
+            ],
+            filterMultiple: false,
+            onFilter: (value, record) =>
+              record.emailNotification.onMyOrderHasNewReply === value,
+            render: (onMyOrderHasNewReply) => {
+              return onMyOrderHasNewReply ? "接收" : "";
+            },
+          },
+        ],
+      },
+      {
+        title: "需要重置密码",
+        dataIndex: "requirePasswordReset",
+        key: "requirePasswordReset",
+        filters: [
+          { text: "需要", value: true },
+          { text: "不需要", value: false },
+        ],
+        filterMultiple: false,
+        onFilter: (value, record) => record.requirePasswordReset === value,
+        render: (requirePasswordReset) => {
+          return requirePasswordReset ? "需要" : "";
+        },
+      },
+      { title: "登录账号ID", dataIndex: "loginName", key: "loginName" },
       {
         title: "最近登录",
         dataIndex: "lastLogin",
@@ -184,32 +262,101 @@ function MemberInfoTable({ data, onSelectRow }) {
           }
         },
       },
-      { title: "登录账号ID", dataIndex: "loginName", key: "loginName" },
       {
         title: "ID",
         key: "ID",
         dataIndex: "_id",
-        width: 220,
+        width: 256,
         ...getColumnSearchProps("_id", "ID"),
       },
       {
-        title: "Action",
+        title: "邀请人",
+        dataIndex: "inviteBy",
+        key: "inviteBy",
+        render: (inviteBy) => inviteBy && inviteBy.realName,
+      },
+      {
+        title: "",
         key: "operation",
         fixed: "right",
         width: 100,
-        render: () => <Button>更多</Button>,
+        render: (text, record) => {
+          if (!authTest.notLessThan(memberContext.role, record.role)) {
+            return null;
+          }
+          const isMyself = memberContext._id === record._id;
+          return (
+            <Dropdown
+              overlay={
+                <Menu
+                  onClick={({ key }) => {
+                    handleAction({ member: record, type: key });
+                  }}
+                >
+                  {!record.disabled && !isMyself && (
+                    <Menu.Item key="passwordReset">
+                      <Icon type="lock" />
+                      重置密码
+                    </Menu.Item>
+                  )}
+                  {!record.disabled && (
+                    <Menu.Item key="changeRole">
+                      <Icon type="user" />
+                      更改权限
+                    </Menu.Item>
+                  )}
+                  {!isMyself && (
+                    <Menu.Item key="changeDisable">
+                      {record.disabled ? (
+                        <>
+                          <Icon
+                            type="check-circle"
+                            className="member-action-enable"
+                          />
+                          启用账号
+                        </>
+                      ) : (
+                        <>
+                          <Icon
+                            type="close-circle"
+                            className="member-action-disable"
+                          />
+                          禁用账号
+                        </>
+                      )}
+                    </Menu.Item>
+                  )}
+                </Menu>
+              }
+            >
+              <Button type="link">
+                操作
+                <Icon type="down" />
+              </Button>
+            </Dropdown>
+          );
+        },
       },
     ];
-  }, [getColumnSearchProps]);
+  }, [getColumnSearchProps, memberContext]);
 
   return (
-    <Table
-      columns={columns}
-      dataSource={data}
-      rowKey={(member) => member._id}
-      scroll={{ x: 1500 }}
-      rowSelection={{ columnTitle: "选择", onSelect: onSelectRow }}
-    />
+    <>
+      <Table
+        bordered
+        columns={columns}
+        dataSource={data}
+        rowKey={(member) => member._id}
+        scroll={{ x: 1600 }}
+      />
+      <MemberActionModal
+        actionType={action && action.type}
+        member={action && action.member}
+        visible={action && action.visible}
+        onHide={handleHideModal}
+        onRefreshData={onRefreshData}
+      />
+    </>
   );
 }
 
