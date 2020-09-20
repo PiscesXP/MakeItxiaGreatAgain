@@ -37,7 +37,7 @@ import { sendApiRequest } from "UTIL/api";
 
 /**
  * 发起API请求.
- *
+ * @function
  * @param {string} path
  * @param {Object|string} query
  * @param {"GET"|"POST"|"PUT"|"DELETE"} method
@@ -164,7 +164,7 @@ function useApiRequest({
 
   /**
    * 发送请求.
-   * @callback
+   * @function
    * @param {Object?} requestBody
    * @param {Object|string?} queryObject
    * */
