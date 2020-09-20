@@ -1,52 +1,103 @@
-import React, { useEffect } from "react";
+import React, { useMemo } from "react";
 import { parseQueryString } from "UTIL/query";
-import { useApi, useTitleWCMS } from "HOOK";
-import { useHistory, Redirect } from "react-router-dom";
+import { useTitleWCMS } from "HOOK";
+import { useHistory } from "react-router-dom";
 import { routePath } from "PAGE/routePath";
-import { Loading } from "COMPONENTS/loading";
-import { Modal, notification } from "antd";
+import { Alert, Card, Icon, Modal, Spin } from "antd";
+import { useApiRequest } from "HOOK/useApiRequest";
+import "./oauthPage.css";
 
+/**
+ * OAuth登录的页面.
+ * (也包括绑定时的)
+ * */
 function OAuthPage() {
   useTitleWCMS("OAuth登录");
   const history = useHistory();
 
-  const { code, send } = useApi({
+  const modal = useMemo(() => {
+    return Modal.info({
+      icon: <Icon type="loading" />,
+      title: "登录中...",
+      content: "请稍等",
+      footer: null,
+    });
+  }, []);
+
+  useApiRequest({
     path: "/oauth/link/qq",
     method: "POST",
-    later: true,
-    onSuccess: ({ c, message, payload }) => {
-      notification.success({
-        message: message,
-        description: payload.toString(),
-        duration: 3,
-      });
+    data: { token: parseQueryString() },
+    onSuccess: ({ code, message }) => {
+      switch (code) {
+        case 16:
+          //登录成功
+          modal.update({
+            type: "success",
+            icon: <Icon type="check-circle" />,
+            title: "登陆成功",
+            content: "正在跳转中...",
+          });
+          setTimeout(() => {
+            modal.destroy();
+            history.push(routePath.wcms.DASHBOARD);
+          }, 1000);
+          break;
+        case 17:
+          //绑定成功
+          modal.update({
+            type: "success",
+            icon: <Icon type="check-circle" />,
+            title: "绑定成功",
+            content: "你可通过QQ登录后台系统.",
+            okText: "好的",
+            onOk: () => {
+              history.push(routePath.wcms.SELF_PROFILE);
+            },
+          });
+          break;
+        default:
+          //登录失败
+          modal.update({
+            type: "error",
+            icon: <Icon type="close-circle" />,
+            title: "登陆失败",
+            content: message,
+            okText: "返回",
+            onOk: () => {
+              history.push(routePath.wcms.LOGIN);
+            },
+          });
+      }
     },
-    onFail: () => {
-      Modal.error({
-        title: "登录失败",
-        content: (
-          <div>
-            <p>若要通过QQ登录，请先在个人设置绑定QQ账号.</p>
-            <p>若要绑定QQ账号，请先确认你是否已登录后台系统.</p>
-          </div>
-        ),
-        centered: true,
+    onError: (error) => {
+      modal.update({
+        type: "error",
+        icon: <Icon type="close-circle" />,
+        title: "登陆失败",
+        content: error.toString(),
+        okText: "返回",
         onOk: () => {
-          history.push(routePath.WCMS);
+          history.push(routePath.wcms.LOGIN);
         },
       });
     },
   });
 
-  useEffect(() => {
-    const { token } = parseQueryString();
-    send({ accessToken: token });
-  }, [send]);
-
-  if (code === 0) {
-    return <Redirect to={routePath.wcms.SELF_PROFILE} push />;
-  } else {
-    return <Loading />;
-  }
+  return (
+    <div className="oauth-page-container">
+      <Card title="QQ OAuth登录" className="oauth-page-card">
+        <Alert
+          type="info"
+          message={
+            <span>
+              <Spin />
+              通过QQ登录中...
+            </span>
+          }
+        />
+      </Card>
+    </div>
+  );
 }
 export { OAuthPage };
