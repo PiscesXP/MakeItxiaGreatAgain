@@ -3,11 +3,12 @@ import { useState } from "react";
 /**
  * 使用LocalStorage保持的值作为state.
  * 更新时也会写入LocalStorage.
+ *
  * @param key {string} LocalStorage key
  * @param init {function|Object?} Initial value, or function returns initial value
  * @param transform {function} transform state while set new value
  * */
-function useLocalStorageState({ key, init = null, transform = null }) {
+function useLocalStorageState(key, init = null, transform = null) {
   const [state, setState] = useState(getInitValue());
 
   /**
@@ -26,6 +27,10 @@ function useLocalStorageState({ key, init = null, transform = null }) {
     return init;
   }
 
+  /**
+   * 更新状态.
+   * @param {*} newState
+   * */
   function updateState(newState) {
     if (newState === undefined) {
       localStorage.removeItem(key);
@@ -39,7 +44,16 @@ function useLocalStorageState({ key, init = null, transform = null }) {
     }
   }
 
-  return [state, updateState];
+  /**
+   * 清除LocalStorage的值.
+   * 并把state设为undefined.
+   * */
+  function remove() {
+    localStorage.removeItem(key);
+    setState(undefined);
+  }
+
+  return [state, updateState, remove];
 }
 
 export { useLocalStorageState };
