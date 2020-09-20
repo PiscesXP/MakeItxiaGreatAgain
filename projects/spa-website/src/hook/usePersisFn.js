@@ -11,7 +11,7 @@ function usePersistFn(fn) {
 
   ref.current = fn;
 
-  return useCallback((...args) => ref.current(...args), [ref]);
+  return useCallback((...args) => ref.current(...args), []);
 }
 
 export { usePersistFn };
