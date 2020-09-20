@@ -22,12 +22,12 @@ const { Header, Content, Footer } = Layout;
  * */
 function WCMS() {
   //提示是否前往 nju.itxia.cn
-  const [noticeGotoNewSite, setNoticeGotoNewSite] = useLocalStorageState({
-    key: "noticeGotoNewSite",
-    init: () => {
+  const [noticeGotoNewSite, setNoticeGotoNewSite] = useLocalStorageState(
+    "noticeGotoNewSite",
+    () => {
       return window.location.host !== "nju.itxia.cn";
-    },
-  });
+    }
+  );
 
   useEffect(() => {
     if (noticeGotoNewSite) {

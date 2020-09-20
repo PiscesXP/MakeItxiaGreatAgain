@@ -5,7 +5,7 @@ import {
   AttachmentUpload,
   attachmentUploadFormParser,
 } from "COMPONENTS/attachment";
-import { useLocalStorage, useThrottle } from "HOOK";
+import { useLocalStorageState, useThrottle } from "HOOK";
 
 /**
  * 公告编辑器.
@@ -15,7 +15,9 @@ function EditorForm({
   editingAnnounceID,
   onSubmitAnnouncement,
 }) {
-  const [draft, setDraft, removeDraft] = useLocalStorage("announceEditDraft");
+  const [draft, setDraft, removeDraft] = useLocalStorageState(
+    "announceEditDraft"
+  );
 
   const [loading, setLoading] = useState(false);
 
