@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    //可用 import XXX from "xxx" 替代 import * as XXX from "xxx"
+    "allowSyntheticDefaultImports": true,
+    "module": "ES6",
+    "jsx": "react"
+  }
+}
