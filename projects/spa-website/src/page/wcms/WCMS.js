@@ -14,6 +14,7 @@ import { AnnouncementManage } from "./announcementManage";
 import { MemberManage } from "./memberManage";
 import { useLocalStorageState } from "HOOK";
 import { Join } from "PAGE/wcms/join/Join";
+import { ExpPage } from "PAGE/wcms/exp/ExpPage";
 
 const { Header, Content, Footer } = Layout;
 
@@ -86,6 +87,9 @@ function WCMSRouter() {
       </Route>
       <Route path={routePath.wcms.MEMBER_MANAGE}>
         <MemberManage />
+      </Route>
+      <Route path={routePath.wcms.EXP}>
+        <ExpPage />
       </Route>
       <Route>
         <NotFound />

@@ -1,4 +1,4 @@
-import { Icon, Menu } from "antd";
+import { Badge, Icon, Menu } from "antd";
 import React, { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { LogoutButton } from "COMPONENTS/logout";
@@ -41,6 +41,12 @@ function WcmsNavigateBar() {
         <Link to={routePath.wcms.HANDLE_ORDER} />
       </Menu.Item>
 
+      <Menu.Item key={routePath.wcms.EXP}>
+        <Icon type="read" />
+        经验记录
+        <Link to={routePath.wcms.EXP} />
+      </Menu.Item>
+
       {isAdminOrSuperAdmin && (
         <Menu.Item key={routePath.wcms.ANNOUNCE_MANAGE}>
           <Icon type="form" />
@@ -57,7 +63,7 @@ function WcmsNavigateBar() {
 
       {isAdminOrSuperAdmin && (
         <Menu.Item key={routePath.wcms.MEMBER_MANAGE}>
-          <Icon type="ordered-list" />
+          <Icon type="team" />
           成员管理
           <Link to={routePath.wcms.MEMBER_MANAGE} />
         </Menu.Item>

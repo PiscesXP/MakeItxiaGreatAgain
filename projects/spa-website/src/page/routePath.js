@@ -17,6 +17,7 @@ const routePath = {
     ANNOUNCE_MANAGE: "/wcms/announce-manage",
     SELF_PROFILE: "/wcms/profile",
     MEMBER_MANAGE: "/wcms/member-manage",
+    EXP: "/wcms/exp",
   },
   OAUTH: "/oauth",
 };
