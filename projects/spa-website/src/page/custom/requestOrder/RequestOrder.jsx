@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { OrderForm } from "./OrderForm";
 import { OrderResult } from "./OrderResult";
 import { Modal, Spin } from "antd";
-import * as api from "UTIL/api";
+import * as api from "@/request/api";
 import { useHistory } from "react-router-dom";
 import { routePath } from "PAGE/routePath";
 import { useTitleCustom } from "HOOK";

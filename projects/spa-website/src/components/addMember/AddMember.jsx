@@ -6,18 +6,18 @@ import {
   Input,
   notification,
   Radio,
-  Result
+  Result,
 } from "antd";
 import React from "react";
-import * as api from "UTIL/api";
+import * as api from "@/request/api";
 
 class AddMemberForm extends React.Component {
   state = {
     submit: {
       loading: false,
       payload: undefined,
-      error: undefined
-    }
+      error: undefined,
+    },
   };
 
   componentDidMount() {
@@ -37,7 +37,7 @@ class AddMemberForm extends React.Component {
     localStorage.setItem("addMember", JSON.stringify(values));
   }
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (err) {
@@ -47,32 +47,32 @@ class AddMemberForm extends React.Component {
       //提交表单
       this.setState({
         submit: {
-          loading: true
-        }
+          loading: true,
+        },
       });
       api
         .POST("/user", values)
-        .then(payload => {
+        .then((payload) => {
           this.setState({
             submit: {
               loading: false,
-              payload
-            }
+              payload,
+            },
           });
           localStorage.removeItem("addMember");
           this.props.form.setFieldsValue({});
         })
-        .catch("error", e => {
+        .catch("error", (e) => {
           notification.error({
             message: "网络请求失败",
             description: e.toString(),
-            duration: 0
+            duration: 0,
           });
           this.setState({
             submit: {
               loading: false,
-              error: e
-            }
+              error: e,
+            },
           });
         });
     });
@@ -82,7 +82,7 @@ class AddMemberForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: { span: 6 },
-      wrapperCol: { span: 14 }
+      wrapperCol: { span: 14 },
     };
     const { payload } = this.state.submit;
     if (payload) {
@@ -99,13 +99,13 @@ class AddMemberForm extends React.Component {
                   submit: {
                     loading: false,
                     payload: undefined,
-                    error: undefined
-                  }
+                    error: undefined,
+                  },
                 });
               }}
             >
               返回
-            </Button>
+            </Button>,
           ]}
         />
       );
@@ -119,9 +119,9 @@ class AddMemberForm extends React.Component {
               { required: true, message: "请填写姓名" },
               {
                 pattern: /^.{2,16}$/,
-                message: "2-16个字符"
-              }
-            ]
+                message: "2-16个字符",
+              },
+            ],
           })(
             <Input
               prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
@@ -136,9 +136,9 @@ class AddMemberForm extends React.Component {
               { required: true, message: "请填写登录账号名" },
               {
                 pattern: /^\w{4,16}$/,
-                message: "账号格式不正确"
-              }
-            ]
+                message: "账号格式不正确",
+              },
+            ],
           })(
             <Input
               prefix={
@@ -161,9 +161,9 @@ class AddMemberForm extends React.Component {
               { required: true, message: "请填写密码" },
               {
                 pattern: /^\w{8,16}$/,
-                message: "密码格式不正确"
-              }
-            ]
+                message: "密码格式不正确",
+              },
+            ],
           })(
             <Input.Password
               prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
@@ -184,8 +184,8 @@ class AddMemberForm extends React.Component {
                   callback();
                 }
                 callback("两次密码不一致");
-              }
-            ]
+              },
+            ],
           })(
             <Input.Password
               prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
@@ -196,7 +196,7 @@ class AddMemberForm extends React.Component {
         <Form.Item label="校区">
           {getFieldDecorator("campus", {
             rules: [{ required: true, message: "请选择你的校区" }],
-            initialValue: "仙林"
+            initialValue: "仙林",
           })(
             <Radio.Group>
               <Radio value={"仙林"}>仙林</Radio>
@@ -207,7 +207,7 @@ class AddMemberForm extends React.Component {
         <Form.Item label="身份">
           {getFieldDecorator("role", {
             rules: [{ required: true, message: "请选择成员身份" }],
-            initialValue: "普通成员"
+            initialValue: "普通成员",
           })(
             <Radio.Group>
               <Radio value={"普通成员"}>普通成员</Radio>

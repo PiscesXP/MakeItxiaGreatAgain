@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Col, Icon, List, Tag, Row, Divider } from "antd";
+import { Card, Col, Icon, List, Row, Tag } from "antd";
 import { CenterMeResponsive } from "COMPONENTS/layout";
 import {
   useLocalStorageState,

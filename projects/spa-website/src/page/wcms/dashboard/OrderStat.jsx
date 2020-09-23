@@ -39,7 +39,7 @@ function OrderStat() {
         </Col>
       </Row>
       <Divider />
-      <h1>积压的预约单 (>14天未处理) </h1>
+      <h1>积压的预约单 (&gt14天未处理) </h1>
       <Row>
         <Col span={8}>
           <Statistic

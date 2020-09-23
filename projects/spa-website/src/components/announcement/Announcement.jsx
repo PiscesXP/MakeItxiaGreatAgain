@@ -4,7 +4,7 @@ import { AttachmentList } from "COMPONENTS/attachment";
 import { ReplyList } from "COMPONENTS/reply";
 import * as timeUtil from "UTIL/time";
 import { ReactMarkdown } from "UTIL/md2html";
-import * as api from "UTIL/api";
+import * as api from "@/request/api";
 import { useMemberContext } from "HOOK";
 
 /**

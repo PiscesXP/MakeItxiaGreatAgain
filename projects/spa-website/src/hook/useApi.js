@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useReducer } from "react";
-import { sendApiRequest } from "UTIL/api";
+import { sendApiRequest } from "@/request/api";
 
 /**
  * 发起API请求的hook.

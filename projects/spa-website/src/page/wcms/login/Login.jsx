@@ -6,7 +6,7 @@ import { AutoLogin } from "./AutoLogin";
 import { routePath } from "PAGE/routePath";
 import { Redirect } from "react-router-dom";
 import "./style.css";
-import { GET } from "UTIL/api";
+import { GET } from "@/request/api";
 
 function LoginForm(props) {
   useTitleWCMS("登录");

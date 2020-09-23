@@ -1,38 +1,38 @@
 import { Button, Form, Input, Modal, notification, Table } from "antd";
 import React from "react";
 import * as timeUtil from "UTIL/time";
-import * as api from "UTIL/api";
+import * as api from "@/request/api";
 
 const columns = [
   {
     title: "标签ID",
     dataIndex: "_id",
-    key: "id"
+    key: "id",
   },
   {
     title: "标签名称",
     dataIndex: "tagName",
-    key: "tagName"
+    key: "tagName",
   },
   {
     title: "引用次数",
     dataIndex: "useCount",
-    key: "useCount"
+    key: "useCount",
   },
   {
     title: "添加时间",
     dataIndex: "addTime",
     key: "addTime",
-    render: unixTime => {
+    render: (unixTime) => {
       const time = timeUtil.utcDateToText(unixTime);
       return <span>{time}</span>;
-    }
+    },
   },
   {
     title: "添加人",
     dataIndex: "addBy.realName",
-    key: "addBy"
-  }
+    key: "addBy",
+  },
 ];
 
 class TagManage extends React.Component {
@@ -40,7 +40,7 @@ class TagManage extends React.Component {
     super(props);
     this.state = {
       loading: true,
-      data: null
+      data: null,
     };
     this.reload = this.reload.bind(this);
     this.add = this.add.bind(this);
@@ -53,12 +53,12 @@ class TagManage extends React.Component {
   reload() {
     this.setState({
       loading: true,
-      data: null
+      data: null,
     });
-    api.GET("/tag").then(payload => {
+    api.GET("/tag").then((payload) => {
       this.setState({
         loading: false,
-        data: payload
+        data: payload,
       });
     });
   }
@@ -71,7 +71,7 @@ class TagManage extends React.Component {
         key,
         duration: 0,
         message: "正在添加标签",
-        description: `添加标签"${tagName}"中...`
+        description: `添加标签"${tagName}"中...`,
       });
       api
         .POST("/tag", { tagName })
@@ -80,16 +80,16 @@ class TagManage extends React.Component {
             key,
             duration: 5,
             message: "添加标签成功",
-            description: `成功添加标签：${tagName}`
+            description: `成功添加标签：${tagName}`,
           });
           this.reload();
         })
-        .catch(message => {
+        .catch((message) => {
           notification.error({
             key,
             duration: 0,
             message: "添加标签失败",
-            description: message
+            description: message,
           });
           this.reload();
         });
@@ -100,7 +100,7 @@ class TagManage extends React.Component {
         <Form>
           <Form.Item label="标签名">
             <Input
-              onChange={e => {
+              onChange={(e) => {
                 tagName = e.target.value;
               }}
             ></Input>
@@ -111,7 +111,7 @@ class TagManage extends React.Component {
       okCancel: true,
       onOk: () => {
         onSubmit();
-      }
+      },
     });
   }
 
@@ -141,12 +141,12 @@ class TagManage extends React.Component {
           </Form.Item>
         </Form>
         <Table
-          columns={columns.map(item => ({ ...item }))}
+          columns={columns.map((item) => ({ ...item }))}
           dataSource={
             this.state.data
-              ? this.state.data.map(value => ({
+              ? this.state.data.map((value) => ({
                   key: value._id,
-                  ...value
+                  ...value,
                 }))
               : []
           }

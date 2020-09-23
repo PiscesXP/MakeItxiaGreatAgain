@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Modal } from "antd";
-import { PUT } from "UTIL/api";
+import { PUT } from "@/request/api";
 
 /**
  * 改变账号的禁用状态.

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Alert, Button, Form, Icon, Input, Modal } from "antd";
-import * as api from "UTIL/api";
+import * as api from "@/request/api";
 
 function FromOldAccountForm(props) {
   const [loading, setLoading] = useState(false);
@@ -20,13 +20,13 @@ function FromOldAccountForm(props) {
           onOk: () => {
             window.location = "/login";
           },
-          centered: true
+          centered: true,
         });
       } catch (error) {
         Modal.error({
           title: "恢复失败",
           content: error.message,
-          centered: true
+          centered: true,
         });
       }
     });
@@ -34,7 +34,7 @@ function FromOldAccountForm(props) {
 
   const formItemLayout = {
     labelCol: { span: 6 },
-    wrapperCol: { span: 15 }
+    wrapperCol: { span: 15 },
   };
   const { getFieldDecorator } = props.form;
   return (
@@ -42,12 +42,12 @@ function FromOldAccountForm(props) {
       <h3>旧账号信息</h3>
       <Form.Item label="旧账号名">
         {getFieldDecorator("oldAccount", {
-          rules: [{ required: true, message: "请填写旧系统账号名" }]
+          rules: [{ required: true, message: "请填写旧系统账号名" }],
         })(<Input type="text" placeholder="旧系统账号名" />)}
       </Form.Item>
       <Form.Item label="旧密码">
         {getFieldDecorator("oldPassword", {
-          rules: [{ required: true, message: "请填写旧系统密码" }]
+          rules: [{ required: true, message: "请填写旧系统密码" }],
         })(<Input type="password" placeholder="旧系统密码" />)}
       </Form.Item>
       <h3>新账号信息</h3>
@@ -57,9 +57,9 @@ function FromOldAccountForm(props) {
             { message: "请填写新账号名" },
             {
               pattern: /^\w{4,16}$/,
-              message: "账号格式不正确"
-            }
-          ]
+              message: "账号格式不正确",
+            },
+          ],
         })(
           <Input
             prefix={
@@ -81,9 +81,9 @@ function FromOldAccountForm(props) {
             { required: true, message: "请填写新密码" },
             {
               pattern: /^.{8,256}$/,
-              message: "密码格式不正确"
-            }
-          ]
+              message: "密码格式不正确",
+            },
+          ],
         })(
           <Input.Password
             prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}

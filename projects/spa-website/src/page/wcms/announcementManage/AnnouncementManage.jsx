@@ -4,7 +4,7 @@ import { AnnouncementEditor } from "./AnnouncementEditor";
 import { CenterMeResponsive } from "COMPONENTS/layout";
 import { useApi, useTitleWCMS } from "HOOK";
 import { AnnouncementTable } from "PAGE/wcms/announcementManage/AnnouncementTable";
-import { DELETE, POST, PUT } from "UTIL/api";
+import { DELETE, POST, PUT } from "@/request/api";
 import { debounceFn } from "UTIL/common";
 
 function AnnouncementManage() {

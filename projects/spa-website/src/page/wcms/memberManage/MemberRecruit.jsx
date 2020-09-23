@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from "react";
 import { parseEnumValue } from "UTIL/enumParser";
 import { notification, Button, Icon, Table, Typography } from "antd";
 import { useApi } from "HOOK/index";
-import { DELETE, POST } from "UTIL/api";
+import { DELETE, POST } from "@/request/api";
 
 function MemberRecruit() {
   const { loading, payload, send } = useApi({

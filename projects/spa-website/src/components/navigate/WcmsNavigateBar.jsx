@@ -1,4 +1,4 @@
-import { Badge, Icon, Menu } from "antd";
+import { Icon, Menu } from "antd";
 import React, { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { LogoutButton } from "COMPONENTS/logout";

@@ -1,6 +1,6 @@
 import { Form, notification, Switch } from "antd";
 import React from "react";
-import * as api from "../../util/api";
+import * as api from "@/request/api";
 import HandleOrderForm from "./HandleOrderForm";
 
 const data = [];
@@ -24,7 +24,7 @@ class HandleOrder extends React.Component {
     campus: 0,
     data,
     filters: {},
-    tagList: []
+    tagList: [],
   };
 
   componentDidMount() {
@@ -43,7 +43,7 @@ class HandleOrder extends React.Component {
    */
   async fetchTableData(pagination = this.state.pagination, filters, sorter) {
     this.setState({
-      loading: true
+      loading: true,
     });
     const { current: page = 1 } = pagination;
 
@@ -82,13 +82,13 @@ class HandleOrder extends React.Component {
       this.setState({
         loading: false,
         pagination,
-        data
+        data,
       });
     } catch (reason) {
       notification.error({
         message: "网络请求失败",
         description: reason,
-        duration: 0
+        duration: 0,
       });
     }
   }
@@ -97,26 +97,26 @@ class HandleOrder extends React.Component {
     try {
       const tagPayload = await api.GET("/tag");
       this.setState({
-        tagList: tagPayload
+        tagList: tagPayload,
       });
     } catch (reason) {
       notification.error({
         message: "网络请求失败",
         description: reason,
-        duration: 0
+        duration: 0,
       });
     }
   }
 
-  handleToggle = enable => {
+  handleToggle = (enable) => {
     this.setState({ bordered: enable });
   };
 
-  handleCampusChange = e => {
+  handleCampusChange = (e) => {
     this.setState({ campus: e.target.value });
   };
 
-  handleShowFinishChange = enable => {
+  handleShowFinishChange = (enable) => {
     this.setState({ showFinish: enable });
   };
 

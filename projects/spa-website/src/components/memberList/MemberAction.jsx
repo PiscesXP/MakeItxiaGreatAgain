@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal, Popconfirm } from "antd";
-import * as api from "UTIL/api";
+import * as api from "@/request/api";
 
 const actions = [
   {
@@ -8,34 +8,34 @@ const actions = [
     condition: { role: "普通成员" },
     buttonType: "default",
     urlPostfix: "role",
-    data: { role: "管理员" }
+    data: { role: "管理员" },
   },
   {
     actionName: "设为普通成员",
     condition: { role: "管理员" },
     buttonType: "default",
     urlPostfix: "role",
-    data: { role: "普通成员" }
+    data: { role: "普通成员" },
   },
   {
     actionName: "启用账号",
     condition: { disable: true },
     buttonType: "primary",
     urlPostfix: "disable",
-    data: { disable: false }
+    data: { disable: false },
   },
   {
     actionName: "禁用账号",
     condition: { disable: false },
     buttonType: "danger",
     urlPostfix: "disable",
-    data: { disable: true }
+    data: { disable: true },
   },
   {
     actionName: "重置密码",
     buttonType: "dashed",
-    notImplemented: true
-  }
+    notImplemented: true,
+  },
 ];
 
 function MemberAction(props) {
@@ -46,7 +46,7 @@ function MemberAction(props) {
       return Modal.info({
         title: "操作失败",
         content: "功能尚未实现，请等待下个版本",
-        centered: true
+        centered: true,
       });
     }
     setLoading(true);
@@ -60,20 +60,20 @@ function MemberAction(props) {
           centered: true,
           onOk: () => {
             props.onActionDone();
-          }
+          },
         });
       })
-      .catch(e => {
+      .catch((e) => {
         Modal.error({
           title: "网络请求失败",
           content: e.toString(),
-          centered: true
+          centered: true,
         });
       });
   }
 
   const { record } = props;
-  const actionArr = actions.filter(value => {
+  const actionArr = actions.filter((value) => {
     const { condition } = value;
     if (condition) {
       for (const key in condition) {
@@ -102,7 +102,7 @@ function MemberAction(props) {
               type={value.buttonType}
               size="small"
               style={{
-                margin: "0.5em"
+                margin: "0.5em",
               }}
               disabled={loading}
             >

@@ -8,32 +8,32 @@ import {
   Input,
   Modal,
   notification,
-  Spin
+  Spin,
 } from "antd";
 import "./style.css";
-import * as api from "UTIL/api";
+import * as api from "@/request/api";
 import { Redirect } from "react-router-dom";
 import { routePath } from "ROUTE/routePath";
 import { config } from "CONFIG";
 
 const localStorageKeys = {
   isRememberAccount: "isRememberAccount",
-  rememberAccount: "rememberAccount"
+  rememberAccount: "rememberAccount",
 };
 
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLogin: false
+      isLogin: false,
     };
   }
 
   componentDidMount() {
-    this.autoLogin().catch(e => {});
+    this.autoLogin().catch((e) => {});
   }
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
@@ -64,7 +64,7 @@ class LoginForm extends React.Component {
       Modal.error({
         title: "登录失败",
         content: error.message,
-        centered: true
+        centered: true,
       });
     }
   }
@@ -75,7 +75,7 @@ class LoginForm extends React.Component {
       key,
       message: "检查登录状态中...",
       icon: <Spin />,
-      duration: 0
+      duration: 0,
     });
     try {
       await api.GET("/whoami");
@@ -83,11 +83,11 @@ class LoginForm extends React.Component {
         notification.success({
           key,
           message: "已登录, 自动跳转到主页.",
-          duration: 3
+          duration: 3,
         });
       }, 500);
       this.setState({
-        isLogin: true
+        isLogin: true,
       });
     } catch (error) {
       setTimeout(() => {
@@ -116,7 +116,7 @@ class LoginForm extends React.Component {
               initialValue: localStorage.getItem("rememberAccount")
                 ? localStorage.getItem("rememberAccount")
                 : "",
-              rules: [{ required: true, message: "请输入登录账号" }]
+              rules: [{ required: true, message: "请输入登录账号" }],
             })(
               <Input
                 prefix={
@@ -128,7 +128,7 @@ class LoginForm extends React.Component {
           </Form.Item>
           <Form.Item>
             {getFieldDecorator("password", {
-              rules: [{ required: true, message: "请输入密码" }]
+              rules: [{ required: true, message: "请输入密码" }],
             })(
               <Input.Password
                 prefix={
@@ -143,7 +143,7 @@ class LoginForm extends React.Component {
               valuePropName: "checked",
               initialValue:
                 localStorage.getItem(localStorageKeys.isRememberAccount) ===
-                "true"
+                "true",
             })(<Checkbox>记住账号</Checkbox>)}
             <Button
               type="primary"
