@@ -6,7 +6,7 @@ import React from "react";
 import "antd/dist/antd.css";
 import "./App.css";
 
-import { Main } from "PAGE";
+import { Main } from "@/page";
 
 function App() {
   return <Main />;

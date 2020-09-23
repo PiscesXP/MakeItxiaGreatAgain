@@ -1,5 +1,15 @@
 import { useState } from "react";
 
+function isFunction<T>(obj: any): obj is T {
+  return typeof obj === "function";
+}
+
+declare type LocalStorageStateResult<T> = [
+  T | undefined,
+  (value: T) => void,
+  () => void
+];
+
 /**
  * 使用LocalStorage保持的值作为state.
  * 更新时也会写入LocalStorage.
@@ -8,20 +18,25 @@ import { useState } from "react";
  * @param init {function|Object?} Initial value, or function returns initial value
  * @param transform {function} transform state while set new value
  * */
-function useLocalStorageState(key, init = null, transform = null) {
-  const [state, setState] = useState(getInitValue());
+function useLocalStorageState<T>(
+  key: string,
+  init: T | (() => T),
+  transform?: (value: T) => T
+): LocalStorageStateResult<T> {
+  const [state, setState] = useState<T | undefined>(getInitValue());
 
   /**
    * 从LocalStorage获取初始值.
    * 若不存在，则使用init的值.
-   * @return initial value
    * */
-  function getInitValue() {
+  function getInitValue(): T {
     const value = localStorage.getItem(key);
     try {
-      return JSON.parse(value);
+      if (value !== null) {
+        return JSON.parse(value);
+      }
     } catch (e) {}
-    if (typeof init === "function") {
+    if (isFunction<() => T>(init)) {
       return init();
     }
     return init;
@@ -29,9 +44,8 @@ function useLocalStorageState(key, init = null, transform = null) {
 
   /**
    * 更新状态.
-   * @param {*} newState
    * */
-  function updateState(newState) {
+  function updateState(newState: T) {
     if (newState === undefined) {
       localStorage.removeItem(key);
       setState(undefined);

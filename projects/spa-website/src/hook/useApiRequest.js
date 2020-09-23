@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
-import { usePersistFn } from "HOOK/usePersisFn";
-import { sendApiRequest } from "UTIL/api";
+import { usePersistFn } from "@/hook/usePersisFn";
+import { sendApiRequest } from "@/request/api";
 
 /**
  * @typedef {Object} ApiRequestResult
@@ -34,7 +34,15 @@ import { sendApiRequest } from "UTIL/api";
  * @property {useApiRequestSend} send
  *
  * */
-
+/*
+interface useApiRequestArgs {
+  readonly path: string;
+  readonly method: "GET" | "POST" | "PUT" | "DELETE";
+  readonly requestQuery?: RequestQuery;
+  readonly requestBody?: any;
+  readonly manual: boolean;
+}
+*/
 /**
  * 发起API请求.
  * @function
