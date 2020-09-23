@@ -4,7 +4,7 @@ import * as timeUtil from "UTIL/time";
 import { Attachment } from "COMPONENTS/attachment";
 import { ReactMarkdown } from "UTIL/md2html";
 
-const getStatusIcon = status => {
+const getStatusIcon = (status) => {
   switch (status) {
     case "等待处理":
       return (
@@ -59,7 +59,7 @@ function OrderInfoCard(props) {
     warranty,
     description,
     attachments,
-    status
+    status,
   } = data;
 
   const { onCancel, onBackHome } = props;
@@ -121,7 +121,7 @@ function OrderInfoCard(props) {
           <p>
             <strong>附件:</strong>
           </p>
-          {attachments.map(value => {
+          {attachments.map((value) => {
             return <Attachment key={value._id} data={value} />;
           })}
         </div>

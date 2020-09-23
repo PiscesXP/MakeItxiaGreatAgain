@@ -9,7 +9,7 @@ import {
   Redirect,
   Route,
   Switch,
-  useLocation
+  useLocation,
 } from "react-router-dom";
 import { NotFound } from "COMPONENTS/notFound";
 import { CustomHomeLayout } from "page/custom/home";
