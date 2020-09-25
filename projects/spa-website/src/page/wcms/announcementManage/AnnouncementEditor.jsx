@@ -1,4 +1,6 @@
-import { Button, Form, Input, Modal, Radio } from "antd";
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Input, Modal, Radio } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import "./announcementEditor.css";
 import {

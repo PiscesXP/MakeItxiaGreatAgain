@@ -1,5 +1,8 @@
 import React from "react";
-import { Alert, Button, Col, Form, Icon, Input, Modal, Row } from "antd";
+import { LockOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Alert, Button, Col, Input, Modal, Row } from "antd";
 import { useApi } from "HOOK";
 
 function PasswordResetForm({
@@ -54,7 +57,7 @@ function PasswordResetForm({
           ],
         })(
           <Input.Password
-            prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+            prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
             placeholder="密码"
             autoComplete="new-password"
           />
@@ -74,7 +77,7 @@ function PasswordResetForm({
           ],
         })(
           <Input.Password
-            prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+            prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
             placeholder="确认密码"
             autoComplete="new-password"
           />

@@ -1,13 +1,7 @@
-import {
-  Alert,
-  Button,
-  Form,
-  Icon,
-  Input,
-  notification,
-  Radio,
-  Result,
-} from "antd";
+import { LockOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Alert, Button, Input, notification, Radio, Result } from "antd";
 import React from "react";
 import * as api from "@/request/api";
 
@@ -124,7 +118,7 @@ class AddMemberForm extends React.Component {
             ],
           })(
             <Input
-              prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+              prefix={<UserOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
               type="text"
               placeholder="姓名"
             />
@@ -142,7 +136,7 @@ class AddMemberForm extends React.Component {
           })(
             <Input
               prefix={
-                <Icon type="user-add" style={{ color: "rgba(0,0,0,.25)" }} />
+                <UserAddOutlined style={{ color: "rgba(0,0,0,.25)" }} />
               }
               type="text"
               placeholder="登录账号名"
@@ -166,7 +160,7 @@ class AddMemberForm extends React.Component {
             ],
           })(
             <Input.Password
-              prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+              prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder="密码"
             />
           )}
@@ -188,7 +182,7 @@ class AddMemberForm extends React.Component {
             ],
           })(
             <Input.Password
-              prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+              prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder="确认密码"
             />
           )}

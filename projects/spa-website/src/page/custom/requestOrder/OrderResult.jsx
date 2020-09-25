@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Alert, Card, Icon } from "antd";
+import { ClockCircleOutlined } from '@ant-design/icons';
+import { Alert, Card } from "antd";
 import { OrderInfoCard } from "./OrderInfoCard";
 import { CenterMe } from "COMPONENTS/layout";
 import { ReplyList } from "COMPONENTS/reply";
@@ -45,7 +46,7 @@ function OrderResult(props) {
         message: "正在处理",
         description: `你的单子正由 ${order.handler.realName} 处理中，请等待ta联系解决问题😊`,
         type: "info",
-        icon: <Icon type="clock-circle" />,
+        icon: <ClockCircleOutlined />,
       };
       break;
     case "DONE":

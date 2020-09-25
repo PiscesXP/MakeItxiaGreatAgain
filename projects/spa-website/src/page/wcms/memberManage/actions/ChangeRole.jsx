@@ -1,5 +1,7 @@
 import React, { useMemo } from "react";
-import { Button, Form, Modal, Select } from "antd";
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Modal, Select } from "antd";
 import { useMemberContext } from "HOOK/useMemberContext";
 import { authTest } from "UTIL/authTest";
 import { useApi } from "HOOK/useApi";

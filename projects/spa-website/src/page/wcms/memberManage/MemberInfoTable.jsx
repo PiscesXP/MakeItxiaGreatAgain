@@ -1,5 +1,15 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Button, Table, Icon, Input, Dropdown, Menu } from "antd";
+
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  DownOutlined,
+  LockOutlined,
+  SearchOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
+
+import { Button, Table, Input, Dropdown, Menu } from "antd";
 import { parseEnumValue, parseRoleAuthLevel } from "UTIL/enumParser";
 import { utcDateToText } from "UTIL/time";
 import Highlighter from "react-highlight-words";
@@ -53,7 +63,7 @@ function MemberInfoTable({ data, onRefreshData }) {
           <Button
             type="primary"
             onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-            icon="search"
+            icon={<SearchOutlined />}
             size="small"
             style={{ width: 90, marginRight: 8 }}
           >
@@ -69,10 +79,7 @@ function MemberInfoTable({ data, onRefreshData }) {
         </div>
       ),
       filterIcon: (filtered) => (
-        <Icon
-          type="search"
-          style={{ color: filtered ? "#1890ff" : undefined }}
-        />
+        <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
       ),
       onFilter: (value, record) =>
         record[dataIndex]
@@ -152,14 +159,14 @@ function MemberInfoTable({ data, onRefreshData }) {
           if (disabled) {
             return (
               <span>
-                <Icon type="close-circle" style={{ color: "red" }} />
+                <CloseCircleOutlined style={{ color: "red" }} />
                 未启用
               </span>
             );
           } else {
             return (
               <span>
-                <Icon type="check-circle" style={{ color: "green" }} />
+                <CheckCircleOutlined style={{ color: "green" }} />
                 正常
               </span>
             );
@@ -295,13 +302,13 @@ function MemberInfoTable({ data, onRefreshData }) {
                 >
                   {!record.disabled && !isMyself && (
                     <Menu.Item key="passwordReset">
-                      <Icon type="lock" />
+                      <LockOutlined />
                       重置密码
                     </Menu.Item>
                   )}
                   {!record.disabled && (
                     <Menu.Item key="changeRole">
-                      <Icon type="user" />
+                      <UserOutlined />
                       更改权限
                     </Menu.Item>
                   )}
@@ -309,18 +316,12 @@ function MemberInfoTable({ data, onRefreshData }) {
                     <Menu.Item key="changeDisable">
                       {record.disabled ? (
                         <>
-                          <Icon
-                            type="check-circle"
-                            className="member-action-enable"
-                          />
+                          <CheckCircleOutlined className="member-action-enable" />
                           启用账号
                         </>
                       ) : (
                         <>
-                          <Icon
-                            type="close-circle"
-                            className="member-action-disable"
-                          />
+                          <CloseCircleOutlined className="member-action-disable" />
                           禁用账号
                         </>
                       )}
@@ -331,7 +332,7 @@ function MemberInfoTable({ data, onRefreshData }) {
             >
               <Button type="link">
                 操作
-                <Icon type="down" />
+                <DownOutlined />
               </Button>
             </Dropdown>
           );

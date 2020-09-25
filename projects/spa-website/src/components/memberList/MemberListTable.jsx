@@ -1,4 +1,5 @@
-import { Icon, Table, Tag } from "antd";
+import { CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons';
+import { Table, Tag } from "antd";
 import React from "react";
 import { MemberAction } from "./MemberAction";
 import * as timeUtil from "UTIL/time";
@@ -85,18 +86,14 @@ function getColumns(props) {
           case true:
             return (
               <span>
-                <Icon type="close-circle" theme="twoTone" twoToneColor="red" />
+                <CloseCircleTwoTone twoToneColor="red" />
                 &nbsp;已禁用
               </span>
             );
           case false:
             return (
               <span>
-                <Icon
-                  type="check-circle"
-                  theme="twoTone"
-                  twoToneColor="#52c41a"
-                />
+                <CheckCircleTwoTone twoToneColor="#52c41a" />
                 &nbsp;正常
               </span>
             );

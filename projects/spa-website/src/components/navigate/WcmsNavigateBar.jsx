@@ -1,4 +1,14 @@
-import { Icon, Menu } from "antd";
+import {
+  CalendarOutlined,
+  DashboardOutlined,
+  FormOutlined,
+  MenuOutlined,
+  ReadOutlined,
+  SmileOutlined,
+  TeamOutlined,
+} from '@ant-design/icons';
+
+import { Menu } from "antd";
 import React, { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { LogoutButton } from "COMPONENTS/logout";
@@ -23,47 +33,47 @@ function WcmsNavigateBar() {
       theme="dark"
       overflowedIndicator={
         <div>
-          <Icon type="menu" />
+          <MenuOutlined />
           菜单
         </div>
       }
       selectedKeys={[location.pathname]}
     >
       <Menu.Item key={routePath.wcms.DASHBOARD}>
-        <Icon type="dashboard" />
+        <DashboardOutlined />
         DashBoard
         <Link to={routePath.wcms.DASHBOARD} />
       </Menu.Item>
 
       <Menu.Item key={routePath.wcms.HANDLE_ORDER}>
-        <Icon type="calendar" />
+        <CalendarOutlined />
         预约单
         <Link to={routePath.wcms.HANDLE_ORDER} />
       </Menu.Item>
 
       <Menu.Item key={routePath.wcms.EXP}>
-        <Icon type="read" />
+        <ReadOutlined />
         经验记录
         <Link to={routePath.wcms.EXP} />
       </Menu.Item>
 
       {isAdminOrSuperAdmin && (
         <Menu.Item key={routePath.wcms.ANNOUNCE_MANAGE}>
-          <Icon type="form" />
+          <FormOutlined />
           发布公告
           <Link to={routePath.wcms.ANNOUNCE_MANAGE} />
         </Menu.Item>
       )}
 
       <Menu.Item key={routePath.wcms.SELF_PROFILE}>
-        <Icon type="smile" />
+        <SmileOutlined />
         个人信息
         <Link to={routePath.wcms.SELF_PROFILE} />
       </Menu.Item>
 
       {isAdminOrSuperAdmin && (
         <Menu.Item key={routePath.wcms.MEMBER_MANAGE}>
-          <Icon type="team" />
+          <TeamOutlined />
           成员管理
           <Link to={routePath.wcms.MEMBER_MANAGE} />
         </Menu.Item>

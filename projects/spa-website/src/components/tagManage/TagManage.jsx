@@ -1,4 +1,7 @@
-import { Button, Form, Input, Modal, notification, Table } from "antd";
+import { PlusOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Input, Modal, notification, Table } from "antd";
 import React from "react";
 import * as timeUtil from "UTIL/time";
 import * as api from "@/request/api";
@@ -122,7 +125,7 @@ class TagManage extends React.Component {
           <Form.Item>
             <Button
               type="primary"
-              icon="reload"
+              icon={<ReloadOutlined />}
               onClick={this.reload}
               loading={this.state.loading}
             >
@@ -132,7 +135,7 @@ class TagManage extends React.Component {
           <Form.Item>
             <Button
               type="primary"
-              icon="plus"
+              icon={<PlusOutlined />}
               onClick={this.add}
               loading={this.state.loading}
             >

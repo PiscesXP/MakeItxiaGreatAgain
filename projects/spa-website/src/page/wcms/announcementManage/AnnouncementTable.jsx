@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Icon, Popconfirm, Table } from "antd";
+import { MenuOutlined } from '@ant-design/icons';
+import { Button, Popconfirm, Table } from "antd";
 import {
   sortableContainer,
   sortableElement,
@@ -11,7 +12,7 @@ import { EmbeddableLoading, Loading } from "COMPONENTS/loading";
 import { utcDateToText } from "UTIL/time";
 
 const DragHandle = sortableHandle(() => (
-  <Icon type="menu" style={{ cursor: "pointer", color: "#999" }} />
+  <MenuOutlined style={{ cursor: "pointer", color: "#999" }} />
 ));
 
 const SortableItem = sortableElement((props) => <tr {...props} />);

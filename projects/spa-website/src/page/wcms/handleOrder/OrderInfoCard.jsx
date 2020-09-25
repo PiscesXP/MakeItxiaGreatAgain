@@ -1,5 +1,13 @@
 import React from "react";
-import { Card, Divider, Icon } from "antd";
+
+import {
+  CalendarTwoTone,
+  CheckCircleTwoTone,
+  ClockCircleTwoTone,
+  CloseCircleTwoTone,
+} from '@ant-design/icons';
+
+import { Card, Divider } from "antd";
 import * as timeUtil from "UTIL/time";
 import { AttachmentList } from "COMPONENTS/attachment";
 import { HandleActions } from "./HandleActions";
@@ -10,40 +18,13 @@ import { HighlightText } from "COMPONENTS/text/HighlightText";
 const getStatusIcon = (status) => {
   switch (status) {
     case "PENDING":
-      return (
-        <Icon
-          type="calendar"
-          theme="twoTone"
-          twoToneColor="green"
-          style={{ fontSize: "1.5em" }}
-        />
-      );
+      return <CalendarTwoTone twoToneColor="green" style={{ fontSize: "1.5em" }} />;
     case "HANDLING":
-      return (
-        <Icon
-          type="clock-circle"
-          theme="twoTone"
-          twoToneColor="#66ccff"
-          style={{ fontSize: "1.5em" }}
-        />
-      );
+      return <ClockCircleTwoTone twoToneColor="#66ccff" style={{ fontSize: "1.5em" }} />;
     case "DONE":
-      return (
-        <Icon
-          type="check-circle"
-          theme="twoTone"
-          style={{ fontSize: "1.5em" }}
-        />
-      );
+      return <CheckCircleTwoTone style={{ fontSize: "1.5em" }} />;
     case "CANCELED":
-      return (
-        <Icon
-          type="close-circle"
-          theme="twoTone"
-          twoToneColor="red"
-          style={{ fontSize: "1.5em" }}
-        />
-      );
+      return <CloseCircleTwoTone twoToneColor="red" style={{ fontSize: "1.5em" }} />;
     default:
   }
 };

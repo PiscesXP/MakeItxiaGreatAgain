@@ -1,5 +1,13 @@
 import React from "react";
-import { Icon, Timeline } from "antd";
+
+import {
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  CloseCircleOutlined,
+  DeleteOutlined,
+} from '@ant-design/icons';
+
+import { Timeline } from "antd";
 import * as timeUtil from "../../util/time";
 
 export default class OrderHistoryTimeline extends React.Component {
@@ -12,7 +20,7 @@ export default class OrderHistoryTimeline extends React.Component {
     historyInfo.push({
       color: "green",
       text: "预约人发起了预约",
-      dot: <Icon type="clock-circle" style={{ fontSize: "16px" }} />,
+      dot: <ClockCircleOutlined style={{ fontSize: "16px" }} />,
     });
     history.forEach((value) => {
       let info;
@@ -33,21 +41,21 @@ export default class OrderHistoryTimeline extends React.Component {
           info = {
             color: "blue",
             text: `预约单已完成.`,
-            dot: <Icon type="check-circle" style={{ fontSize: "16px" }} />,
+            dot: <CheckCircleOutlined style={{ fontSize: "16px" }} />,
           };
           break;
         case 3:
           info = {
             color: "red",
             text: `预约单已被取消.`,
-            dot: <Icon type="close-circle" style={{ fontSize: "16px" }} />,
+            dot: <CloseCircleOutlined style={{ fontSize: "16px" }} />,
           };
           break;
         case 4:
           info = {
             color: "red",
             text: `预约单已被废弃.`,
-            dot: <Icon type="delete" style={{ fontSize: "16px" }} />,
+            dot: <DeleteOutlined style={{ fontSize: "16px" }} />,
           };
           break;
         default:

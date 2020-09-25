@@ -1,5 +1,8 @@
 import React, { useMemo } from "react";
-import { Alert, Button, Card, Form, Icon, Input, Modal, Select } from "antd";
+import { LockOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Alert, Button, Card, Input, Modal, Select } from "antd";
 import "./join.css";
 import { CenterMeFlex } from "COMPONENTS/layout";
 import { useApi, useTitle } from "HOOK/index";
@@ -105,7 +108,7 @@ function JoinForm({
             })(
               <Input.Password
                 prefix={
-                  <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
+                  <LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />
                 }
                 placeholder="密码"
               />
@@ -127,7 +130,7 @@ function JoinForm({
             })(
               <Input.Password
                 prefix={
-                  <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
+                  <LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />
                 }
                 placeholder="请再次输入密码"
               />

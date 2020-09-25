@@ -1,7 +1,8 @@
 import React from "react";
 import { config } from "CONFIG";
 import "./index.css";
-import { Divider, Icon, Modal } from "antd";
+import { FileUnknownOutlined } from '@ant-design/icons';
+import { Divider, Modal } from "antd";
 
 class Attachment extends React.Component {
   state = {
@@ -38,7 +39,7 @@ class Attachment extends React.Component {
           />
         ) : (
           <div className="not-img-atech" onClick={this.onShowModal}>
-            <Icon type="file-unknown" className="not-img-icon" />
+            <FileUnknownOutlined className="not-img-icon" />
             <br />
             <span>附件</span>
           </div>
@@ -59,7 +60,7 @@ class Attachment extends React.Component {
             <img src={url} alt="无法显示图片" width="100%" />
           ) : (
             <div className="not-img-atech" onClick={this.onShowModal}>
-              <Icon type="file-unknown" className="not-img-icon" />
+              <FileUnknownOutlined className="not-img-icon" />
               <br />
               <span>附件</span>
             </div>

@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { Alert, Button, Form, Icon, Input, Modal } from "antd";
+import { LockOutlined, UserAddOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Alert, Button, Input, Modal } from "antd";
 import * as api from "@/request/api";
 
 function FromOldAccountForm(props) {
@@ -63,7 +66,7 @@ function FromOldAccountForm(props) {
         })(
           <Input
             prefix={
-              <Icon type="user-add" style={{ color: "rgba(0,0,0,.25)" }} />
+              <UserAddOutlined style={{ color: "rgba(0,0,0,.25)" }} />
             }
             type="text"
             placeholder="新账号名"
@@ -86,7 +89,7 @@ function FromOldAccountForm(props) {
           ],
         })(
           <Input.Password
-            prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+            prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
             placeholder="新密码"
           />
         )}

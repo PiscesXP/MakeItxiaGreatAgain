@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { Form, Icon, Modal, Upload } from "antd";
+import { PlusOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal, Upload } from "antd";
 import { config } from "CONFIG";
 import "./AttachmentUpload.css";
 
@@ -54,7 +57,7 @@ function AttachmentUpload({
             onPreview={handlePreview}
           >
             <div>
-              <Icon type="plus" />
+              <PlusOutlined />
               <div className="ant-upload-text">上传附件</div>
             </div>
           </Upload>

@@ -1,3 +1,4 @@
+import { Icon as LegacyIcon } from '@ant-design/compatible';
 import { Button, Result } from "antd";
 import React from "react";
 import PropTypes from "prop-types";
@@ -24,7 +25,7 @@ function NotFound({
       status={status}
       title={title}
       subTitle={subTitle}
-      icon={icon}
+      icon={<LegacyIcon type={icon} />}
       extra={extra}
     />
   );

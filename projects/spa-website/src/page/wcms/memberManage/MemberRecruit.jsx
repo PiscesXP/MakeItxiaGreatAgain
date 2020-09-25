@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import { parseEnumValue } from "UTIL/enumParser";
-import { notification, Button, Icon, Table, Typography } from "antd";
+import { CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { notification, Button, Table, Typography } from "antd";
 import { useApi } from "HOOK/index";
 import { DELETE, POST } from "@/request/api";
 
@@ -70,12 +71,12 @@ function MemberRecruit() {
         render: (hasRedeemed) => {
           return hasRedeemed ? (
             <>
-              <Icon type="check-circle" style={{ color: "green" }} />
+              <CheckCircleOutlined style={{ color: "green" }} />
               已使用
             </>
           ) : (
             <>
-              <Icon type="clock-circle" style={{ color: "#1890ff" }} />
+              <ClockCircleOutlined style={{ color: "#1890ff" }} />
               未使用
             </>
           );

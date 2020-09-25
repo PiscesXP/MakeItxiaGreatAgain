@@ -1,5 +1,6 @@
 import React from "react";
-import { Card, Col, Icon, List, Row, Tag } from "antd";
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Card, Col, List, Row, Tag } from "antd";
 import { CenterMeResponsive } from "COMPONENTS/layout";
 import {
   useLocalStorageState,
@@ -24,7 +25,7 @@ for (let i = 0; i < 20; i++) {
 }
 const IconText = ({ type, text }) => (
   <span>
-    <Icon type={type} style={{ marginRight: 8 }} />
+    <LegacyIcon type={type} style={{ marginRight: 8 }} />
     {text}
   </span>
 );

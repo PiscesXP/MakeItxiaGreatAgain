@@ -1,7 +1,8 @@
 import React from "react";
 import { Link, Redirect, Route, Switch, useLocation } from "react-router-dom";
 import { routePath } from "../routePath";
-import { BackTop, Divider, Icon, Layout, Menu } from "antd";
+import { CalendarOutlined, FileSearchOutlined, HomeOutlined, SolutionOutlined } from '@ant-design/icons';
+import { BackTop, Divider, Layout, Menu } from "antd";
 import { Footer as MyFooter } from "COMPONENTS/footer";
 import { CustomHomePage } from "./home";
 import { RequestOrder } from "./requestOrder";
@@ -69,29 +70,29 @@ function CustomNavigate() {
       <SubMenu
         title={
           <span>
-            <Icon type="calendar" />
+            <CalendarOutlined />
             预约系统
           </span>
         }
       >
         <Menu.Item key={routePath.custom.HOME}>
-          <Icon type="home" />
+          <HomeOutlined />
           主页
           <Link to={routePath.custom.HOME} />
         </Menu.Item>
         <Menu.Item key={routePath.custom.ORDER}>
-          <Icon type="calendar" />
+          <CalendarOutlined />
           发起预约
           <Link to={routePath.custom.ORDER} />
         </Menu.Item>
         <Menu.Item key={routePath.custom.RETRIEVE}>
-          <Icon type="file-search" />
+          <FileSearchOutlined />
           找回预约单
           <Link to={routePath.custom.RETRIEVE} />
         </Menu.Item>
       </SubMenu>
       <Menu.Item key={routePath.WCMS}>
-        <Icon type="solution" />
+        <SolutionOutlined />
         后台系统
         <Link to={routePath.WCMS} />
       </Menu.Item>

@@ -1,5 +1,14 @@
 import React from "react";
-import { Icon, Table, Tag } from "antd";
+
+import {
+  CheckCircleTwoTone,
+  ClockCircleTwoTone,
+  CloseCircleTwoTone,
+  DeleteTwoTone,
+  SmileTwoTone,
+} from '@ant-design/icons';
+
+import { Table, Tag } from "antd";
 import * as timeUtil from "UTIL/time";
 import "./style.css";
 import HandleOrderAction from "./HandleOrderAction";
@@ -118,43 +127,35 @@ export default class HandleOrderForm extends React.Component {
             case "等待处理":
               return (
                 <span>
-                  <Icon type="smile" theme="twoTone" />
+                  <SmileTwoTone />
                   &nbsp;等待处理
                 </span>
               );
             case "正在处理":
               return (
                 <span>
-                  <Icon type="clock-circle" theme="twoTone" spin />
+                  <ClockCircleTwoTone spin />
                   &nbsp;正在处理
                 </span>
               );
             case "已完成":
               return (
                 <span>
-                  <Icon
-                    type="check-circle"
-                    theme="twoTone"
-                    twoToneColor="#52c41a"
-                  />
+                  <CheckCircleTwoTone twoToneColor="#52c41a" />
                   &nbsp;已完成
                 </span>
               );
             case "已取消":
               return (
                 <span>
-                  <Icon
-                    type="close-circle"
-                    theme="twoTone"
-                    twoToneColor="red"
-                  />
+                  <CloseCircleTwoTone twoToneColor="red" />
                   &nbsp;已取消
                 </span>
               );
             case "已删除":
               return (
                 <span>
-                  <Icon type="delete" theme="twoTone" twoToneColor="red" />
+                  <DeleteTwoTone twoToneColor="red" />
                   &nbsp;已删除
                 </span>
               );

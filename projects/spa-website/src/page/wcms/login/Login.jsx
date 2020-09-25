@@ -1,5 +1,8 @@
 import React from "react";
-import { Button, Divider, Form, Icon, Input, Modal } from "antd";
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Divider, Input, Modal } from "antd";
 import { config } from "CONFIG";
 import { useApi, useTitleWCMS } from "HOOK";
 import { AutoLogin } from "./AutoLogin";
@@ -73,7 +76,7 @@ function LoginForm(props) {
             rules: [{ required: true, message: "请输入登录账号" }],
           })(
             <Input
-              prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+              prefix={<UserOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder="账号"
             />
           )}
@@ -83,7 +86,7 @@ function LoginForm(props) {
             rules: [{ required: true, message: "请输入密码" }],
           })(
             <Input.Password
-              prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+              prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder="密码"
             />
           )}

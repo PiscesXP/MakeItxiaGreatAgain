@@ -1,5 +1,7 @@
 import React from "react";
-import { Button, Checkbox, Col, Form, Input, Modal, Row, Select } from "antd";
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Checkbox, Col, Input, Modal, Row, Select } from "antd";
 import { useApi, useMemberContext } from "HOOK";
 import { CenterMeFlex } from "COMPONENTS/layout";
 

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Icon, List } from "antd";
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { MessageOutlined } from '@ant-design/icons';
+import { List } from "antd";
 import { AttachmentList } from "COMPONENTS/attachment";
 import { ReplyList } from "COMPONENTS/reply";
 import * as timeUtil from "UTIL/time";
@@ -46,7 +48,7 @@ function Announcement(props) {
         showActions
           ? [
               <span key="1" onClick={hitLikeButton}>
-                <Icon
+                <LegacyIcon
                   type="like"
                   theme={isLiked ? "twoTone" : "outlined"}
                   style={{ marginRight: 8 }}
@@ -59,7 +61,7 @@ function Announcement(props) {
                   setShowReply(true);
                 }}
               >
-                <Icon type="message" style={{ marginRight: 8 }} />
+                <MessageOutlined style={{ marginRight: 8 }} />
                 {comments.length}
               </span>,
             ]

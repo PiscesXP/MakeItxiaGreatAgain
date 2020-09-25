@@ -3,7 +3,8 @@ import { parseQueryString } from "UTIL/query";
 import { useTitleWCMS } from "HOOK";
 import { useHistory } from "react-router-dom";
 import { routePath } from "PAGE/routePath";
-import { Alert, Card, Icon, Modal, Spin } from "antd";
+import { CheckCircleOutlined, CloseCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Alert, Card, Modal, Spin } from "antd";
 import { useApiRequest } from "HOOK/useApiRequest";
 import "./oauthPage.css";
 
@@ -17,7 +18,7 @@ function OAuthPage() {
 
   const modal = useMemo(() => {
     return Modal.info({
-      icon: <Icon type="loading" />,
+      icon: <LoadingOutlined />,
       title: "登录中...",
       content: "请稍等",
       footer: null,
@@ -34,7 +35,7 @@ function OAuthPage() {
           //登录成功
           modal.update({
             type: "success",
-            icon: <Icon type="check-circle" />,
+            icon: <CheckCircleOutlined />,
             title: "登陆成功",
             content: "正在跳转中...",
           });
@@ -47,7 +48,7 @@ function OAuthPage() {
           //绑定成功
           modal.update({
             type: "success",
-            icon: <Icon type="check-circle" />,
+            icon: <CheckCircleOutlined />,
             title: "绑定成功",
             content: "你可通过QQ登录后台系统.",
             okText: "好的",
@@ -60,7 +61,7 @@ function OAuthPage() {
           //登录失败
           modal.update({
             type: "error",
-            icon: <Icon type="close-circle" />,
+            icon: <CloseCircleOutlined />,
             title: "登陆失败",
             content: message,
             okText: "返回",
@@ -73,7 +74,7 @@ function OAuthPage() {
     onError: (error) => {
       modal.update({
         type: "error",
-        icon: <Icon type="close-circle" />,
+        icon: <CloseCircleOutlined />,
         title: "登陆失败",
         content: error.toString(),
         okText: "返回",
