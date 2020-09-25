@@ -1,7 +1,7 @@
 import React from "react";
 import { config } from "CONFIG";
 
-export default function(props) {
+export default function (props) {
   const { md5, mimetype, fileName } = props.payload;
   const getImageUrl = (md5, isThumbnail = false) => {
     let url =

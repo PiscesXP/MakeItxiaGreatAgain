@@ -12,13 +12,13 @@ export default class HandleOrderForm extends React.Component {
       {
         title: "姓名",
         dataIndex: "name",
-        key: "name"
+        key: "name",
       },
       {
         title: "校区",
         dataIndex: "campus",
         key: "campus",
-        render: campus => {
+        render: (campus) => {
           switch (campus) {
             case "仙林":
               return <Tag color="orange">仙林</Tag>;
@@ -31,26 +31,26 @@ export default class HandleOrderForm extends React.Component {
         filters: [
           {
             text: "仙林",
-            value: "仙林"
+            value: "仙林",
           },
           {
             text: "鼓楼",
-            value: "鼓楼"
-          }
+            value: "鼓楼",
+          },
         ],
-        filterMultiple: false
+        filterMultiple: false,
         //onFilter: (filterValue, record) => filterValue === record.campus
       },
       {
         title: "电脑型号",
         dataIndex: "model",
-        key: "model"
+        key: "model",
       },
       {
         title: "保修",
         dataIndex: "warranty",
         key: "warranty",
-        render: warranty => {
+        render: (warranty) => {
           switch (warranty) {
             case "不确定":
               return <Tag color="gray">不确定</Tag>;
@@ -65,55 +65,55 @@ export default class HandleOrderForm extends React.Component {
         filters: [
           {
             text: "不清楚",
-            value: "不清楚"
+            value: "不清楚",
           },
           {
             text: "在保",
-            value: "在保"
+            value: "在保",
           },
           {
             text: "过保",
-            value: "过保"
-          }
+            value: "过保",
+          },
         ],
-        filterMultiple: true
+        filterMultiple: true,
         //onFilter: (filterValue, record) => filterValue === record.warranty
       },
       {
         title: "标签",
         dataIndex: "tags",
         key: "tags",
-        render: tags => (
+        render: (tags) => (
           <div>
             {tags
-              ? tags.map(value => <Tag key={value._id}>{value.tagName}</Tag>)
+              ? tags.map((value) => <Tag key={value._id}>{value.tagName}</Tag>)
               : ""}
           </div>
         ),
-        filters: this.props.tagList.map(value => ({
+        filters: this.props.tagList.map((value) => ({
           text: value.tagName,
-          value: value._id
+          value: value._id,
         })),
-        filterMultiple: true
+        filterMultiple: true,
       },
       {
         title: "预约时间",
         dataIndex: "createTime",
         key: "time",
-        render: createTime => {
+        render: (createTime) => {
           return <span>{timeUtil.utcDateToText(createTime)}</span>;
         },
         sorter: (a, b) => {
           //console.log(a);
           return new Date(a.createTime) - new Date(b.createTime);
-        }
+        },
         //sortDirections: ["descend", "ascend"]
       },
       {
         title: "状态",
         dataIndex: "status",
         key: "status",
-        render: status => {
+        render: (status) => {
           switch (status) {
             case "等待处理":
               return (
@@ -161,7 +161,7 @@ export default class HandleOrderForm extends React.Component {
             default:
               return <span>未知错误</span>;
           }
-        }
+        },
       },
       {
         title: "我来处理",
@@ -173,8 +173,8 @@ export default class HandleOrderForm extends React.Component {
               onActionDone={this.props.onRequireUpdate}
             ></HandleOrderAction>
           );
-        }
-      }
+        },
+      },
     ];
   }
 
@@ -185,9 +185,9 @@ export default class HandleOrderForm extends React.Component {
         bordered={this.props.bordered}
         expandedRowRender={ExpandedRow}
         columns={this.generateColumns()}
-        dataSource={this.props.data.map(value => ({
+        dataSource={this.props.data.map((value) => ({
           key: value._id,
-          ...value
+          ...value,
         }))}
         pagination={this.props.pagination}
         onChange={this.props.onPageChange}

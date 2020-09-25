@@ -1,21 +1,22 @@
 import React from "react";
 import { Alert, Button, Card, Col, Row } from "antd";
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { routePath } from "PAGE/routePath";
-import { useTitleCustom, useToggle } from "HOOK";
+import { useTitleCustom } from "HOOK";
 import { CenterMeResponsive } from "COMPONENTS/layout";
 
 function CustomHomePage() {
   useTitleCustom("主页");
 
-  const [gotoOrder, setGotoOrder] = useToggle(false);
+  const history = useHistory();
 
   function handleGoToOrder() {
-    setGotoOrder(true);
-  }
-  if (gotoOrder) {
     window.scrollTo(0, 0);
-    return <Redirect push to={routePath.custom.ORDER} />;
+    history.push(routePath.custom.ORDER);
+  }
+
+  function handleRetrieveOrder() {
+    history.push(routePath.custom.RETRIEVE);
   }
 
   const orderID = window.localStorage.getItem("requestedOrderId");
@@ -27,6 +28,18 @@ function CustomHomePage() {
 
   const orderNotification = (
     <ul style={{ margin: "0.5em" }}>
+      {!!!orderID ? (
+        <li>
+          已有预约？
+          <Button
+            type="link"
+            style={{ height: 0, padding: 0 }}
+            onClick={handleRetrieveOrder}
+          >
+            找回预约单
+          </Button>
+        </li>
+      ) : null}
       <li>
         预约之前，请查看我们的
         <a

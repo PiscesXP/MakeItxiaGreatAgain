@@ -1,0 +1,14 @@
+.join-page-container {
+  min-width: 300px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(240, 242, 245);
+}
+
+.join-page-card {
+  width: 90%;
+  max-width: 600px;
+  border-radius: 15px;
+}

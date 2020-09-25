@@ -18,6 +18,11 @@ enum class ResponseCode(val code: Int, val message: String) {
     REQUEST_SIZE_EXCEEDED(10, "附件过大"),
     NO_OAUTH_ID_FOUND(11, "未找到OAuth ID"),
     ACCOUNT_NOT_ENABLE(12, "此账号未启用"),
+    NO_SUCH_MEMBER(13, "无此账号"),
+    INVALID_REDEEM_CODE(14, "邀请码无效"),
+    LOGIN_NAME_ALREADY_EXISTED(15, "登录ID已存在"),
+    QQ_OAUTH_LOGIN_SUCCESSFUL(16, "QQ OAuth登录成功"),
+    QQ_OAUTH_BIND_SUCCESSFUL(17, "QQ OAuth绑定成功"),
     UNKNOWN_ERROR(999, "未知错误"),
 
     ;

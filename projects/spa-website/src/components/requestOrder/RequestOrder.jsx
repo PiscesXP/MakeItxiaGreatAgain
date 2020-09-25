@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { OrderForm } from "./OrderForm";
 import { OrderResult } from "./OrderResult";
 import { Modal, Spin } from "antd";
-import * as api from "UTIL/api";
+import * as api from "@/request/api";
 import { useHistory } from "react-router-dom";
 import { routePath } from "ROUTE/routePath";
 
@@ -37,13 +37,13 @@ function RequestOrder() {
           setOrderInfo(null);
           localStorage.removeItem(orderIdStorageKey);
           history.push(routePath.CUSTOM_HOME);
-        }
+        },
       });
     } catch (e) {
       Modal.error({
         title: "取消失败",
         content: "请刷新查看预约单状态 (可能已经被接单)",
-        centered: true
+        centered: true,
       });
     }
   }

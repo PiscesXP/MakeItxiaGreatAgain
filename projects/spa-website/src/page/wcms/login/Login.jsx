@@ -1,24 +1,15 @@
 import React from "react";
-import { Button, Checkbox, Divider, Form, Icon, Input, Modal } from "antd";
+import { Button, Divider, Form, Icon, Input, Modal } from "antd";
 import { config } from "CONFIG";
-import { useApi, useTitleWCMS, useLocalStorage } from "HOOK";
+import { useApi, useTitleWCMS } from "HOOK";
 import { AutoLogin } from "./AutoLogin";
 import { routePath } from "PAGE/routePath";
 import { Redirect } from "react-router-dom";
 import "./style.css";
-import { GET } from "UTIL/api";
+import { GET } from "@/request/api";
 
 function LoginForm(props) {
   useTitleWCMS("登录");
-
-  const [isRememberAccount, setIsRememberAccount] = useLocalStorage(
-    "isRememberAccount"
-  );
-  const [
-    rememberedAccount,
-    setRememberedAccount,
-    removeRememberedAccount,
-  ] = useLocalStorage("rememberedAccount");
 
   const { loading, isSuccess, send } = useApi({
     path: "/login",
@@ -59,12 +50,6 @@ function LoginForm(props) {
     const { validateFields } = props.form;
     validateFields((err, values) => {
       if (!err) {
-        setIsRememberAccount(values.rememberAccount);
-        if (values.rememberAccount) {
-          setRememberedAccount(values.username);
-        } else {
-          removeRememberedAccount();
-        }
         const { loginName, password } = values;
         send({ loginName, password });
       }
@@ -84,7 +69,7 @@ function LoginForm(props) {
         <img src="/img/itxia-logo.jpg" alt="itxia logo" id="itxia-logo" />
         <Form.Item>
           {getFieldDecorator("loginName", {
-            initialValue: rememberedAccount ? rememberedAccount : "",
+            initialValue: "",
             rules: [{ required: true, message: "请输入登录账号" }],
           })(
             <Input
@@ -104,10 +89,6 @@ function LoginForm(props) {
           )}
         </Form.Item>
         <Form.Item>
-          {getFieldDecorator("rememberAccount", {
-            valuePropName: "checked",
-            initialValue: isRememberAccount === true,
-          })(<Checkbox>记住账号</Checkbox>)}
           <Button
             type="primary"
             htmlType="submit"

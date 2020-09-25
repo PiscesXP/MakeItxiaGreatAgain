@@ -34,7 +34,7 @@ function RequireRole(props) {
 RequireRole.prototype = {
   role: PropTypes.string,
   fallback: PropTypes.node,
-  custom: PropTypes.func
+  custom: PropTypes.func,
 };
 
 export { RequireRole };

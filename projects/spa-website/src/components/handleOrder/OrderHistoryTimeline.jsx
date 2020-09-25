@@ -12,42 +12,42 @@ export default class OrderHistoryTimeline extends React.Component {
     historyInfo.push({
       color: "green",
       text: "预约人发起了预约",
-      dot: <Icon type="clock-circle" style={{ fontSize: "16px" }} />
+      dot: <Icon type="clock-circle" style={{ fontSize: "16px" }} />,
     });
-    history.forEach(value => {
+    history.forEach((value) => {
       let info;
       switch (value.action) {
         case 0:
           info = {
             color: "blue",
-            text: `被${value.memberName}接单.`
+            text: `被${value.memberName}接单.`,
           };
           break;
         case 1:
           info = {
             color: "gray",
-            text: `被${value.memberName}放回.`
+            text: `被${value.memberName}放回.`,
           };
           break;
         case 2:
           info = {
             color: "blue",
             text: `预约单已完成.`,
-            dot: <Icon type="check-circle" style={{ fontSize: "16px" }} />
+            dot: <Icon type="check-circle" style={{ fontSize: "16px" }} />,
           };
           break;
         case 3:
           info = {
             color: "red",
             text: `预约单已被取消.`,
-            dot: <Icon type="close-circle" style={{ fontSize: "16px" }} />
+            dot: <Icon type="close-circle" style={{ fontSize: "16px" }} />,
           };
           break;
         case 4:
           info = {
             color: "red",
             text: `预约单已被废弃.`,
-            dot: <Icon type="delete" style={{ fontSize: "16px" }} />
+            dot: <Icon type="delete" style={{ fontSize: "16px" }} />,
           };
           break;
         default:

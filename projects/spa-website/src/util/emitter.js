@@ -4,7 +4,7 @@ class EventEmitter {
   emit(eventName, ...args) {
     const e = this.eventList[eventName];
     if (e && Array.isArray(e)) {
-      e.forEach(listener => {
+      e.forEach((listener) => {
         listener(...args);
       });
     }

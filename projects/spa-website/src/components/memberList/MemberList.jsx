@@ -1,6 +1,6 @@
 import { Modal } from "antd";
 import React from "react";
-import * as api from "UTIL/api";
+import * as api from "@/request/api";
 import { MemberListTable } from "./MemberListTable";
 
 class MemberList extends React.Component {
@@ -10,7 +10,7 @@ class MemberList extends React.Component {
   }
   state = {
     loading: false,
-    data: []
+    data: [],
   };
 
   componentDidMount() {
@@ -23,19 +23,19 @@ class MemberList extends React.Component {
 
   async updateData() {
     this.setState({
-      loading: true
+      loading: true,
     });
     try {
       const data = await api.GET("/user");
       this.setState({
         loading: false,
-        data
+        data,
       });
     } catch (error) {
       Modal.error({
         title: "获取成员列表失败",
         content: error.message,
-        centered: true
+        centered: true,
       });
     }
   }

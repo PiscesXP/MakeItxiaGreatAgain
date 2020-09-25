@@ -1,16 +1,16 @@
 import React from "react";
-import * as api from "UTIL/api";
+import * as api from "@/request/api";
 import { Button, Modal, Popconfirm } from "antd";
 
 export default class Action extends React.Component {
   state = {
     loading: false,
-    actionName: null
+    actionName: null,
   };
   async handleAction(actionName, putPath) {
     this.setState({
       loading: true,
-      actionName
+      actionName,
     });
     const { _id } = this.props;
     try {
@@ -18,24 +18,24 @@ export default class Action extends React.Component {
       Modal.success({
         title: "操作成功",
         content: "预约单已成功" + actionName,
-        centered: true
+        centered: true,
       });
       this.props.onActionDone();
     } catch (error) {
       Modal.error({
         title: "操作失败",
         content: error.toString(),
-        centered: true
+        centered: true,
       });
     }
     this.setState({
       loading: false,
-      actionName: null
+      actionName: null,
     });
   }
 
   generateButtons() {
-    const generateButton = function(key, actionName, putPath, buttonType) {
+    const generateButton = function (key, actionName, putPath, buttonType) {
       return (
         <Popconfirm
           key={key}
@@ -50,7 +50,7 @@ export default class Action extends React.Component {
             type={buttonType}
             size="small"
             style={{
-              margin: "0.5em"
+              margin: "0.5em",
             }}
             loading={this.state.loading && this.state.actionName === actionName}
             disabled={this.state.loading}
@@ -81,6 +81,6 @@ export default class Action extends React.Component {
 
   render() {
     const buttonList = this.generateButtons();
-    return <div>{buttonList.map(value => value)}</div>;
+    return <div>{buttonList.map((value) => value)}</div>;
   }
 }

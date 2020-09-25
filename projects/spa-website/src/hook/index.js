@@ -1,19 +1,23 @@
 import { useApi } from "./useApi";
+import { useApiRequest } from "./useApiRequest";
+import { useLocalStorageState } from "./useLocalStorageState";
 import { useMemberContext } from "./useMemberContext";
-import { useLocalStorage } from "./useLocalStorage";
+import { usePersistFn } from "./usePersisFn";
 import { useTitle, useTitleCustom, useTitleWCMS } from "./useTitle";
 import { useThrottle } from "./useThrottle";
-import { useToggle } from "HOOK/useToggle";
-import { useLocalStorageState } from "HOOK/useLocalStorageState";
+import { useToggle } from "./useToggle";
+import { useUpdateEffect } from "./useUpdateEffect";
 
 export {
   useApi,
+  useApiRequest,
   useMemberContext,
-  useLocalStorage,
+  useLocalStorageState,
+  usePersistFn,
   useTitle,
   useTitleCustom,
   useTitleWCMS,
   useThrottle,
   useToggle,
-  useLocalStorageState,
+  useUpdateEffect,
 };

@@ -16,7 +16,7 @@ function NotFound({
     <Button type="primary" onClick={onBack}>
       返回
     </Button>
-  )
+  ),
 }) {
   useTitle("WTF - What a Terrible Failure");
   return (
@@ -35,7 +35,7 @@ NotFound.propTypes = {
   title: PropTypes.string,
   subTitle: PropTypes.string,
   icon: PropTypes.node,
-  extra: PropTypes.node
+  extra: PropTypes.node,
 };
 
 export { NotFound };

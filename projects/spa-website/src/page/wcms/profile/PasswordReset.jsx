@@ -56,6 +56,7 @@ function PasswordResetForm({
           <Input.Password
             prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
             placeholder="密码"
+            autoComplete="new-password"
           />
         )}
         <Alert message="密码要求：至少8个字符" type="info" />
@@ -75,6 +76,7 @@ function PasswordResetForm({
           <Input.Password
             prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
             placeholder="确认密码"
+            autoComplete="new-password"
           />
         )}
       </Form.Item>

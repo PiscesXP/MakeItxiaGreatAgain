@@ -6,8 +6,8 @@ const app = express();
 
 //QQ OAuth
 app.use("/oauth/qq", (req, res, next) => {
-  if (req.headers && req.headers["host"] === "api.itxia.site") {
-    return res.redirect("/oauth/qq.html");
+  if (req.hostname === "api.itxia.cn") {
+    return res.redirect("https://nju.itxia.cn/oauth/qq.html");
   }
   next();
 });

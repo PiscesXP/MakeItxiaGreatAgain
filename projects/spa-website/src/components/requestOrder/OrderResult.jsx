@@ -11,19 +11,19 @@ function OrderResult(props) {
       status: "等待处理",
       message: "预约成功",
       description: "请等待IT侠接单.",
-      type: "success"
+      type: "success",
     },
     {
       status: "正在处理",
       message: "正在处理",
       description: "请等待IT侠联系解决问题.",
-      type: "info"
+      type: "info",
     },
     {
       status: "已完成",
       message: "预约已完成",
-      type: "success"
-    }
+      type: "success",
+    },
   ];
 
   let alertProps;

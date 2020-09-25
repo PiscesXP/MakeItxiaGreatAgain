@@ -1,7 +1,9 @@
+import { QuerystringObject, RequestQuery } from "@/request/types";
+
 /**
- * @param query {*}
+ * 将任意值转换为query string.
  * */
-function buildQueryString(query) {
+export function toQuerystring(query: RequestQuery): string {
   if (query === null || query === undefined) {
     return "";
   }
@@ -34,10 +36,11 @@ function buildQueryString(query) {
 /**
  * 可传入fn在解析时调用.
  * (例如把特定key的value转换成数组)
- * @param valueParseFn {function}
  * */
-function parseQueryString(valueParseFn = (str) => str) {
-  const result = {};
+export function parseQuerystring(
+  valueParseFn: (value: any, key: string) => any
+): object {
+  const result: QuerystringObject = {};
   const qs = window.location.search;
   qs.substr(1)
     .split("&")
@@ -49,4 +52,7 @@ function parseQueryString(valueParseFn = (str) => str) {
   return result;
 }
 
-export { buildQueryString, parseQueryString };
+//@ts-ignore
+//compatible for old code
+//TODO remove this
+export const parseQueryString = parseQuerystring;

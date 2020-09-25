@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Alert, Button, Modal, Popconfirm } from "antd";
-import * as api from "UTIL/api";
+import * as api from "@/request/api";
 import { UserInfoContext } from "CONTEXT/UserInfo";
 import { ReplyList } from "COMPONENTS/reply";
 

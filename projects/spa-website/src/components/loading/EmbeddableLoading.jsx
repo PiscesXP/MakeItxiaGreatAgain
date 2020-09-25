@@ -18,7 +18,7 @@ function EmbeddableLoading(props) {
 EmbeddableLoading.propTypes = {
   loading: PropTypes.bool,
   tip: PropTypes.string,
-  delay: PropTypes.number
+  delay: PropTypes.number,
 };
 
 export { EmbeddableLoading };

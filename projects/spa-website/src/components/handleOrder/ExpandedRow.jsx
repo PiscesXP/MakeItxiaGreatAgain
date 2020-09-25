@@ -21,7 +21,7 @@ export default function render(record) {
           {Array.isArray(record.attachments)
             ? record.attachments.length === 0
               ? "无附件."
-              : record.attachments.map(attachment => {
+              : record.attachments.map((attachment) => {
                   return (
                     <AttachmentContainer
                       key={attachment._id}

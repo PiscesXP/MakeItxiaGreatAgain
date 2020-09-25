@@ -30,20 +30,20 @@ function HandleOrder() {
 
   const memberContext = useMemberContext();
 
-  const [condition, setCondition] = useLocalStorageState({
-    key: "orderSearchCondition",
-    init: {
+  const [condition, setCondition] = useLocalStorageState(
+    "orderSearchCondition",
+    {
       onlyMine: false,
       campus: memberContext.campus,
       status: "PENDING",
       text: "",
       orderTime: null,
     },
-    transform: (newCondition) => {
+    (newCondition) => {
       const { orderTime, ...rest } = newCondition;
       return rest;
-    },
-  });
+    }
+  );
 
   const [pagination, setPagination] = useState({ page: 1, size: 10 });
 

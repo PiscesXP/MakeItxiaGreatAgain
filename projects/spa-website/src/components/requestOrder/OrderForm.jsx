@@ -7,11 +7,11 @@ import {
   Input,
   Modal,
   Select,
-  Upload
+  Upload,
 } from "antd";
 import React, { useEffect } from "react";
 import { config } from "CONFIG";
-import * as api from "UTIL/api";
+import * as api from "@/request/api";
 
 const { Option } = Select;
 
@@ -20,7 +20,7 @@ function RequestOrderForm(props) {
     validateFields,
     getFieldsValue,
     setFieldsValue,
-    getFieldDecorator
+    getFieldDecorator,
   } = props.form;
   const { onSubmitSuccess } = props;
 
@@ -69,7 +69,7 @@ function RequestOrderForm(props) {
           Modal.error({
             title: "附件未全部上传",
             content: "请等待附件全部上传，或删除上传失败的附件.",
-            centered: true
+            centered: true,
           });
           return;
         }
@@ -85,7 +85,7 @@ function RequestOrderForm(props) {
         Modal.error({
           title: "预约未成功",
           content: e.toString(),
-          centered: true
+          centered: true,
         });
       }
     });
@@ -119,7 +119,7 @@ function RequestOrderForm(props) {
         },
         onCancel: () => {
           localStorage.removeItem(draftStorageKey);
-        }
+        },
       });
     }
   }
@@ -130,46 +130,46 @@ function RequestOrderForm(props) {
 
   const formItemLayout = {
     labelCol: { span: 6 },
-    wrapperCol: { span: 14 }
+    wrapperCol: { span: 14 },
   };
   return (
     <Card title="你好,请提交你的维修预约">
       <Form {...formItemLayout} onSubmit={handleSubmit} onChange={saveDraft}>
         <Form.Item label="姓名" hasFeedback>
           {getFieldDecorator("name", {
-            rules: [{ required: true, message: "请输入姓名" }]
+            rules: [{ required: true, message: "请输入姓名" }],
           })(<Input />)}
         </Form.Item>
 
         <Form.Item label="手机号" hasFeedback>
           {getFieldDecorator("phone", {
-            rules: [{ required: true, message: "请输入手机号" }]
+            rules: [{ required: true, message: "请输入手机号" }],
           })(<Input />)}
           <Alert type="info" message="联系方式仅用于IT侠联系." />
         </Form.Item>
 
         <Form.Item label="QQ" hasFeedback>
           {getFieldDecorator("qq", {
-            rules: [{ required: false, message: "请输入联系QQ号" }]
+            rules: [{ required: false, message: "请输入联系QQ号" }],
           })(<Input />)}
         </Form.Item>
 
         <Form.Item label="Email" hasFeedback>
           {getFieldDecorator("email", {
-            rules: [{ required: false, message: "请输入邮箱地址" }]
+            rules: [{ required: false, message: "请输入邮箱地址" }],
           })(<Input />)}
         </Form.Item>
 
         <Form.Item label="操作系统" hasFeedback>
           {getFieldDecorator("os", {
-            rules: [{ required: true, message: "请输入系统名称" }]
+            rules: [{ required: true, message: "请输入系统名称" }],
           })(<Input />)}
           <Alert message="例如:win10 x64, win7 32位, mac, ubuntu." />
         </Form.Item>
 
         <Form.Item label="电脑型号" hasFeedback>
           {getFieldDecorator("brandModel", {
-            rules: [{ required: true, message: "请输入电脑型号" }]
+            rules: [{ required: true, message: "请输入电脑型号" }],
           })(<Input />)}
           <Alert
             type="info"
@@ -179,14 +179,14 @@ function RequestOrderForm(props) {
 
         <Form.Item label="是否在保修期内" hasFeedback>
           {getFieldDecorator("warranty", {
-            rules: [{ required: false }]
+            rules: [{ required: false }],
           })(<Input />)}
           <Alert type="info" message="选填，在保的机器我们会更谨慎对待." />
         </Form.Item>
 
         <Form.Item label="校区" hasFeedback>
           {getFieldDecorator("campus", {
-            rules: [{ required: true, message: "请选择校区" }]
+            rules: [{ required: true, message: "请选择校区" }],
           })(
             <Select placeholder="请选择校区">
               <Option value={"仙林"}>仙林</Option>
@@ -197,7 +197,7 @@ function RequestOrderForm(props) {
 
         <Form.Item label="问题详细描述" hasFeedback>
           {getFieldDecorator("description", {
-            rules: [{ required: true, message: "请详细描述你遇到的问题" }]
+            rules: [{ required: true, message: "请详细描述你遇到的问题" }],
           })(<Input.TextArea autoSize={{ minRows: 6 }} allowClear={true} />)}
           <Alert
             type="warning"
@@ -210,12 +210,12 @@ function RequestOrderForm(props) {
         <Form.Item label="附件上传">
           {getFieldDecorator("attachments", {
             valuePropName: "fileList",
-            getValueFromEvent: e => {
+            getValueFromEvent: (e) => {
               if (Array.isArray(e)) {
                 return e;
               }
               return e && e.fileList;
-            }
+            },
           })(
             <Upload
               action={
@@ -225,7 +225,7 @@ function RequestOrderForm(props) {
                 "/upload"
               }
               headers={{
-                "X-Requested-With": null
+                "X-Requested-With": null,
               }}
               withCredentials
               listType="picture"
@@ -245,8 +245,8 @@ function RequestOrderForm(props) {
                   callback();
                 }
                 callback("必须同意才能发起预约");
-              }
-            ]
+              },
+            ],
           })(
             <Checkbox>
               我已了解并同意

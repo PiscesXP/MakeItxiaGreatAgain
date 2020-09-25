@@ -8,7 +8,7 @@ function dateToText(date) {
     " ",
     date.getHours(),
     ":",
-    date.getMinutes()
+    date.getMinutes(),
   ];
   return arr.reduce((result, value) => {
     if (typeof value === "number" && value < 10) {

@@ -19,7 +19,7 @@ const routePath = {
 
   CUSTOM: "/custom",
   CUSTOM_HOME: "/custom/home",
-  CUSTOM_ORDER: "/custom/order"
+  CUSTOM_ORDER: "/custom/order",
 };
 
 export { routePath };

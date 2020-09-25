@@ -2,7 +2,9 @@ package cn.itxia.api.controller
 
 import cn.itxia.api.annotation.CurrentItxiaMember
 import cn.itxia.api.annotation.RequireItxiaMember
+import cn.itxia.api.dto.AnnouncementModifyDto
 import cn.itxia.api.dto.AnnouncementPublishDto
+import cn.itxia.api.dto.AnnouncementReorderDto
 import cn.itxia.api.dto.ReplyDto
 import cn.itxia.api.enum.MemberRoleEnum
 import cn.itxia.api.model.ItxiaMember
@@ -41,6 +43,12 @@ class AnnouncementController {
         return ResponseCode.SUCCESS.withPayload(announcementService.getExternalAnnouncements())
     }
 
+    @GetMapping("/announcement/all")
+    @RequireItxiaMember
+    fun getAllAnnouncement(): Response {
+        return ResponseCode.SUCCESS.withPayload(announcementService.getAllAnnouncement())
+    }
+
     /**
      * 发布公告.
      * */
@@ -53,18 +61,24 @@ class AnnouncementController {
     }
 
     /**
-     * 点赞/取消赞.
+     * 点赞.
      * */
-    @PutMapping("/announcement/{aid}/{likeAction}")
+    @PutMapping("/announcement/{aid}/like")
     @RequireItxiaMember
     fun like(@PathVariable aid: String,
-             @PathVariable likeAction: String,
              @CurrentItxiaMember itxiaMember: ItxiaMember): Response {
-        when (likeAction) {
-            "like" -> announcementService.likeOrUnlike(aid, itxiaMember, true)
-            "unlike" -> announcementService.likeOrUnlike(aid, itxiaMember, false)
-            else -> ResponseCode.INVALID_PARAM.withoutPayload()
-        }
+        announcementService.likeOrUnlike(aid, itxiaMember, true)
+        return ResponseCode.SUCCESS.withoutPayload()
+    }
+
+    /**
+     * 取消赞.
+     * */
+    @PutMapping("/announcement/{aid}/unlike")
+    @RequireItxiaMember
+    fun unlike(@PathVariable aid: String,
+               @CurrentItxiaMember itxiaMember: ItxiaMember): Response {
+        announcementService.likeOrUnlike(aid, itxiaMember, false)
         return ResponseCode.SUCCESS.withoutPayload()
     }
 
@@ -81,6 +95,39 @@ class AnnouncementController {
             return ResponseCode.SUCCESS.withPayload("评论发表成功")
         }
         return ResponseCode.UNKNOWN_ERROR.withPayload("评论发表失败")
+    }
+
+    /**
+     * 删除公告.
+     * */
+    @DeleteMapping("/announcement/{aid}")
+    @RequireItxiaMember(role = MemberRoleEnum.ADMIN)
+    fun deleteAnnouncement(@PathVariable aid: String): Response {
+        announcementService.deleteAnnouncement(aid)
+        return ResponseCode.SUCCESS.withoutPayload()
+    }
+
+    /**
+     * 排序公告.
+     * */
+    @PutMapping("/announcement/all/order")
+    @RequireItxiaMember(role = MemberRoleEnum.ADMIN)
+    fun reorderAnnouncement(@RequestBody reorderDto: List<AnnouncementReorderDto>): Response {
+        announcementService.reorderAnnouncement(reorderDto)
+        return ResponseCode.SUCCESS.withoutPayload()
+    }
+
+    /**
+     * 修改公告.
+     * */
+    @PutMapping("/announcement/{aid}")
+    @RequireItxiaMember(role = MemberRoleEnum.ADMIN)
+    fun modifyAnnouncement(
+            @PathVariable aid: String,
+            @RequestBody dto: AnnouncementModifyDto
+    ): Response {
+        announcementService.modifyAnnouncement(aid, dto)
+        return ResponseCode.SUCCESS.withoutPayload()
     }
 
 }

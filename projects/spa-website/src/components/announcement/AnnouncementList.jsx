@@ -26,7 +26,10 @@ function AnnouncementList({ isInternal = false }) {
     formatResult: (data) => {
       //最近的公告排在前面
       return data.sort((foo, bar) => {
-        return Date.parse(bar.createTime) - Date.parse(foo.createTime);
+        if (foo.order === bar.order) {
+          return Date.parse(bar.createTime) - Date.parse(foo.createTime);
+        }
+        return foo.order - bar.order;
       });
     },
     onError: (error) => {

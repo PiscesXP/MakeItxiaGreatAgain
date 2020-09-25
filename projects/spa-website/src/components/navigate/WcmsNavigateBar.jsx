@@ -1,13 +1,22 @@
 import { Icon, Menu } from "antd";
-import React from "react";
+import React, { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { LogoutButton } from "COMPONENTS/logout";
 import { routePath } from "PAGE/routePath";
-
-const { SubMenu } = Menu;
+import { useMemberContext } from "HOOK/index";
 
 function WcmsNavigateBar() {
   const location = useLocation();
+
+  const memberContext = useMemberContext();
+
+  const isAdminOrSuperAdmin = useMemo(() => {
+    return (
+      memberContext &&
+      (memberContext.role === "ADMIN" || memberContext.role === "SUPER_ADMIN")
+    );
+  }, [memberContext]);
+
   return (
     <Menu
       mode="horizontal"
@@ -25,43 +34,48 @@ function WcmsNavigateBar() {
         DashBoard
         <Link to={routePath.wcms.DASHBOARD} />
       </Menu.Item>
+
       <Menu.Item key={routePath.wcms.HANDLE_ORDER}>
         <Icon type="calendar" />
         预约单
         <Link to={routePath.wcms.HANDLE_ORDER} />
       </Menu.Item>
-      <Menu.Item key={routePath.wcms.ANNOUNCE_MANAGE}>
-        <Icon type="form" />
-        发布公告
-        <Link to={routePath.wcms.ANNOUNCE_MANAGE} />
+
+      <Menu.Item key={routePath.wcms.EXP}>
+        <Icon type="read" />
+        经验记录
+        <Link to={routePath.wcms.EXP} />
       </Menu.Item>
+
+      {isAdminOrSuperAdmin && (
+        <Menu.Item key={routePath.wcms.ANNOUNCE_MANAGE}>
+          <Icon type="form" />
+          发布公告
+          <Link to={routePath.wcms.ANNOUNCE_MANAGE} />
+        </Menu.Item>
+      )}
 
       <Menu.Item key={routePath.wcms.SELF_PROFILE}>
         <Icon type="smile" />
         个人信息
         <Link to={routePath.wcms.SELF_PROFILE} />
       </Menu.Item>
-      <SubMenu
+
+      {isAdminOrSuperAdmin && (
+        <Menu.Item key={routePath.wcms.MEMBER_MANAGE}>
+          <Icon type="team" />
+          成员管理
+          <Link to={routePath.wcms.MEMBER_MANAGE} />
+        </Menu.Item>
+      )}
+      {/*<Menu.SubMenu
         title={
           <span>
             <Icon type="experiment" />
             实验功能
           </span>
         }
-      >
-        <Menu.Item key={routePath.wcms.MEMBER_MANAGE}>
-          <Icon type="ordered-list" />
-          成员管理
-          <Link to={routePath.wcms.MEMBER_MANAGE} />
-        </Menu.Item>
-        {/*
-        计划集成到成员管理页面中
-        <Menu.Item key={routePath.wcms.ADD_MEMBER}>
-          <Icon type="user-add" />
-          添加成员
-          <Link to={routePath.wcms.ADD_MEMBER} />
-        </Menu.Item>*/}
-      </SubMenu>
+      ></Menu.SubMenu>*/}
       <Menu.Item key="logout">
         <LogoutButton />
       </Menu.Item>
