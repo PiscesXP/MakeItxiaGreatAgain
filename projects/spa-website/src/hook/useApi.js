@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useReducer } from "react";
 import { sendApiRequest } from "@/request/api";
+import { ApiRequestStateEnum } from "@/request/types";
 
 /**
  * 发起API请求的hook.
@@ -153,16 +154,25 @@ function useApi({
         const result = await sendApiRequest({
           path,
           method,
-          query: queryObject,
+          requestQuery: queryObject,
           requestBody,
           signal: abortController.signal,
         });
+        if (result.state === ApiRequestStateEnum.error) {
+          dispatch({ type: "error", error: result.error });
+        } else {
+          const formattedResult = { ...result.data };
+          if (typeof formatPayload === "function") {
+            formattedResult.payload = formatPayload(formattedResult.payload);
+          }
+          dispatch({ type: "success", data: formattedResult });
+        } /*
         const formattedResult = {
           code: result.code,
           message: result.message,
           payload: formatPayload(result.payload),
         };
-        dispatch({ type: "success", data: formattedResult });
+        dispatch({ type: "success", data: formattedResult });*/
       } catch (e) {
         dispatch({ type: "error", error: e });
       }
