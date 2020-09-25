@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { PlusOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
+import { PlusOutlined } from "@ant-design/icons";
+import { Form } from "@ant-design/compatible";
+import "@ant-design/compatible/assets/index.css";
 import { Modal, Upload } from "antd";
 import { config } from "CONFIG";
 import "./AttachmentUpload.css";

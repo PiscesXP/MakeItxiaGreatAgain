@@ -5,7 +5,7 @@ import {
   CheckCircleTwoTone,
   ClockCircleTwoTone,
   CloseCircleTwoTone,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
 import { Card, Divider } from "antd";
 import * as timeUtil from "UTIL/time";
@@ -18,13 +18,22 @@ import { HighlightText } from "COMPONENTS/text/HighlightText";
 const getStatusIcon = (status) => {
   switch (status) {
     case "PENDING":
-      return <CalendarTwoTone twoToneColor="green" style={{ fontSize: "1.5em" }} />;
+      return (
+        <CalendarTwoTone twoToneColor="green" style={{ fontSize: "1.5em" }} />
+      );
     case "HANDLING":
-      return <ClockCircleTwoTone twoToneColor="#66ccff" style={{ fontSize: "1.5em" }} />;
+      return (
+        <ClockCircleTwoTone
+          twoToneColor="#66ccff"
+          style={{ fontSize: "1.5em" }}
+        />
+      );
     case "DONE":
       return <CheckCircleTwoTone style={{ fontSize: "1.5em" }} />;
     case "CANCELED":
-      return <CloseCircleTwoTone twoToneColor="red" style={{ fontSize: "1.5em" }} />;
+      return (
+        <CloseCircleTwoTone twoToneColor="red" style={{ fontSize: "1.5em" }} />
+      );
     default:
   }
 };

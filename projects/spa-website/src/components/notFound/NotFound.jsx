@@ -1,4 +1,4 @@
-import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Icon as LegacyIcon } from "@ant-design/compatible";
 import { Button, Result } from "antd";
 import React from "react";
 import PropTypes from "prop-types";

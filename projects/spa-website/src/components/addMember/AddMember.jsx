@@ -1,6 +1,6 @@
-import { LockOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
+import { LockOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
+import { Form } from "@ant-design/compatible";
+import "@ant-design/compatible/assets/index.css";
 import { Alert, Button, Input, notification, Radio, Result } from "antd";
 import React from "react";
 import * as api from "@/request/api";
@@ -135,9 +135,7 @@ class AddMemberForm extends React.Component {
             ],
           })(
             <Input
-              prefix={
-                <UserAddOutlined style={{ color: "rgba(0,0,0,.25)" }} />
-              }
+              prefix={<UserAddOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
               type="text"
               placeholder="登录账号名"
               autoComplete="new-password"

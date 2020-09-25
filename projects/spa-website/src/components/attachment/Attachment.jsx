@@ -1,7 +1,7 @@
 import React from "react";
 import { config } from "CONFIG";
 import "./index.css";
-import { FileUnknownOutlined } from '@ant-design/icons';
+import { FileUnknownOutlined } from "@ant-design/icons";
 import { Divider, Modal } from "antd";
 
 class Attachment extends React.Component {

@@ -5,7 +5,7 @@ import {
   CheckCircleTwoTone,
   ClockCircleTwoTone,
   CloseCircleTwoTone,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
 import { Button, Card, Col, Divider, Popconfirm, Row } from "antd";
 import * as timeUtil from "UTIL/time";
@@ -15,13 +15,22 @@ import { ReactMarkdown } from "UTIL/md2html";
 const getStatusIcon = (status) => {
   switch (status) {
     case "等待处理":
-      return <CalendarTwoTone twoToneColor="green" style={{ fontSize: "1.5em" }} />;
+      return (
+        <CalendarTwoTone twoToneColor="green" style={{ fontSize: "1.5em" }} />
+      );
     case "正在处理":
-      return <ClockCircleTwoTone twoToneColor="#66ccff" style={{ fontSize: "1.5em" }} />;
+      return (
+        <ClockCircleTwoTone
+          twoToneColor="#66ccff"
+          style={{ fontSize: "1.5em" }}
+        />
+      );
     case "已完成":
       return <CheckCircleTwoTone style={{ fontSize: "1.5em" }} />;
     case "已取消":
-      return <CloseCircleTwoTone twoToneColor="red" style={{ fontSize: "1.5em" }} />;
+      return (
+        <CloseCircleTwoTone twoToneColor="red" style={{ fontSize: "1.5em" }} />
+      );
     default:
   }
 };

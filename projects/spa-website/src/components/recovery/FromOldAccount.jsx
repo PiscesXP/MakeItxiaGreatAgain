@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { LockOutlined, UserAddOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
+import { LockOutlined, UserAddOutlined } from "@ant-design/icons";
+import { Form } from "@ant-design/compatible";
+import "@ant-design/compatible/assets/index.css";
 import { Alert, Button, Input, Modal } from "antd";
 import * as api from "@/request/api";
 
@@ -65,9 +65,7 @@ function FromOldAccountForm(props) {
           ],
         })(
           <Input
-            prefix={
-              <UserAddOutlined style={{ color: "rgba(0,0,0,.25)" }} />
-            }
+            prefix={<UserAddOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
             type="text"
             placeholder="新账号名"
             autoComplete="new-password"

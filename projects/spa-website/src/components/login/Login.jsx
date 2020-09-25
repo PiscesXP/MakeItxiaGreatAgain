@@ -1,8 +1,16 @@
 import React from "react";
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Button, Checkbox, Divider, Input, Modal, notification, Spin } from "antd";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Form } from "@ant-design/compatible";
+import "@ant-design/compatible/assets/index.css";
+import {
+  Button,
+  Checkbox,
+  Divider,
+  Input,
+  Modal,
+  notification,
+  Spin,
+} from "antd";
 import "./style.css";
 import * as api from "@/request/api";
 import { Redirect } from "react-router-dom";
@@ -112,9 +120,7 @@ class LoginForm extends React.Component {
               rules: [{ required: true, message: "请输入登录账号" }],
             })(
               <Input
-                prefix={
-                  <UserOutlined style={{ color: "rgba(0,0,0,.25)" }} />
-                }
+                prefix={<UserOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
                 placeholder="账号"
               />
             )}
@@ -124,9 +130,7 @@ class LoginForm extends React.Component {
               rules: [{ required: true, message: "请输入密码" }],
             })(
               <Input.Password
-                prefix={
-                  <LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />
-                }
+                prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
                 placeholder="密码"
               />
             )}

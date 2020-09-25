@@ -1,6 +1,6 @@
 import React from "react";
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
+import { Form } from "@ant-design/compatible";
+import "@ant-design/compatible/assets/index.css";
 import { Card, DatePicker, Input, Radio, Switch } from "antd";
 import "./expSearchCondition.css";
 

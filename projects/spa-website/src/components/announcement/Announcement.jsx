@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Icon as LegacyIcon } from '@ant-design/compatible';
-import { MessageOutlined } from '@ant-design/icons';
+import { Icon as LegacyIcon } from "@ant-design/compatible";
+import { MessageOutlined } from "@ant-design/icons";
 import { List } from "antd";
 import { AttachmentList } from "COMPONENTS/attachment";
 import { ReplyList } from "COMPONENTS/reply";

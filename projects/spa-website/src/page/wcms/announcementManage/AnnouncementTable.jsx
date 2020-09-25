@@ -1,5 +1,5 @@
 import React from "react";
-import { MenuOutlined } from '@ant-design/icons';
+import { MenuOutlined } from "@ant-design/icons";
 import { Button, Popconfirm, Table } from "antd";
 import {
   sortableContainer,

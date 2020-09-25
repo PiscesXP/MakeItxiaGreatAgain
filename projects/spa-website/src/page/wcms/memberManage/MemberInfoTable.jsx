@@ -7,7 +7,7 @@ import {
   LockOutlined,
   SearchOutlined,
   UserOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
 import { Button, Table, Input, Dropdown, Menu } from "antd";
 import { parseEnumValue, parseRoleAuthLevel } from "UTIL/enumParser";

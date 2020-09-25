@@ -1,5 +1,5 @@
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
+import { Form } from "@ant-design/compatible";
+import "@ant-design/compatible/assets/index.css";
 import { Alert, Button, Card, Checkbox, Input, Modal, Select } from "antd";
 import React, { useEffect } from "react";
 import {

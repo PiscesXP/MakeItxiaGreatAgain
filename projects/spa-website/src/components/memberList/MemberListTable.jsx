@@ -1,4 +1,4 @@
-import { CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons';
+import { CheckCircleTwoTone, CloseCircleTwoTone } from "@ant-design/icons";
 import { Table, Tag } from "antd";
 import React from "react";
 import { MemberAction } from "./MemberAction";

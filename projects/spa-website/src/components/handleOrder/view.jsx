@@ -1,5 +1,5 @@
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
+import { Form } from "@ant-design/compatible";
+import "@ant-design/compatible/assets/index.css";
 import { notification, Switch } from "antd";
 import React from "react";
 import * as api from "@/request/api";

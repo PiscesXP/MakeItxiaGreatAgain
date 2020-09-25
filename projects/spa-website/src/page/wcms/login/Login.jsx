@@ -1,7 +1,7 @@
 import React from "react";
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Form } from "@ant-design/compatible";
+import "@ant-design/compatible/assets/index.css";
 import { Button, Divider, Input, Modal } from "antd";
 import { config } from "CONFIG";
 import { useApi, useTitleWCMS } from "HOOK";

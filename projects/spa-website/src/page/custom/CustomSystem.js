@@ -1,7 +1,12 @@
 import React from "react";
 import { Link, Redirect, Route, Switch, useLocation } from "react-router-dom";
 import { routePath } from "../routePath";
-import { CalendarOutlined, FileSearchOutlined, HomeOutlined, SolutionOutlined } from '@ant-design/icons';
+import {
+  CalendarOutlined,
+  FileSearchOutlined,
+  HomeOutlined,
+  SolutionOutlined,
+} from "@ant-design/icons";
 import { BackTop, Divider, Layout, Menu } from "antd";
 import { Footer as MyFooter } from "COMPONENTS/footer";
 import { CustomHomePage } from "./home";

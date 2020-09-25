@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ClockCircleOutlined } from '@ant-design/icons';
+import { ClockCircleOutlined } from "@ant-design/icons";
 import { Alert, Card } from "antd";
 import { OrderInfoCard } from "./OrderInfoCard";
 import { CenterMe } from "COMPONENTS/layout";

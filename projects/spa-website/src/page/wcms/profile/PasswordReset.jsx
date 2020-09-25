@@ -1,7 +1,7 @@
 import React from "react";
-import { LockOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
+import { LockOutlined } from "@ant-design/icons";
+import { Form } from "@ant-design/compatible";
+import "@ant-design/compatible/assets/index.css";
 import { Alert, Button, Col, Input, Modal, Row } from "antd";
 import { useApi } from "HOOK";
 

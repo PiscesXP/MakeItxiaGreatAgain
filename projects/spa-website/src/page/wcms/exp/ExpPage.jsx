@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Icon as LegacyIcon } from "@ant-design/compatible";
 import { Card, Col, List, Row, Tag } from "antd";
 import { CenterMeResponsive } from "COMPONENTS/layout";
 import {

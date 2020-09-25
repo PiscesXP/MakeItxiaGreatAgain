@@ -5,7 +5,7 @@ import {
   ClockCircleOutlined,
   CloseCircleOutlined,
   DeleteOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
 import { Timeline } from "antd";
 import * as timeUtil from "../../util/time";

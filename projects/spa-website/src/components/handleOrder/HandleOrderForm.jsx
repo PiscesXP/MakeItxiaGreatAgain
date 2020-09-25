@@ -6,7 +6,7 @@ import {
   CloseCircleTwoTone,
   DeleteTwoTone,
   SmileTwoTone,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
 import { Table, Tag } from "antd";
 import * as timeUtil from "UTIL/time";

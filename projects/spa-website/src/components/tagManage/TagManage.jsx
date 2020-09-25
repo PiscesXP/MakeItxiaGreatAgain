@@ -1,6 +1,6 @@
-import { PlusOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
+import { PlusOutlined, ReloadOutlined } from "@ant-design/icons";
+import { Form } from "@ant-design/compatible";
+import "@ant-design/compatible/assets/index.css";
 import { Button, Input, Modal, notification, Table } from "antd";
 import React from "react";
 import * as timeUtil from "UTIL/time";

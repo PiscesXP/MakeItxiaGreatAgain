@@ -6,7 +6,7 @@ import {
   ReadOutlined,
   SmileOutlined,
   TeamOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
 import { Menu } from "antd";
 import React, { useMemo } from "react";

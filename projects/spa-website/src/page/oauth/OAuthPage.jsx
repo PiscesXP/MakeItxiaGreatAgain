@@ -3,7 +3,11 @@ import { parseQueryString } from "UTIL/query";
 import { useTitleWCMS } from "HOOK";
 import { useHistory } from "react-router-dom";
 import { routePath } from "PAGE/routePath";
-import { CheckCircleOutlined, CloseCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
 import { Alert, Card, Modal, Spin } from "antd";
 import { useApiRequest } from "HOOK/useApiRequest";
 import "./oauthPage.css";

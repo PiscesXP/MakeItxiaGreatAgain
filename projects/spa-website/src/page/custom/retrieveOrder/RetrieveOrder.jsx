@@ -1,6 +1,6 @@
 import React from "react";
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
+import { Form } from "@ant-design/compatible";
+import "@ant-design/compatible/assets/index.css";
 import { Button, Card, Input, Modal } from "antd";
 import { CenterMeFlex } from "COMPONENTS/layout";
 import { useApi, useTitleCustom } from "HOOK/index";
