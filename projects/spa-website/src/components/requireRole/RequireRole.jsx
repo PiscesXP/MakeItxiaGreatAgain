@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { UserInfoContext } from "../../context/UserInfo";
+import { UserInfoContext } from "CONTEXT/UserInfo";
 import PropTypes from "prop-types";
 
 function RequireRole(props) {

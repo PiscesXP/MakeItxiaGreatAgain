@@ -1,26 +1,37 @@
-import React, { useCallback, useEffect } from "react";
-import { Loading } from "COMPONENTS/loading";
-import { useHistory, Redirect } from "react-router-dom";
-import { routePath } from "PAGE/routePath";
+import React, { useEffect } from "react";
+import { Loading } from "@/components/loading";
+import { Redirect, useHistory } from "react-router-dom";
+import { routePath } from "@/page/routePath";
 import { Modal } from "antd";
-import { useApi } from "HOOK";
+import { useApiRequest } from "@/hook/useApiRequest";
+import { usePersistFn } from "@/hook/usePersisFn";
 
-const UserInfoContext = React.createContext(null);
+interface WhoamiData {
+  readonly _id: string;
+  readonly loginName: string;
+  readonly realName: string;
+  readonly role: string;
+  readonly email: string;
+  readonly emailNotification: any;
+  readonly requirePasswordReset: boolean;
+}
+
+const UserInfoContext = React.createContext<WhoamiData | null>(null);
 
 /**
  * 提供当前登录用户信息的context.
  */
-function UserInfoProvider(props) {
-  const { loading, code, payload, error, send } = useApi({ path: "/whoami" });
+function UserInfoProvider(props: any) {
+  const { loading, code, payload, error, sendRequest } = useApiRequest({
+    path: "/whoami",
+  });
 
   const history = useHistory();
 
-  const refresh = useCallback(() => {
-    send();
-  }, [send]);
+  const refresh = usePersistFn(sendRequest);
 
   useEffect(() => {
-    if (payload && payload["requirePasswordReset"]) {
+    if (payload && (payload as WhoamiData).requirePasswordReset) {
       Modal.warning({
         title: "请尽快修改密码",
         content: "密码已过期，请尽快修改.",

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { UserInfoContext } from "CONTEXT/UserInfo";
+import { UserInfoContext } from "@/context/UserInfo";
 
 function useMemberContext() {
   return useContext(UserInfoContext);
