@@ -1,7 +1,7 @@
 import { config } from "@/config";
 import { toQuerystring } from "@/util/query";
 import {
-  ApiRequestArgs,
+  ApiRequestParam,
   ApiRequestResult,
   ApiRequestStateEnum,
   RequestQuery,
@@ -27,7 +27,7 @@ async function sendApiRequest({
   method = "GET",
   requestBody = null,
   requestQuery,
-}: ApiRequestArgs): Promise<ApiRequestResult> {
+}: ApiRequestParam): Promise<ApiRequestResult> {
   if (requestBody && (method === "POST" || method === "PUT")) {
     requestBody = JSON.stringify(requestBody);
   }

@@ -28,9 +28,11 @@ export declare type RequestQuery =
   | undefined
   | null;
 
-export interface ApiRequestArgs {
+export declare type RequestMethod = "GET" | "POST" | "PUT" | "DELETE";
+
+export interface ApiRequestParam {
   path: string;
-  method: "GET" | "POST" | "PUT" | "DELETE";
+  method?: RequestMethod;
   requestQuery?: RequestQuery;
   requestBody?: any;
 }
