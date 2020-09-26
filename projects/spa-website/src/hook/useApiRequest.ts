@@ -180,7 +180,7 @@ function useApiRequest({
   /**
    * 发送请求.
    * */
-  const sendRequest = usePersistFn((args: ManualSendParam) => {
+  const sendRequest = usePersistFn((args?: ManualSendParam): void => {
     //记录当前请求的序号.
     seqRef.current = seqRef.current + 1;
     const currentSeq = seqRef.current;
