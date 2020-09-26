@@ -5,7 +5,7 @@ declare type noop = (...args: any[]) => any;
 /**
  * 保证函数调用地址不发生变化.
  * */
-function usePersistFn<T extends noop>(fn: noop | undefined) {
+function usePersistFn<T extends noop>(fn: T | undefined) {
   const ref = useRef<any>(() => {
     throw new Error("Cannot call function while rendering.");
   });
