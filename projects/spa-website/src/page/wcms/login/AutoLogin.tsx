@@ -1,16 +1,18 @@
 import React from "react";
-import { useApi } from "HOOK";
 import { notification, Spin } from "antd";
-import { routePath } from "PAGE/routePath";
-import { Redirect } from "react-router-dom";
+import { routePath } from "@/page/routePath";
+import { useHistory } from "react-router-dom";
+import { useApiRequest } from "@/hook/useApiRequest";
 
 const autoLoginNotificationKey = "autoLogin";
+
 /**
  * 查询是否已登录.
  * 若已登录，自动跳转到主页.
  * */
 function AutoLogin() {
-  const { isSuccess } = useApi({
+  const history = useHistory();
+  useApiRequest({
     path: "/whoami",
     onLoad: () => {
       notification.info({
@@ -28,6 +30,7 @@ function AutoLogin() {
           duration: 3,
         });
       }, 500);
+      history.push(routePath.wcms.DASHBOARD);
     },
     onUnsuccessful: () => {
       setTimeout(() => {
@@ -35,12 +38,6 @@ function AutoLogin() {
       }, 500);
     },
   });
-
-  if (isSuccess) {
-    //跳转到主页
-    return <Redirect to={routePath.wcms.DASHBOARD} />;
-  }
-
   return null;
 }
 
