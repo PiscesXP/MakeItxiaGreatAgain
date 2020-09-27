@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useRef } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
 import { useOptionalPersistFn, usePersistFn } from "@/hook/usePersisFn";
 import { sendApiRequest } from "@/request/api";
 import {
@@ -9,6 +9,7 @@ import {
   RequestQuery,
 } from "@/request/types";
 import { ModalParam, popModalOnApiResult } from "@/util/modalUtil";
+import { debounce, throttle } from "@/util/debounce";
 
 interface UseApiInternalState {
   loading: boolean;
@@ -38,6 +39,8 @@ interface UseApiRequestParam extends ApiRequestParam {
   manual?: boolean;
   //直接改变payload
   formatResult?: FormatResult;
+  debounceInterval?: number;
+  throttleInterval?: number;
   onLoad?: () => void;
   onSuccess?: (data: ApiRequestData) => void;
   onFail?: (data: ApiRequestData) => void;
@@ -56,6 +59,8 @@ function useApiRequest({
   requestQuery,
   manual = false,
   formatResult,
+  debounceInterval,
+  throttleInterval,
   onLoad,
   onSuccess,
   onFail,
@@ -228,6 +233,16 @@ function useApiRequest({
       });
   });
 
+  const wrappedSendRequest = useMemo<typeof sendRequest>(() => {
+    if (debounceInterval) {
+      return debounce(sendRequest, debounceInterval);
+    }
+    if (throttleInterval) {
+      return throttle(sendRequest, throttleInterval);
+    }
+    return sendRequest;
+  }, [sendRequest, debounceInterval, throttleInterval]);
+
   /**
    * 终止当前请求.
    * */
@@ -258,7 +273,7 @@ function useApiRequest({
   return {
     ...reducerState,
     mutate,
-    sendRequest,
+    sendRequest: wrappedSendRequest,
     abort,
   };
 }
