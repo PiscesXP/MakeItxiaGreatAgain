@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
-import { usePersistFn } from "@/hook/usePersisFn";
+import { useOptionalPersistFn, usePersistFn } from "@/hook/usePersisFn";
 import { sendApiRequest } from "@/request/api";
 import {
   ApiRequestData,
@@ -63,13 +63,13 @@ function useApiRequest({
   onUnsuccessful,
   popModal,
 }: UseApiRequestParam) {
-  onLoad = usePersistFn(onLoad);
-  onSuccess = usePersistFn(onSuccess);
-  onFail = usePersistFn(onFail);
-  onError = usePersistFn(onError);
-  onUnsuccessful = usePersistFn(onUnsuccessful);
+  onLoad = useOptionalPersistFn(onLoad, () => {});
+  onSuccess = useOptionalPersistFn(onSuccess, () => {});
+  onFail = useOptionalPersistFn(onFail, () => {});
+  onError = useOptionalPersistFn(onError, () => {});
+  onUnsuccessful = useOptionalPersistFn(onUnsuccessful, () => {});
 
-  formatResult = usePersistFn(formatResult);
+  formatResult = useOptionalPersistFn(formatResult, (a) => a);
 
   const seqRef = useRef(0);
 
@@ -78,13 +78,13 @@ function useApiRequest({
    * */
   const init = useCallback(
     (): UseApiInternalState => ({
-      loading: false,
+      loading: !manual,
       code: null,
       message: null,
       payload: null,
       error: null,
     }),
-    []
+    [manual]
   );
 
   /**
@@ -119,6 +119,7 @@ function useApiRequest({
             const { code, message } = action.data;
             let { payload } = action.data;
             if (typeof formatResult === "function") {
+              //persist后必定会调用
               payload = formatResult(payload);
             }
             newState = {
