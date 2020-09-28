@@ -1,12 +1,20 @@
 import React from "react";
-import { HighlightText } from "COMPONENTS/text/HighlightText";
+import { HighlightText } from "./HighlightText";
+
+interface MultiLinePlainTextProps {
+  content: string;
+  highlightWords?: string[];
+}
 
 /**
  * @param content {string}
  * @param highlightWords {[string]?}
  * */
-function MultiLinePlainText({ content, highlightWords }) {
-  if (!!!content || content === "") {
+export const MultiLinePlainText: React.FC<MultiLinePlainTextProps> = ({
+  content,
+  highlightWords,
+}) => {
+  if (!content || content === "") {
     return null;
   }
   //解析转义字符
@@ -27,6 +35,4 @@ function MultiLinePlainText({ content, highlightWords }) {
       ))}
     </div>
   );
-}
-
-export { MultiLinePlainText };
+};

@@ -1,15 +1,22 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  useApi,
-  useLocalStorageState,
-  useMemberContext,
-  useTitleWCMS,
-} from "HOOK";
-import { SearchCondition } from "PAGE/wcms/handleOrder/SearchCondition";
-import { CenterMeResponsive } from "COMPONENTS/layout";
-import { Divider, Modal } from "antd";
-import { OrderList } from "PAGE/wcms/handleOrder/OrderList";
-import { debounceFn } from "UTIL/common";
+import React, { useEffect, useMemo, useState } from "react";
+import { useMemberContext, useTitleWCMS } from "HOOK";
+import { SearchCondition } from "./SearchCondition";
+import { CenterMeResponsive } from "@/components/layout";
+import { Divider } from "antd";
+import { OrderList } from "./OrderList";
+import { debounceFn } from "@/util/common";
+import { useLocalStorageState } from "@/hook/useLocalStorageState";
+import { useApiRequest } from "@/hook/useApiRequest";
+import { CampusEnum, OrderStatusEnum } from "@/util/enum";
+import { useDebounce } from "@/hook/useDebounce";
+
+interface OrderSearchCondition {
+  onlyMine: boolean;
+  campus: CampusEnum;
+  status: OrderStatusEnum;
+  text: string;
+  orderTime: any;
+}
 
 /**
  * 浮生日记.
@@ -30,71 +37,48 @@ function HandleOrder() {
 
   const memberContext = useMemberContext();
 
-  const [condition, setCondition] = useLocalStorageState(
+  const [condition, setCondition] = useLocalStorageState<OrderSearchCondition>(
     "orderSearchCondition",
     {
       onlyMine: false,
       campus: memberContext.campus,
-      status: "PENDING",
+      status: OrderStatusEnum.PENDING,
       text: "",
       orderTime: null,
-    },
-    (newCondition) => {
-      const { orderTime, ...rest } = newCondition;
-      return rest;
     }
   );
 
   const [pagination, setPagination] = useState({ page: 1, size: 10 });
 
-  const { code, loading, payload, send } = useApi({
+  const { code, loading, payload, sendRequest } = useApiRequest({
     path: "/order",
-    query: condition,
-    later: true,
-    onFail: ({ message }) => {
-      Modal.error({
-        title: "获取预约单失败",
-        content: message,
-        centered: true,
-      });
-    },
-    onError: (error) => {
-      Modal.error({
-        title: "获取预约单失败",
-        content: error.toString(),
-        centered: true,
-      });
-    },
+    requestQuery: condition,
+    manual: true,
+    popModal: { onFail: true, onError: true },
   });
 
-  const sendRequest = useCallback(() => {
-    const { orderTime, ...orderCondition } = condition;
-    if (Array.isArray(orderTime) && orderTime.length === 2) {
-      orderCondition.startTime = orderTime[0]._d.toISOString();
-      orderCondition.endTime = orderTime[1]._d.toISOString();
-    }
-    //获取数据
-    send(null, { ...orderCondition, ...pagination });
-  }, [condition, pagination, send]);
+  const refreshOrder = useDebounce(() => {
+    sendRequest({ requestQuery: { ...condition, ...pagination } });
+  }, 2000);
 
   useEffect(() => {
-    sendRequest();
-  }, [sendRequest]);
+    refreshOrder();
+  }, [refreshOrder]);
 
   const handleConditionChange = useMemo(
     () =>
-      debounceFn((newCondition) => {
+      debounceFn((a: any, newCondition: any, b: any) => {
         setCondition(newCondition);
       }, 1000),
     [setCondition]
   );
 
-  function handlePaginationChange(page, size) {
+  function handlePaginationChange(page: number, size: number) {
     setPagination({ page, size });
   }
 
   function handleHandleOrder() {
-    sendRequest();
+    refreshOrder();
   }
 
   const highlightWords = useMemo(() => {
@@ -106,9 +90,12 @@ function HandleOrder() {
 
   return (
     <div>
+      {/* @ts-ignore*/}
       <CenterMeResponsive>
         <SearchCondition
           onConditionChange={handleConditionChange}
+          initialValues={condition}
+          onFieldsChange={handleConditionChange}
           condition={condition}
         />
         <Divider dashed />

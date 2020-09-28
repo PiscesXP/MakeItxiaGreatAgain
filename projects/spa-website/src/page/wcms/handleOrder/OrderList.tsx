@@ -1,18 +1,27 @@
 import React from "react";
 import { Col, Row } from "antd";
 import { OrderPagination } from "./OrderPagination";
-import { EmbeddableLoading, Loading } from "COMPONENTS/loading";
+import { EmbeddableLoading, Loading } from "@/components/loading";
 import { OrderInfoCard } from "./OrderInfoCard";
-import { OrderNotFound } from "COMPONENTS/notFound";
+import { OrderNotFound } from "@/components/notFound";
 
-function OrderList({
+interface OrderListProps {
+  code: number | null;
+  loading: boolean;
+  payload: any;
+  highlightWords: string[];
+  onHandleOrder: () => void;
+  onPaginationChange: (page: number, pageSize: number) => void;
+}
+
+export const OrderList: React.FC<OrderListProps> = ({
   code,
   loading,
   payload,
   highlightWords,
   onHandleOrder,
   onPaginationChange,
-}) {
+}) => {
   //加载中
   if (code !== 0) {
     return <Loading delay={0} />;
@@ -33,7 +42,7 @@ function OrderList({
 
   return (
     <EmbeddableLoading loading={loading}>
-      <Row gutter={[8, 0]} type="flex" justify="center" align="top">
+      <Row gutter={[8, 0]} justify="center" align="top">
         <Col span={24}>{orderPagination}</Col>
         {data.length > 0 ? null : (
           <Col span={24}>
@@ -42,10 +51,10 @@ function OrderList({
         )}
         <Col xs={24} sm={24} md={24} lg={12} xl={10}>
           {data
-            .filter((value, index) => {
+            .filter((value: any, index: number) => {
               return index < data.length / 2;
             })
-            .map((value) => {
+            .map((value: { _id: string }) => {
               return (
                 <OrderInfoCard
                   key={value._id}
@@ -58,10 +67,10 @@ function OrderList({
         </Col>
         <Col xs={24} sm={24} md={24} lg={12} xl={10}>
           {data
-            .filter((value, index) => {
+            .filter((value: any, index: number) => {
               return index >= data.length / 2;
             })
-            .map((value) => {
+            .map((value: any) => {
               return (
                 <OrderInfoCard
                   key={value._id}
@@ -76,6 +85,4 @@ function OrderList({
       </Row>
     </EmbeddableLoading>
   );
-}
-
-export { OrderList };
+};

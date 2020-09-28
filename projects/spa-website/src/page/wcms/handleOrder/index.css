@@ -17,3 +17,7 @@
 .order-btn-container > * {
   margin: 0.4em 0.6em;
 }
+
+.order-status-icon {
+  font-size: 1.25em;
+}

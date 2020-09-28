@@ -1,12 +1,20 @@
 import React from "react";
 import ReactHighlightWords from "react-highlight-words";
 
+interface HighlightTextProps {
+  highlightWords: string[];
+  text: string;
+}
+
 /**
  *
  * @param highlightWords {[string]}
  * @param text {string}
  * */
-function HighlightText({ highlightWords = [], text }) {
+export const HighlightText: React.FC<HighlightTextProps> = ({
+  highlightWords = [],
+  text,
+}) => {
   return (
     <ReactHighlightWords
       highlightClassName="text-highlight"
@@ -16,6 +24,4 @@ function HighlightText({ highlightWords = [], text }) {
       textToHighlight={text}
     />
   );
-}
-
-export { HighlightText };
+};

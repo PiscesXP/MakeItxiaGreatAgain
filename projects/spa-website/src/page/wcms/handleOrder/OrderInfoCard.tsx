@@ -1,45 +1,50 @@
 import React from "react";
-
 import {
   CalendarTwoTone,
   CheckCircleTwoTone,
   ClockCircleTwoTone,
   CloseCircleTwoTone,
 } from "@ant-design/icons";
-
 import { Card, Divider } from "antd";
-import * as timeUtil from "UTIL/time";
-import { AttachmentList } from "COMPONENTS/attachment";
+import * as timeUtil from "@/util/time";
+import { AttachmentList } from "@/components/attachment";
 import { HandleActions } from "./HandleActions";
-import { parseEnumValue } from "UTIL/enumParser";
-import { MultiLinePlainText } from "COMPONENTS/text";
-import { HighlightText } from "COMPONENTS/text/HighlightText";
+import { parseEnumValue } from "@/util/enumParser";
+import { MultiLinePlainText } from "@/components/text";
+import { HighlightText } from "@/components/text/HighlightText";
+import { OrderStatusEnum } from "@/util/enum";
 
-const getStatusIcon = (status) => {
+const getStatusIcon = (status: OrderStatusEnum) => {
   switch (status) {
-    case "PENDING":
+    case OrderStatusEnum.PENDING:
       return (
-        <CalendarTwoTone twoToneColor="green" style={{ fontSize: "1.5em" }} />
+        <CalendarTwoTone twoToneColor="green" className="order-status-icon" />
       );
-    case "HANDLING":
+    case OrderStatusEnum.HANDLING:
       return (
         <ClockCircleTwoTone
           twoToneColor="#66ccff"
-          style={{ fontSize: "1.5em" }}
+          className="order-status-icon"
         />
       );
-    case "DONE":
-      return <CheckCircleTwoTone style={{ fontSize: "1.5em" }} />;
-    case "CANCELED":
+    case OrderStatusEnum.DONE:
+      return <CheckCircleTwoTone className="order-status-icon" />;
+    case OrderStatusEnum.CANCELED:
       return (
-        <CloseCircleTwoTone twoToneColor="red" style={{ fontSize: "1.5em" }} />
+        <CloseCircleTwoTone twoToneColor="red" className="order-status-icon" />
       );
     default:
   }
 };
 
-function OrderInfoCard(props) {
-  const { data, whoami, highlightWords, onHandleOrder } = props;
+interface OrderInfoCardProps {
+  data: any;
+  highlightWords: string[];
+  onHandleOrder: () => void;
+}
+
+export const OrderInfoCard: React.FC<OrderInfoCardProps> = (props) => {
+  const { data, highlightWords, onHandleOrder } = props;
   const {
     name,
     campus,
@@ -115,13 +120,7 @@ function OrderInfoCard(props) {
         </div>
       )}
       <Divider dashed className="order-hr" />
-      <HandleActions
-        data={data}
-        whoami={whoami}
-        onHandleOrder={onHandleOrder}
-      />
+      <HandleActions data={data} onHandleOrder={onHandleOrder} />
     </Card>
   );
-}
-
-export { OrderInfoCard };
+};

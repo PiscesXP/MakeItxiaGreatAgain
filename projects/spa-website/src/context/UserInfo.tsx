@@ -5,12 +5,14 @@ import { routePath } from "@/page/routePath";
 import { Modal } from "antd";
 import { useApiRequest } from "@/hook/useApiRequest";
 import { usePersistFn } from "@/hook/usePersisFn";
+import { CampusEnum, MemberRoleEnum } from "@/util/enum";
 
-interface WhoamiData {
+export interface WhoamiData {
+  readonly campus: CampusEnum;
   readonly _id: string;
   readonly loginName: string;
   readonly realName: string;
-  readonly role: string;
+  readonly role: MemberRoleEnum;
   readonly email: string;
   readonly emailNotification: any;
   readonly requirePasswordReset: boolean;

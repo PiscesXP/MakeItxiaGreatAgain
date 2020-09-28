@@ -1,3 +1,9 @@
+/*@import url("https://unpkg.com/antd@4.6.5/dist/antd.dark.css")
+(prefers-color-scheme: light);*/
+/*
+@import url("https://unpkg.com/antd@4.6.5/dist/antd.css")
+(prefers-color-scheme: light);*/
+
 .link-button {
   background-color: transparent;
   border: none;

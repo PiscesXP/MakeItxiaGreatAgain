@@ -47,7 +47,7 @@ function HomeRouter() {
    </Route>
 
    <Route path={routePath.HANDLE_ORDER_NEW}>
-   <HandleOrder />
+   <HandleOrderPage />
    </Route>
 
 

@@ -21,7 +21,7 @@ function LoginForm() {
   const history = useHistory();
 
   //优雅的API调用
-  const { sendRequest } = useApiRequest({
+  const { loading, sendRequest } = useApiRequest({
     path: "/login",
     method: "POST",
     manual: true,
@@ -70,7 +70,10 @@ function LoginForm() {
           {
             required: true,
             message: "请输入密码",
+          },
+          {
             pattern: /^.{8,}$/,
+            message: "请输入密码",
           },
         ]}
       >
@@ -81,7 +84,12 @@ function LoginForm() {
       </Form.Item>
 
       <Form.Item>
-        <Button type="primary" htmlType="submit" className="login-form-button">
+        <Button
+          loading={loading}
+          type="primary"
+          htmlType="submit"
+          className="login-form-button"
+        >
           登录
         </Button>
       </Form.Item>
