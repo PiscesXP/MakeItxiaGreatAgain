@@ -1,4 +1,4 @@
-import { HandleOrder } from "./HandleOrderPage";
+import { HandleOrderPage } from "./HandleOrderPage";
 import "./index.css";
 
-export { HandleOrder };
+export { HandleOrderPage };

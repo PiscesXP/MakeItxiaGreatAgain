@@ -1,24 +1,36 @@
 import React from "react";
 import { Card, DatePicker, Form, Input, Radio, Switch } from "antd";
 import moment from "moment";
-import zhCN from "antd/es/date-picker/locale/zh_CN";
+
+interface SearchConditionProps {
+  initialValues: any;
+  onConditionChange: (values: any) => void;
+}
 
 /**
  * 筛选条件.
  * */
-function SearchCondition({ initialValues, onFieldsChange }: any) {
+export const SearchCondition: React.FC<SearchConditionProps> = ({
+  initialValues,
+  onConditionChange,
+}) => {
   if (Array.isArray(initialValues?.orderTime)) {
     initialValues.orderTime = initialValues.orderTime.map((date: any) => {
       console.log(date);
       return moment(date);
     });
   }
+
+  function onValuesChange(changedValues: any, values: any) {
+    onConditionChange(values);
+  }
+
   // noinspection NonAsciiCharacters
   return (
     <Card title="筛选">
       <Form
         initialValues={initialValues}
-        onValuesChange={onFieldsChange}
+        onValuesChange={onValuesChange}
         className="condition-container"
       >
         <Form.Item name="onlyMine" label="只看我的" valuePropName="checked">
@@ -46,7 +58,6 @@ function SearchCondition({ initialValues, onFieldsChange }: any) {
         </Form.Item>
         <Form.Item name="orderTime" label="预约时间">
           <DatePicker.RangePicker
-            locale={zhCN}
             ranges={{
               今天: [moment(), moment()],
               本周: [moment().startOf("week"), moment().endOf("week")],
@@ -62,6 +73,4 @@ function SearchCondition({ initialValues, onFieldsChange }: any) {
       </Form>
     </Card>
   );
-}
-
-export { SearchCondition };
+};

@@ -7,7 +7,7 @@ import { Footer as MyFooter } from "@/components/footer";
 import { NotFound } from "@/components/notFound";
 import { Login } from "./login";
 import { DashBoard } from "./dashboard";
-import { HandleOrder } from "./handleOrder";
+import { HandleOrderPage } from "./handleOrder";
 import { Profile } from "./profile";
 import { AnnouncementManage } from "./announcementManage";
 import { MemberManage } from "./memberManage";
@@ -86,7 +86,7 @@ function WCMSRouter() {
         <DashBoard />
       </Route>
       <Route path={routePath.wcms.HANDLE_ORDER}>
-        <HandleOrder />
+        <HandleOrderPage />
       </Route>
       <Route path={routePath.wcms.SELF_PROFILE}>
         <Profile />

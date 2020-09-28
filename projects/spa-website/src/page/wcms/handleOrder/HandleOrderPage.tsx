@@ -1,14 +1,15 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useMemberContext, useTitleWCMS } from "HOOK";
+import React, { useMemo, useState } from "react";
 import { SearchCondition } from "./SearchCondition";
 import { CenterMeResponsive } from "@/components/layout";
 import { Divider } from "antd";
 import { OrderList } from "./OrderList";
-import { debounceFn } from "@/util/common";
 import { useLocalStorageState } from "@/hook/useLocalStorageState";
 import { useApiRequest } from "@/hook/useApiRequest";
 import { CampusEnum, OrderStatusEnum } from "@/util/enum";
 import { useDebounce } from "@/hook/useDebounce";
+import { useTitleWCMS } from "@/hook/useTitle";
+import { useMemberContext } from "@/hook/useMemberContext";
+import { useUpdateEffect } from "@/hook/useUpdateEffect";
 
 interface OrderSearchCondition {
   onlyMine: boolean;
@@ -31,8 +32,11 @@ interface OrderSearchCondition {
  * class component多个state合在一起真是太难受了.
  * (对了,没用到qs,也是轻松不少)
  *
+ * 2020.09.29
+ * TypeScript再次重构.
+ *
  * */
-function HandleOrder() {
+export const HandleOrderPage: React.FC = () => {
   useTitleWCMS("预约单");
 
   const memberContext = useMemberContext();
@@ -52,26 +56,21 @@ function HandleOrder() {
 
   const { code, loading, payload, sendRequest } = useApiRequest({
     path: "/order",
-    requestQuery: condition,
-    manual: true,
+    requestQuery: { ...condition, ...pagination },
     popModal: { onFail: true, onError: true },
   });
 
   const refreshOrder = useDebounce(() => {
     sendRequest({ requestQuery: { ...condition, ...pagination } });
-  }, 2000);
+  }, 1200);
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     refreshOrder();
-  }, [refreshOrder]);
+  }, [condition, pagination]);
 
-  const handleConditionChange = useMemo(
-    () =>
-      debounceFn((a: any, newCondition: any, b: any) => {
-        setCondition(newCondition);
-      }, 1000),
-    [setCondition]
-  );
+  function handleConditionChange(values: any) {
+    setCondition(values);
+  }
 
   function handlePaginationChange(page: number, size: number) {
     setPagination({ page, size });
@@ -95,8 +94,6 @@ function HandleOrder() {
         <SearchCondition
           onConditionChange={handleConditionChange}
           initialValues={condition}
-          onFieldsChange={handleConditionChange}
-          condition={condition}
         />
         <Divider dashed />
       </CenterMeResponsive>
@@ -110,6 +107,4 @@ function HandleOrder() {
       />
     </div>
   );
-}
-
-export { HandleOrder };
+};
