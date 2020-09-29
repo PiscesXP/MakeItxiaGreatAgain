@@ -38,8 +38,10 @@ export function toQuerystring(query: RequestQuery): string {
  * (例如把特定key的value转换成数组)
  * */
 export function parseQuerystring(
-  valueParseFn: (value: any, key: string) => any
-): object {
+  valueParseFn?: (value: any, key: string) => any
+): {
+  [propName: string]: any;
+} {
   const result: QuerystringObject = {};
   const qs = window.location.search;
   qs.substr(1)
@@ -47,7 +49,11 @@ export function parseQuerystring(
     .filter((pair) => pair.length > 0)
     .forEach((pair) => {
       const [key, value] = pair.split("=");
-      result[key] = valueParseFn(value, key);
+      if (typeof valueParseFn === "function") {
+        result[key] = valueParseFn(value, key);
+      } else {
+        result[key] = value;
+      }
     });
   return result;
 }

@@ -12,7 +12,7 @@ import { Profile } from "./profile";
 import { AnnouncementManage } from "./announcementManage";
 import { MemberManage } from "./memberManage";
 import { useLocalStorageState, useMemberContext } from "HOOK";
-import { Join } from "./join/Join";
+import { JoinPage } from "./join";
 import { ExpPage } from "./exp/ExpPage";
 import {
   CalendarOutlined,
@@ -67,7 +67,7 @@ function WCMS() {
         <Login />
       </Route>
       <Route path={routePath.wcms.JOIN}>
-        <Join />
+        <JoinPage />
       </Route>
       <Route>
         <ItxiaPage />
