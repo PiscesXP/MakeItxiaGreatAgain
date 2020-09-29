@@ -4,10 +4,10 @@ import { MemberSettings } from "./MemberSettings";
 import { PasswordReset } from "./PasswordReset";
 import { OauthSetting } from "./OauthSetting";
 import { BasicInfo } from "./BasicInfo";
-import { useTitleWCMS } from "HOOK";
-import { CenterMeResponsive } from "COMPONENTS/layout";
+import { CenterMeResponsive } from "@/components/layout";
+import { useTitleWCMS } from "@/hook/useTitle";
 
-function Profile() {
+export const Profile: React.FC = () => {
   useTitleWCMS("个人信息");
   return (
     <CenterMeResponsive small>
@@ -28,6 +28,4 @@ function Profile() {
       </Card>
     </CenterMeResponsive>
   );
-}
-
-export { Profile };
+};

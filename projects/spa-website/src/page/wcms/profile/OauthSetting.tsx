@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Alert, Button, Col, Modal, Row } from "antd";
-import { config } from "CONFIG";
-import { useApi } from "HOOK";
-import { Loading } from "COMPONENTS/loading";
+import { config } from "@/config";
+import { Loading } from "@/components/loading";
+import { useApiRequest } from "@/hook/useApiRequest";
 
 function OauthSetting() {
-  const { loading, isSuccess } = useApi({ path: "/oauth/link/qq" });
+  const { loading, code } = useApiRequest({ path: "/oauth/link/qq" });
   const [showModal, setShowModal] = useState(false);
 
   function openOAuthWindow() {
@@ -20,7 +20,7 @@ function OauthSetting() {
     }
   }
 
-  function handleClickThisDemo(e) {
+  function handleClickThisDemo(e: any) {
     e.preventDefault();
     setShowModal(true);
   }
@@ -28,9 +28,9 @@ function OauthSetting() {
   if (loading) {
     return <Loading />;
   }
-  if (isSuccess) {
+  if (code === 0) {
     return (
-      <Row type="flex" justify="center" align="middle" gutter={[24, 24]}>
+      <Row justify="center" align="middle" gutter={[24, 24]}>
         <Col span={16}>
           <Alert
             message="QQ OAuth登录"
@@ -44,7 +44,7 @@ function OauthSetting() {
   } else {
     return (
       <div>
-        <Row type="flex" justify="center" align="middle" gutter={[24, 24]}>
+        <Row justify="center" align="middle" gutter={[24, 24]}>
           <Col span={16}>
             <Alert
               message="QQ OAuth登录"
@@ -62,7 +62,7 @@ function OauthSetting() {
             />
           </Col>
           <Col span={24}>
-            <Row type="flex" justify="center" align="middle">
+            <Row justify="center" align="middle">
               <Col>
                 <Button type="primary" onClick={openOAuthWindow}>
                   授权QQ登录
