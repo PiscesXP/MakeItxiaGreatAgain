@@ -32,6 +32,8 @@ interface AttachmentUploadProps {
   //Upload list type
   listType?: UploadListType;
   existedFileList?: ExistedFile[];
+  //Form.Item extra
+  extra?: React.ReactNode;
 }
 
 /**
@@ -44,27 +46,12 @@ export const AttachmentUpload: React.FC<AttachmentUploadProps> = ({
   name = "attachments",
   listType = "picture-card",
   existedFileList = [],
-  children,
+  extra,
 }) => {
-  existedFileList?.push({
-    _id: "233",
-    size: 233,
-    fileName: "test.jpg",
-    url: "http://localhost:9000/api/upload/5f0cf990222943558de917a1",
-    mimeType: "image/png",
-  });
   return (
-    <>
-      <Form.Item name={name} label={label}>
-        <UploadInput
-          existedFileList={existedFileList}
-          listType={listType}
-          // handlePreview={handlePreview}
-        >
-          {children}
-        </UploadInput>
-      </Form.Item>
-    </>
+    <Form.Item name={name} label={label} extra={extra} initialValue={[]}>
+      <UploadInput existedFileList={existedFileList} listType={listType} />
+    </Form.Item>
   );
 };
 
@@ -98,7 +85,6 @@ const UploadInput: React.FC<{
   existedFileList = [],
   onChange,
   // handlePreview,
-  children,
 }) => {
   const ref = useRef<string[]>(value);
 
@@ -185,7 +171,6 @@ const UploadInput: React.FC<{
       >
         <img alt="preview" style={{ width: "100%" }} src={previewImage} />
       </Modal>
-      {children}
     </>
   );
 };

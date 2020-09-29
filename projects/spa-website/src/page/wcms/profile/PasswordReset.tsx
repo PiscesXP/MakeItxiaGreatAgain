@@ -49,15 +49,13 @@ export const PasswordReset: React.FC = () => {
           },
         ]}
         hasFeedback
+        extra={<Alert message="密码要求：至少8个字符" type="info" />}
       >
         <Input.Password
           prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
           placeholder="密码"
           autoComplete="new-password"
         />
-      </Form.Item>
-      <Form.Item>
-        <Alert message="密码要求：至少8个字符" type="info" />
       </Form.Item>
       <Form.Item
         name="confirmPassword"
