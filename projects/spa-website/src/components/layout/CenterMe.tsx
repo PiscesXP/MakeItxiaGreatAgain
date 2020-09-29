@@ -2,23 +2,26 @@ import React from "react";
 import { Col, Row } from "antd";
 import "./index.css";
 
-function CenterMe(props) {
+export const CenterMe: React.FC = (props) => {
   return (
-    <Row gutter={[8, 0]} type="flex" justify="center" align="top">
+    <Row gutter={[8, 0]} justify="center" align="top">
       <Col span={24}>{props.children}</Col>
     </Row>
   );
-}
+};
 
-function CenterMeFlex({ children }) {
-  return <div className="center-me-flex">{children}</div>;
-}
+export const CenterMeFlex: React.FC = (props) => {
+  return <div className="center-me-flex">{props.children}</div>;
+};
 
 /**
  * @param small {boolean}
  * @param children
  * */
-function CenterMeResponsive({ small, children }) {
+export const CenterMeResponsive: React.FC<{ small: boolean }> = ({
+  small,
+  children,
+}) => {
   const normalLayout = {
     xs: 24,
     sm: 24,
@@ -44,9 +47,8 @@ function CenterMeResponsive({ small, children }) {
   }
 
   return (
-    <Row gutter={[8, 0]} type="flex" justify="center" align="top">
+    <Row gutter={[8, 0]} justify="center" align="top">
       <Col {...colLayout}>{children}</Col>
     </Row>
   );
-}
-export { CenterMe, CenterMeFlex, CenterMeResponsive };
+};
