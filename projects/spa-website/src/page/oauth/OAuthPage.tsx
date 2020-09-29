@@ -1,22 +1,22 @@
 import React, { useMemo } from "react";
-import { parseQueryString } from "UTIL/query";
-import { useTitleWCMS } from "HOOK";
+import { parseQueryString } from "@/util/query";
+import { useTitleWCMS } from "@/hook/useTitle";
 import { useHistory } from "react-router-dom";
-import { routePath } from "PAGE/routePath";
+import { routePath } from "@/page/routePath";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
 import { Alert, Card, Modal, Spin } from "antd";
-import { useApiRequest } from "HOOK/useApiRequest";
+import { useApiRequest } from "@/hook/useApiRequest";
 import "./oauthPage.css";
 
 /**
  * OAuth登录的页面.
  * (也包括绑定时的)
  * */
-function OAuthPage() {
+export const OAuthPage: React.FC = () => {
   useTitleWCMS("OAuth登录");
   const history = useHistory();
 
@@ -25,15 +25,14 @@ function OAuthPage() {
       icon: <LoadingOutlined />,
       title: "登录中...",
       content: "请稍等",
-      footer: null,
     });
   }, []);
 
   useApiRequest({
     path: "/oauth/link/qq",
     method: "POST",
-    data: { token: parseQueryString() },
-    onSuccess: ({ code, message }) => {
+    requestBody: { token: parseQueryString() },
+    onFail: ({ code, message }) => {
       switch (code) {
         case 16:
           //登录成功
@@ -104,5 +103,4 @@ function OAuthPage() {
       </Card>
     </div>
   );
-}
-export { OAuthPage };
+};
