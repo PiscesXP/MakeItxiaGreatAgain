@@ -1,8 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Form, Modal, Upload } from "antd";
 import { config } from "@/config";
 import "./AttachmentUpload.css";
+import { UploadFile, UploadListType } from "antd/es/upload/interface";
 
 const actionUrl = config.network.api.prefix + "/upload";
 
@@ -15,7 +16,13 @@ function getBase64(file: Blob) {
   });
 }
 
-declare type UploadListType = "picture-card" | "picture" | "text" | undefined;
+interface ExistedFile {
+  readonly _id: string;
+  readonly url: string;
+  readonly fileName: string;
+  readonly size: number;
+  readonly mimeType: string;
+}
 
 interface AttachmentUploadProps {
   //Form.Item name
@@ -24,6 +31,7 @@ interface AttachmentUploadProps {
   label?: string;
   //Upload list type
   listType?: UploadListType;
+  existedFileList?: ExistedFile[];
 }
 
 /**
@@ -35,38 +43,27 @@ export const AttachmentUpload: React.FC<AttachmentUploadProps> = ({
   label,
   name = "attachments",
   listType = "picture-card",
+  existedFileList = [],
   children,
 }) => {
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewImage, setPreviewImage] = useState<string | undefined>();
-
-  async function handlePreview(file: any) {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setPreviewImage(file.preview);
-    setPreviewVisible(true);
-  }
-
-  function cancelPreview() {
-    setPreviewVisible(false);
-  }
-
+  existedFileList?.push({
+    _id: "233",
+    size: 233,
+    fileName: "test.jpg",
+    url: "http://localhost:9000/api/upload/5f0cf990222943558de917a1",
+    mimeType: "image/png",
+  });
   return (
     <>
       <Form.Item name={name} label={label}>
-        <UploadInput listType={listType} handlePreview={handlePreview}>
+        <UploadInput
+          existedFileList={existedFileList}
+          listType={listType}
+          // handlePreview={handlePreview}
+        >
           {children}
         </UploadInput>
       </Form.Item>
-      <Modal
-        centered
-        visible={previewVisible}
-        footer={null}
-        onCancel={cancelPreview}
-      >
-        <img alt="preview" style={{ width: "100%" }} src={previewImage} />
-      </Modal>
     </>
   );
 };
@@ -92,37 +89,102 @@ export function attachmentUploadFormParser(uploadFormValue: any[]) {
 const UploadInput: React.FC<{
   value?: string[];
   listType: UploadListType;
+  existedFileList: ExistedFile[];
   onChange?: (fileList: any[]) => void;
-  handlePreview: (a: any) => any;
-}> = ({ value = [], listType, onChange, handlePreview, children }) => {
+  // handlePreview: (a: any) => any;
+}> = ({
+  value = [],
+  listType,
+  existedFileList = [],
+  onChange,
+  // handlePreview,
+  children,
+}) => {
   const ref = useRef<string[]>(value);
+
+  const fileList = useMemo<UploadFile[]>(() => {
+    return existedFileList.map((file) => {
+      return {
+        uid: file._id,
+        status: "done",
+        size: file.size,
+        name: file.fileName,
+        type: file.mimeType,
+      };
+    });
+  }, [existedFileList]);
+
+  const [previewVisible, setPreviewVisible] = useState<boolean>(false);
+  const [previewImage, setPreviewImage] = useState<string | undefined>();
+
+  async function handlePreview(file: any) {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+      setPreviewImage(file.preview);
+    } else {
+      setPreviewImage(file.url);
+    }
+    setPreviewVisible(true);
+  }
+
+  function cancelPreview() {
+    setPreviewVisible(false);
+  }
+
+  function handleRemove() {
+    return new Promise<boolean>((resolve, reject) => {
+      Modal.confirm({
+        title: "确认删除附件嘛",
+        centered: true,
+        onOk: () => {
+          resolve();
+        },
+        onCancel: () => {
+          reject();
+        },
+      });
+    });
+  }
+
+  function handleChange(e: any) {
+    const uploadIDArr = e.fileList
+      .filter(
+        (file: any) =>
+          file.percent === 100 &&
+          file.status === "done" &&
+          file.response.code === 0
+      )
+      .map((file: any) => file.response.payload._id);
+    uploadIDArr.fileList = e.fileList;
+    ref.current = uploadIDArr;
+    if (onChange) {
+      onChange(uploadIDArr);
+    }
+  }
+
   return (
     <>
       <Upload
         action={actionUrl}
         listType={listType}
+        defaultFileList={fileList}
         onPreview={handlePreview}
-        onChange={(e: any) => {
-          const uploadIDArr = e.fileList
-            .filter(
-              (file: any) =>
-                file.percent === 100 &&
-                file.status === "done" &&
-                file.response.code === 0
-            )
-            .map((file: any) => file.response.payload._id);
-          uploadIDArr.fileList = e.fileList;
-          ref.current = uploadIDArr;
-          if (onChange) {
-            onChange(uploadIDArr);
-          }
-        }}
+        onRemove={handleRemove}
+        onChange={handleChange}
       >
         <div>
           <PlusOutlined />
           <div className="ant-upload-text">上传附件</div>
         </div>
       </Upload>
+      <Modal
+        centered
+        visible={previewVisible}
+        footer={null}
+        onCancel={cancelPreview}
+      >
+        <img alt="preview" style={{ width: "100%" }} src={previewImage} />
+      </Modal>
       {children}
     </>
   );
