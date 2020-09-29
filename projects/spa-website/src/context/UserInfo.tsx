@@ -16,6 +16,7 @@ export interface WhoamiData {
   readonly email: string;
   readonly emailNotification: any;
   readonly requirePasswordReset: boolean;
+  refresh: () => void;
 }
 
 const UserInfoContext = React.createContext<WhoamiData | null>(null);
