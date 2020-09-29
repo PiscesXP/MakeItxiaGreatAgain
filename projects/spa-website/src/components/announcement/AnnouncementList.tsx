@@ -1,12 +1,15 @@
 import React from "react";
-import { Card, List, notification, Spin } from "antd";
-import { Announcement } from "./Announcement";
-import { useApi } from "HOOK";
+import { Card, List, Spin } from "antd";
+import { SingleAnnouncement } from "./SingleAnnouncement";
+import { AnnouncementType } from "@/util/enum";
+import { useApiRequest } from "@/hook/useApiRequest";
 
 /**
  * @param isInternal {boolean} 是否为内部公告. 若为false则获取外部公告.
  * */
-function AnnouncementList({ isInternal = false }) {
+export const AnnouncementList: React.FC<{
+  type: AnnouncementType;
+}> = ({ type }) => {
   /**
    * 是否显示点赞、评论区.
    * 对外部公告不显示.
@@ -14,35 +17,32 @@ function AnnouncementList({ isInternal = false }) {
   let showActions = false;
 
   let path;
-  if (isInternal) {
+  if (type === AnnouncementType.INTERNAL) {
     showActions = true;
     path = `/announcement`;
   } else {
     path = `/custom/announcement`;
   }
 
-  const { code, payload, send } = useApi({
+  const { code, payload, sendRequest } = useApiRequest({
     path,
     formatResult: (data) => {
       //最近的公告排在前面
-      return data.sort((foo, bar) => {
+      return data.sort((foo: any, bar: any) => {
         if (foo.order === bar.order) {
           return Date.parse(bar.createTime) - Date.parse(foo.createTime);
         }
         return foo.order - bar.order;
       });
     },
-    onError: (error) => {
-      notification.error({
-        message: "获取公告失败",
-        description: error.toString(),
-        duration: 0,
-      });
+    popModal: {
+      onFail: true,
+      onError: true,
     },
   });
 
   function handleUpdate() {
-    send();
+    sendRequest();
   }
 
   return (
@@ -56,10 +56,10 @@ function AnnouncementList({ isInternal = false }) {
           split
           dataSource={payload}
           renderItem={(announceData) => (
-            <Announcement
-              id={announceData._id}
+            <SingleAnnouncement
+              // id={announceData._id}
               data={announceData}
-              onUpdate={handleUpdate}
+              refresh={handleUpdate}
               showActions={showActions}
             />
           )}
@@ -67,6 +67,4 @@ function AnnouncementList({ isInternal = false }) {
       )}
     </Card>
   );
-}
-
-export { AnnouncementList };
+};

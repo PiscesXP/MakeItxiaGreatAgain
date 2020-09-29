@@ -1,0 +1,7 @@
+.announcement-action:hover {
+  cursor: pointer;
+}
+
+.announcement-action-icon {
+  padding-right: 8px;
+}

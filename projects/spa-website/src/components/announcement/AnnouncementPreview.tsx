@@ -1,10 +1,13 @@
 import React from "react";
 import { List } from "antd";
-import { ReactMarkdown } from "UTIL/md2html";
-import { useMemberContext } from "HOOK";
-import { utcDateToText } from "UTIL/time";
+import { ReactMarkdown } from "@/util/md2html";
+import { utcDateToText } from "@/util/time";
+import { useMemberContext } from "@/hook/useMemberContext";
 
-function AnnouncementPreview({ title, content }) {
+export const AnnouncementPreview: React.FC<{
+  title: string;
+  content: string;
+}> = ({ title, content }) => {
   const { realName } = useMemberContext();
   const time = utcDateToText(new Date().toISOString());
   const description = `由 ${realName} 发布于 ${time}`;
@@ -15,5 +18,4 @@ function AnnouncementPreview({ title, content }) {
       <ReactMarkdown source={content} />
     </List.Item>
   );
-}
-export { AnnouncementPreview };
+};

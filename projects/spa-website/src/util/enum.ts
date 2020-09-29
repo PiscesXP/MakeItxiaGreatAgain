@@ -18,3 +18,9 @@ export enum CampusEnum {
   XIANLIN = "XIANLIN",
   GULOU = "GULOU",
 }
+
+// eslint-disable-next-line no-shadow
+export enum AnnouncementType {
+  INTERNAL = "INTERNAL",
+  EXTERNAL = "EXTERNAL",
+}

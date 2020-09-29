@@ -1,12 +1,13 @@
 import { Divider } from "antd";
 import React from "react";
-import { AnnouncementList } from "COMPONENTS/announcement";
+import { AnnouncementList } from "@/components/announcement";
 import { OrderStat } from "./OrderStat";
 import { MyOrderStat } from "./MyOrderStat";
-import { useTitleWCMS } from "HOOK";
+import { AnnouncementType } from "@/util/enum";
+import { useTitleWCMS } from "@/hook/useTitle";
 import "./index.css";
 
-function DashBoard() {
+export const DashBoard = () => {
   useTitleWCMS("DashBoard");
   return (
     <div id="dash-container">
@@ -17,11 +18,9 @@ function DashBoard() {
       </div>
       <div id="dash-space" />
       <div id="dash-anno">
-        <AnnouncementList isInternal={true} />
+        <AnnouncementList type={AnnouncementType.INTERNAL} />
         <Divider />
       </div>
     </div>
   );
-}
-
-export { DashBoard };
+};
