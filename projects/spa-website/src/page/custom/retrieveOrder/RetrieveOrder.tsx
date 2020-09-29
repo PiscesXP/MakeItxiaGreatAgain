@@ -34,7 +34,7 @@ export const RetrieveOrder: React.FC = () => {
       onError: true,
     },
     onSuccess: ({ payload }) => {
-      customContext.retrieveExistedOrder(payload);
+      customContext.setOrder(payload);
     },
   });
 

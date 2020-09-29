@@ -10,7 +10,7 @@ import {
 import { BackTop, Divider, Layout, Menu } from "antd";
 import { Footer as MyFooter } from "@/components/footer";
 import { CustomHomePage } from "./home";
-import { RequestOrder } from "./requestOrder";
+import { RequestOrderPage } from "./requestOrder";
 import { NotFound } from "@/components/notFound";
 import { CenterMeResponsive } from "@/components/layout";
 import { AnnouncementList } from "@/components/announcement";
@@ -31,7 +31,7 @@ function CustomRouter() {
         <CustomHomePage />
       </Route>
       <Route path={routePath.custom.ORDER}>
-        <RequestOrder />
+        <RequestOrderPage />
       </Route>
       <Route path={routePath.custom.RETRIEVE}>
         <RetrieveOrder />

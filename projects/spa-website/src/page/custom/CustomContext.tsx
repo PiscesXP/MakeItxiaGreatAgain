@@ -7,7 +7,9 @@ interface CustomContextInterface {
   orderID: string | null;
   order?: any | null;
   hasOrder: () => boolean;
-  retrieveExistedOrder: (existedOrderID: string) => void;
+  setOrder: (orderID: string) => void;
+  refreshOrder: () => void;
+  resetOrder: () => void;
 }
 
 const CustomContext = React.createContext<CustomContextInterface | null>(null);
@@ -17,26 +19,41 @@ export const useCustomContext = () => {
 };
 
 export const CustomContextProvider: React.FC = (props) => {
-  const [orderID, setOrderID, removeOrderID] = useLocalStorageState<
-    string | null
-  >("requestedOrderId", null);
+  const [orderID, setOrderID] = useLocalStorageState<string | null>(
+    "requestedOrderId",
+    null
+  );
 
   const orderApiRequest = useApiRequest({
     path: `/custom/order/${orderID}`,
+    onUnsuccessful: () => {
+      //未找到该预约单
+      setOrderID(null);
+    },
   });
 
   const hasOrder = usePersistFn(() => !!orderID);
 
-  const retrieveExistedOrder = usePersistFn((existedOrderID: string) => {
-    setOrderID(existedOrderID);
+  const setOrder = usePersistFn((newOrderID: string) => {
+    setOrderID(newOrderID);
     orderApiRequest.sendRequest();
+  });
+
+  const refreshOrder = usePersistFn(() => {
+    orderApiRequest.sendRequest();
+  });
+
+  const resetOrder = usePersistFn(() => {
+    setOrderID(null);
   });
 
   const contextValue: CustomContextInterface = {
     orderID: orderID || null,
     order: orderApiRequest.payload || null,
     hasOrder,
-    retrieveExistedOrder,
+    setOrder,
+    refreshOrder,
+    resetOrder,
   };
 
   return (
