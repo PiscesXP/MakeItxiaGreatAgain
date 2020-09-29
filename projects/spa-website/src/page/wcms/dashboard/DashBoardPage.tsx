@@ -7,7 +7,7 @@ import { AnnouncementType } from "@/util/enum";
 import { useTitleWCMS } from "@/hook/useTitle";
 import "./index.css";
 
-export const DashBoard = () => {
+export const DashBoardPage = () => {
   useTitleWCMS("DashBoard");
   return (
     <div id="dash-container">

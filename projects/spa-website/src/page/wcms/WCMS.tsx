@@ -6,7 +6,7 @@ import { BackTop, Col, Layout, Menu, Modal, Row } from "antd";
 import { Footer as MyFooter } from "@/components/footer";
 import { NotFound } from "@/components/notFound";
 import { Login } from "./login";
-import { DashBoard } from "./dashboard";
+import { DashBoardPage } from "./dashboard";
 import { HandleOrderPage } from "./handleOrder";
 import { Profile } from "./profile";
 import { AnnouncementManage } from "./announcementManage";
@@ -83,7 +83,7 @@ function WCMSRouter() {
   return (
     <Switch>
       <Route path={routePath.wcms.DASHBOARD}>
-        <DashBoard />
+        <DashBoardPage />
       </Route>
       <Route path={routePath.wcms.HANDLE_ORDER}>
         <HandleOrderPage />

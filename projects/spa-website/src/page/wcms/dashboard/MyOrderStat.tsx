@@ -1,13 +1,13 @@
 import React from "react";
 import { Card, Col, Row, Statistic } from "antd";
-import { Loading } from "COMPONENTS/loading";
-import { useApi } from "HOOK";
+import { Loading } from "@/components/loading";
+import { useApiRequest } from "@/hook/useApiRequest";
 
 /**
  * 个人预约单数量统计.
  * */
-function MyOrderStat() {
-  const { code, payload } = useApi({ path: "/stat?mine" });
+export const MyOrderStat: React.FC = () => {
+  const { code, payload } = useApiRequest({ path: "/stat?mine" });
   if (code !== 0) {
     return <Loading />;
   }
@@ -34,6 +34,4 @@ function MyOrderStat() {
       </Row>
     </Card>
   );
-}
-
-export { MyOrderStat };
+};

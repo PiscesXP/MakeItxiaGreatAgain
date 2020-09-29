@@ -1,11 +1,11 @@
 import React from "react";
 import { Card, Col, Divider, Row, Statistic } from "antd";
-import { Loading } from "COMPONENTS/loading";
-import * as timeUtil from "UTIL/time";
-import { useApi } from "HOOK";
+import { Loading } from "@/components/loading";
+import * as timeUtil from "@/util/time";
+import { useApiRequest } from "@/hook/useApiRequest";
 
-function OrderStat() {
-  const { code, payload: data } = useApi({ path: "/stat" });
+export const OrderStat: React.FC = () => {
+  const { code, payload: data } = useApiRequest({ path: "/stat" });
   if (code !== 0) {
     return <Loading />;
   }
@@ -39,7 +39,7 @@ function OrderStat() {
         </Col>
       </Row>
       <Divider />
-      <h1>积压的预约单 (&gt14天未处理) </h1>
+      <h1>{"积压的预约单(>14天未处理)"} </h1>
       <Row>
         <Col span={8}>
           <Statistic
@@ -63,6 +63,4 @@ function OrderStat() {
       </span>
     </Card>
   );
-}
-
-export { OrderStat };
+};
