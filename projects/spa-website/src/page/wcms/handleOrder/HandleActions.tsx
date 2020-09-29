@@ -206,7 +206,11 @@ export const HandleActions: React.FC<HandleActionsProps> = (props) => {
           cancelText="取消"
           onConfirm={onSubmit(OrderHandleType.delete)}
         >
-          <Button danger loading={handleType === OrderHandleType.delete}>
+          <Button
+            type="primary"
+            danger
+            loading={handleType === OrderHandleType.delete}
+          >
             废纸篓
           </Button>
         </Popconfirm>
