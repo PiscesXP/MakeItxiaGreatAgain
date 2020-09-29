@@ -1,11 +1,12 @@
 import React from "react";
 import { Alert, Button, Card, Col, Row } from "antd";
 import { useHistory } from "react-router-dom";
-import { routePath } from "PAGE/routePath";
-import { useTitleCustom } from "HOOK";
-import { CenterMeResponsive } from "COMPONENTS/layout";
+import { routePath } from "@/page/routePath";
+import { useTitleCustom } from "@/hook/useTitle";
+import { CenterMeResponsive } from "@/components/layout";
+import { useCustomContext } from "@/page/custom/CustomContext";
 
-function CustomHomePage() {
+export const CustomHomePage: React.FC = () => {
   useTitleCustom("主页");
 
   const history = useHistory();
@@ -19,16 +20,16 @@ function CustomHomePage() {
     history.push(routePath.custom.RETRIEVE);
   }
 
-  const orderID = window.localStorage.getItem("requestedOrderId");
+  const customContext = useCustomContext();
 
   let orderButtonText = "发起预约";
-  if (orderID) {
+  if (customContext.hasOrder()) {
     orderButtonText = "查看我的预约";
   }
 
   const orderNotification = (
     <ul style={{ margin: "0.5em" }}>
-      {!!!orderID ? (
+      {!customContext.hasOrder() && (
         <li>
           已有预约？
           <Button
@@ -39,7 +40,7 @@ function CustomHomePage() {
             找回预约单
           </Button>
         </li>
-      ) : null}
+      )}
       <li>
         预约之前，请查看我们的
         <a
@@ -66,7 +67,7 @@ function CustomHomePage() {
 
   return (
     <Card title="预约维修">
-      <Row gutter={[8, 24]} type="flex" justify="center" align="top">
+      <Row gutter={[8, 24]} justify="center" align="top">
         <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
           <img
             src="/img/itxia-logo.jpg"
@@ -87,6 +88,4 @@ function CustomHomePage() {
       </Row>
     </Card>
   );
-}
-
-export { CustomHomePage };
+};

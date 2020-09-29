@@ -18,8 +18,8 @@ export const CenterMeFlex: React.FC = (props) => {
  * @param small {boolean}
  * @param children
  * */
-export const CenterMeResponsive: React.FC<{ small: boolean }> = ({
-  small,
+export const CenterMeResponsive: React.FC<{ small?: boolean }> = ({
+  small = false,
   children,
 }) => {
   const normalLayout = {
