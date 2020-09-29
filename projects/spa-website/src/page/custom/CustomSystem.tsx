@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, Redirect, Route, Switch, useLocation } from "react-router-dom";
-import { routePath } from "../routePath";
+import { routePath } from "@/page/routePath";
 import {
   CalendarOutlined,
   FileSearchOutlined,
@@ -8,14 +8,16 @@ import {
   SolutionOutlined,
 } from "@ant-design/icons";
 import { BackTop, Divider, Layout, Menu } from "antd";
-import { Footer as MyFooter } from "COMPONENTS/footer";
+import { Footer as MyFooter } from "@/components/footer";
 import { CustomHomePage } from "./home";
 import { RequestOrder } from "./requestOrder";
-import { NotFound } from "COMPONENTS/notFound";
-import { CenterMeResponsive } from "COMPONENTS/layout";
-import { AnnouncementList } from "COMPONENTS/announcement";
-import { useTitle } from "HOOK";
-import { RetrieveOrder } from "PAGE/custom/retrieveOrder";
+import { NotFound } from "@/components/notFound";
+import { CenterMeResponsive } from "@/components/layout";
+import { AnnouncementList } from "@/components/announcement";
+import { useTitle } from "@/hook";
+import { RetrieveOrder } from "@/page/custom/retrieveOrder";
+import { AnnouncementType } from "@/util/enum";
+import { CustomContextProvider } from "@/page/custom/CustomContext";
 
 const { Header, Content, Footer } = Layout;
 
@@ -44,25 +46,27 @@ function CustomRouter() {
 function CustomSystem() {
   useTitle("IT侠预约系统");
   return (
-    <Layout id="home">
-      <Header id="home-header">
-        <span id="home-header-text">NJU IT侠预约系统</span>
-        <div id="home-header-navi" style={{ flexGrow: 0.3 }}>
-          <CustomNavigate />
-        </div>
-      </Header>
-      <Content id="home-content">
-        <CenterMeResponsive small>
-          <CustomRouter />
-          <Divider dashed />
-          <AnnouncementList isInternal={false} />
-        </CenterMeResponsive>
-        <BackTop />
-      </Content>
-      <Footer>
-        <MyFooter />
-      </Footer>
-    </Layout>
+    <CustomContextProvider>
+      <Layout id="home">
+        <Header id="home-header">
+          <span id="home-header-text">NJU IT侠预约系统</span>
+          <div id="home-header-navi" style={{ flexGrow: 0.3 }}>
+            <CustomNavigate />
+          </div>
+        </Header>
+        <Content id="home-content">
+          <CenterMeResponsive small>
+            <CustomRouter />
+            <Divider dashed />
+            <AnnouncementList type={AnnouncementType.EXTERNAL} />
+          </CenterMeResponsive>
+          <BackTop />
+        </Content>
+        <Footer>
+          <MyFooter />
+        </Footer>
+      </Layout>
+    </CustomContextProvider>
   );
 }
 
