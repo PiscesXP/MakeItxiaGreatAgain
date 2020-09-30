@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, DatePicker, Form, Input, Radio, Switch } from "antd";
 import moment from "moment";
+import { useMount } from "@/hook/useMount";
 
 interface SearchConditionProps {
   initialValues: any;
@@ -14,14 +15,45 @@ export const SearchCondition: React.FC<SearchConditionProps> = ({
   initialValues,
   onConditionChange,
 }) => {
-  if (Array.isArray(initialValues?.orderTime)) {
-    initialValues.orderTime = initialValues.orderTime.map((date: any) => {
-      console.log(date);
-      return moment(date);
-    });
-  }
+  const [form] = Form.useForm();
+
+  useMount(() => {
+    const { orderTime } = initialValues;
+    if (Array.isArray(orderTime)) {
+      //convert iso date string to moment.js object
+      initialValues.orderTime = orderTime.map((date) => {
+        if (date) {
+          return moment(date);
+        } else {
+          return undefined;
+        }
+      });
+    }
+    form.setFieldsValue(initialValues);
+  });
 
   function onValuesChange(changedValues: any, values: any) {
+    const { orderTime } = values;
+    /**
+     * orderTime: used to store date range in form, type is moment.js
+     * startTime, endTime: date string 'yyyy-MM-dd' use to query order
+     *
+     * Notice that when set orderTime to undefined or [],
+     * You should always set startTime, endTime to undefined as well.
+     * */
+    let startTime, endTime;
+    if (Array.isArray(orderTime)) {
+      //convert to date string like 'yyyy-MM-dd'
+      if (orderTime[0]) {
+        startTime = orderTime[0].toDate().toISOString().substr(0, 10);
+      }
+      if (orderTime[1]) {
+        //+1d
+        const tmp = new Date(+orderTime[1].toDate() + 86400 * 1000);
+        endTime = tmp.toISOString().substr(0, 10);
+      }
+    }
+    Object.assign(values, { startTime, endTime });
     onConditionChange(values);
   }
 
@@ -29,13 +61,14 @@ export const SearchCondition: React.FC<SearchConditionProps> = ({
   return (
     <Card title="筛选">
       <Form
-        initialValues={initialValues}
+        form={form}
         onValuesChange={onValuesChange}
         className="condition-container"
       >
         <Form.Item name="onlyMine" label="只看我的" valuePropName="checked">
           <Switch />
         </Form.Item>
+
         <Form.Item name="campus" label="校区">
           <Radio.Group>
             <Radio value="">全部</Radio>
@@ -53,9 +86,11 @@ export const SearchCondition: React.FC<SearchConditionProps> = ({
             <Radio value="CANCELED">已取消</Radio>
           </Radio.Group>
         </Form.Item>
+
         <Form.Item name="text" label="文字搜索">
           <Input allowClear placeholder="姓名,电脑型号,问题描述..." />
         </Form.Item>
+
         <Form.Item name="orderTime" label="预约时间">
           <DatePicker.RangePicker
             ranges={{
@@ -66,8 +101,6 @@ export const SearchCondition: React.FC<SearchConditionProps> = ({
             disabledDate={(date) => {
               return date.isAfter(moment());
             }}
-            //@ts-ignore
-            defaultValue={[undefined, moment()]}
           />
         </Form.Item>
       </Form>

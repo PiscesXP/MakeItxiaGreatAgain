@@ -17,6 +17,8 @@ interface OrderSearchCondition {
   status: OrderStatusEnum;
   text: string;
   orderTime: any;
+  startTime?: string;
+  endTime?: string;
 }
 
 /**
@@ -42,13 +44,13 @@ export const HandleOrderPage: React.FC = () => {
   const memberContext = useMemberContext();
 
   const [condition, setCondition] = useLocalStorageState<OrderSearchCondition>(
-    "orderSearchCondition",
+    "orderSearchCondition_v2",
     {
       onlyMine: false,
       campus: memberContext.campus,
       status: OrderStatusEnum.PENDING,
       text: "",
-      orderTime: null,
+      orderTime: [],
     }
   );
 
@@ -61,7 +63,9 @@ export const HandleOrderPage: React.FC = () => {
   });
 
   const refreshOrder = useDebounce(() => {
-    sendRequest({ requestQuery: { ...condition, ...pagination } });
+    sendRequest({
+      requestQuery: { ...condition, ...pagination },
+    });
   }, 1200);
 
   useUpdateEffect(() => {
