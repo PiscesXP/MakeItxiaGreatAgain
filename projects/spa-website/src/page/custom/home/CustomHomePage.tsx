@@ -70,9 +70,10 @@ export const CustomHomePage: React.FC = () => {
       <Row gutter={[8, 24]} justify="center" align="top">
         <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
           <img
-            src="/img/itxia-logo.jpg"
+            src="/img/itxia-logo.png"
             alt="logo"
             style={{ display: "block" }}
+            className="itxia-logo"
           />
         </Col>
         <Col span={24} style={{ display: "flex", justifyContent: "center" }}>

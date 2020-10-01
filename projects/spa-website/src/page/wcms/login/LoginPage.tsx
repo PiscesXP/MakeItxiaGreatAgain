@@ -45,9 +45,9 @@ function LoginForm() {
         <h3>IT侠后台管理系统</h3>
       </div>
       <img
-        src="/img/itxia-logo.jpg"
+        src="/img/itxia-logo.png"
         alt="itxia logo"
-        className="login-itxia-logo"
+        className="login-itxia-logo itxia-logo"
       />
 
       <Form.Item
