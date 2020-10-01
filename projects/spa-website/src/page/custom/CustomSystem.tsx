@@ -7,7 +7,7 @@ import {
   HomeOutlined,
   SolutionOutlined,
 } from "@ant-design/icons";
-import { BackTop, Divider, Layout, Menu } from "antd";
+import { Divider, Layout, Menu } from "antd";
 import { Footer as MyFooter } from "@/components/footer";
 import { CustomHomePage } from "./home";
 import { RequestOrderPage } from "./requestOrder";
@@ -60,7 +60,6 @@ function CustomSystem() {
             <Divider dashed />
             <AnnouncementList type={AnnouncementType.EXTERNAL} />
           </CenterMeResponsive>
-          <BackTop />
         </Content>
         <Footer>
           <MyFooter />

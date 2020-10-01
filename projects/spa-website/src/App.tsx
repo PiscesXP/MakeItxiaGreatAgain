@@ -11,12 +11,16 @@ import zhCN from "antd/es/locale/zh_CN";
 import moment from "moment";
 import "moment/locale/zh-cn";
 import { Main } from "@/page";
+import { ThemeSwitch } from "@/theme/ThemeSwitch";
+import { BackTop } from "@/components/backtop/BackTop";
 
 function App() {
   moment.locale("zh-cn");
   return (
     <ConfigProvider locale={zhCN}>
+      <ThemeSwitch />
       <Main />
+      <BackTop />
     </ConfigProvider>
   );
 }
