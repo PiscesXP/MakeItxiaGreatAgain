@@ -1,63 +1,74 @@
 import React from "react";
 import { MenuOutlined } from "@ant-design/icons";
 import { Button, Popconfirm, Table } from "antd";
-import {
-  sortableContainer,
-  sortableElement,
-  sortableHandle,
-} from "react-sortable-hoc";
+import * as ReactSortableHoc from "react-sortable-hoc";
 import arrayMove from "array-move";
+import { EmbeddableLoading, Loading } from "@/components/loading";
+import { utcDateToText } from "@/util/time";
+import { AnnouncementType } from "@/util/enum";
 import "./table.css";
-import { EmbeddableLoading, Loading } from "COMPONENTS/loading";
-import { utcDateToText } from "UTIL/time";
 
-const DragHandle = sortableHandle(() => (
+const DragHandle = ReactSortableHoc.SortableHandle(() => (
   <MenuOutlined style={{ cursor: "pointer", color: "#999" }} />
 ));
 
-const SortableItem = sortableElement((props) => <tr {...props} />);
-const SortableContainer = sortableContainer((props) => <tbody {...props} />);
+const SortableItem = ReactSortableHoc.SortableElement((props: any) => (
+  <tr {...props} />
+));
+const SortableContainer = ReactSortableHoc.SortableContainer((props: any) => (
+  <tbody {...props} />
+));
+
+interface AnnouncementTableProps {
+  loading: boolean;
+  //公告信息
+  data: any;
+  //正在编辑的公告ID
+  editingAnnounceID?: string | null;
+  //更改公告列表的排序
+  onChangeAnnounceOrder: (dataArray: any[]) => void;
+  //删除公告
+  onDeleteAnnounce: (announceID: string) => void;
+  //设置正在编辑的公告
+  onEditAnnounce: (announceID?: string | null) => void;
+}
 
 /**
- * @param code {number}
- * @param loading {boolean}
- * @param data {[*]} 公告数据
- * @param editingAnnounceID {string|null}
- * @param onReorderAnnounce {function}
- * @param onDeleteAnnounce {function}
- * @param onStartEditingAnnounce {function}
+ * 公告表格.
+ * 展示公告标题、顺序、编辑按钮等等.
  * */
-function AnnouncementTable({
-  code,
+export const AnnouncementTable: React.FC<AnnouncementTableProps> = ({
   loading,
-  data = null,
+  data,
   editingAnnounceID = null,
-  onReorderAnnounce,
+  onChangeAnnounceOrder,
   onDeleteAnnounce,
-  onStartEditingAnnounce,
-}) {
-  if (code !== 0) {
+  onEditAnnounce,
+}) => {
+  if (!data) {
     return <Loading />;
   }
 
-  const onSortEnd = ({ oldIndex, newIndex }) => {
+  const onSortEnd = ({ oldIndex, newIndex }: any) => {
     if (oldIndex !== newIndex) {
       const newData = arrayMove([].concat(data), oldIndex, newIndex).filter(
         (el) => !!el
       );
       //改变旧数据
-      onReorderAnnounce(newData);
+      onChangeAnnounceOrder(newData);
     }
   };
 
-  const DraggableBodyRow = ({ className, style, ...restProps }) => {
-    const index = data.findIndex((x) => x._id === restProps["data-row-key"]);
+  const DraggableBodyRow = ({ className, style, ...restProps }: any) => {
+    const index = data.findIndex(
+      (x: any) => x._id === restProps["data-row-key"]
+    );
     //正在编辑时，禁用拖拽
     const disabled = !!editingAnnounceID;
     return <SortableItem index={index} disabled={disabled} {...restProps} />;
   };
 
-  const DraggableContainer = (props) => (
+  const DraggableContainer = (props: any) => (
     <SortableContainer
       useDragHandle
       helperClass="row-dragging"
@@ -77,10 +88,10 @@ function AnnouncementTable({
     {
       title: "公告类型",
       dataIndex: "type",
-      render: (type) => {
-        if (type === "INTERNAL") {
+      render: (type: AnnouncementType) => {
+        if (type === AnnouncementType.INTERNAL) {
           return "后台管理";
-        } else if (type === "EXTERNAL") {
+        } else if (type === AnnouncementType.EXTERNAL) {
           return "预约系统";
         }
         return null;
@@ -95,22 +106,23 @@ function AnnouncementTable({
     {
       title: "时间",
       dataIndex: "createTime",
-      render: (createTime) => {
+      render: (createTime: any) => {
         return <span>{utcDateToText(createTime)}</span>;
       },
     },
     {
       title: "操作",
       dataIndex: "_id",
-      render: (_id) => {
+      render: (_id: string) => {
         if (editingAnnounceID) {
           if (editingAnnounceID === _id) {
             return (
               <Button
                 onClick={() => {
-                  onStartEditingAnnounce(null);
+                  onEditAnnounce(null);
                 }}
-                type="danger"
+                type="primary"
+                danger
               >
                 取消编辑
               </Button>
@@ -124,7 +136,7 @@ function AnnouncementTable({
           <>
             <Button
               onClick={() => {
-                onStartEditingAnnounce(_id);
+                onEditAnnounce(_id);
               }}
               style={{ marginRight: "1em" }}
             >
@@ -138,7 +150,9 @@ function AnnouncementTable({
                 onDeleteAnnounce(_id);
               }}
             >
-              <Button type="danger">删除</Button>
+              <Button type="primary" danger>
+                删除
+              </Button>
             </Popconfirm>
           </>
         );
@@ -162,6 +176,4 @@ function AnnouncementTable({
       />
     </EmbeddableLoading>
   );
-}
-
-export { AnnouncementTable };
+};
