@@ -1,12 +1,16 @@
 import React, { useCallback, useMemo } from "react";
-import { parseEnumValue } from "UTIL/enumParser";
+import { parseEnumValue } from "@/util/enumParser";
 import { CheckCircleOutlined, ClockCircleOutlined } from "@ant-design/icons";
-import { notification, Button, Table, Typography } from "antd";
-import { useApi } from "HOOK/index";
+import { Button, notification, Table, Typography } from "antd";
 import { DELETE, POST } from "@/request/api";
+import { useApiRequest } from "@/hook/useApiRequest";
+import { ApiRequestStateEnum } from "@/request/types";
+import { popModalOnApiResult } from "@/util/modalUtil";
+import { CampusEnum } from "@/util/enum";
+import { ColumnsType } from "antd/lib/table/interface";
 
-function MemberRecruit() {
-  const { loading, payload, send } = useApi({
+export const MemberRecruit: React.FC = () => {
+  const { loading, payload, sendRequest } = useApiRequest({
     path: "/member/recruit",
     formatResult: (data) => {
       //翻转顺序，让最近的在前面
@@ -28,38 +32,43 @@ function MemberRecruit() {
     });
   }, []);
 
-  const handleDeleteRecruit = useCallback(
-    (id) => {
-      DELETE(`/member/recruit/${id}`).then(() => {
+  const handleDeleteRecruit = useCallback((id) => {
+    DELETE(`/member/recruit/${id}`).then((result) => {
+      if (result.state === ApiRequestStateEnum.success) {
         notification.success({
           message: "邀请码已删除",
           duration: 3,
         });
-        send();
-      });
-    },
-    [send]
-  );
+        sendRequest();
+      } else {
+        popModalOnApiResult({ result, onFail: true, onError: true });
+      }
+    });
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  }, []);
+
   function handleRecruit() {
-    POST("/member/recruit")
-      .then(() => {
+    POST("/member/recruit").then((result) => {
+      if (result.state === ApiRequestStateEnum.success) {
         notification.success({
           message: "邀请码已生成",
           duration: 2,
         });
-        send();
-      })
-      .catch(() => {});
+        sendRequest();
+      } else {
+        popModalOnApiResult({ result, onFail: true, onError: true });
+      }
+    });
   }
 
-  const columnProps = useMemo(
+  const columnProps: ColumnsType<any> = useMemo(
     () => [
       {
         title: "邀请码",
         dataIndex: "redeemCode",
         key: "redeemCode",
         width: 210,
-        render: (redeemCode) => {
+        render: (redeemCode: string) => {
           return <Typography.Text copyable>{redeemCode}</Typography.Text>;
         },
       },
@@ -68,7 +77,7 @@ function MemberRecruit() {
         dataIndex: "hasRedeemed",
         key: "hasRedeemed",
         width: 150,
-        render: (hasRedeemed) => {
+        render: (hasRedeemed: boolean) => {
           return hasRedeemed ? (
             <>
               <CheckCircleOutlined style={{ color: "green" }} />
@@ -108,9 +117,9 @@ function MemberRecruit() {
               },
             ],
             filterMultiple: false,
-            onFilter: (value, record) =>
+            onFilter: (value: CampusEnum, record: any) =>
               record.receiver && record.receiver.campus === value,
-            render: (campus) => campus && parseEnumValue(campus),
+            render: (campus: string) => campus && parseEnumValue(campus),
           },
           {
             title: "登录账号",
@@ -133,7 +142,7 @@ function MemberRecruit() {
         key: "action",
         width: 220,
         fixed: "right",
-        render: (text, record) => {
+        render: (text: any, record: any) => {
           if (record.hasRedeemed) {
             return null;
           } else {
@@ -149,7 +158,8 @@ function MemberRecruit() {
                   复制链接
                 </Button>
                 <Button
-                  type="danger"
+                  type="primary"
+                  danger
                   onClick={() => {
                     handleDeleteRecruit(record._id);
                   }}
@@ -182,6 +192,4 @@ function MemberRecruit() {
       />
     </>
   );
-}
-
-export { MemberRecruit };
+};

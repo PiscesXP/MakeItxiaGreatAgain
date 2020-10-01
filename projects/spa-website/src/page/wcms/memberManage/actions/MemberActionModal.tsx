@@ -4,14 +4,22 @@ import { ChangeRole } from "./ChangeRole";
 import { ChangeDisable } from "./ChangeDisable";
 import { ResetPassword } from "./ResetPassword";
 
-function MemberActionModal({
+interface MemberActionModalProps {
+  actionType: string;
+  member: any;
+  visible: boolean;
+  onHide: () => void;
+  onRefreshData: () => void;
+}
+
+export const MemberActionModal: React.FC<MemberActionModalProps> = ({
   actionType,
   member,
   visible,
   onHide,
   onRefreshData,
-}) {
-  if (!!!member) {
+}) => {
+  if (!member) {
     return null;
   }
 
@@ -50,6 +58,4 @@ function MemberActionModal({
       </Modal>
     </>
   );
-}
-
-export { MemberActionModal };
+};

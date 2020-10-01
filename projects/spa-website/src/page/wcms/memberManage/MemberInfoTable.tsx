@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState } from "react";
-
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -8,30 +7,39 @@ import {
   SearchOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-
 import { Button, Table, Input, Dropdown, Menu } from "antd";
-import { parseEnumValue, parseRoleAuthLevel } from "UTIL/enumParser";
-import { utcDateToText } from "UTIL/time";
+import { parseEnumValue, parseRoleAuthLevel } from "@/util/enumParser";
+import { utcDateToText } from "@/util/time";
 import Highlighter from "react-highlight-words";
 import { MemberActionModal } from "./actions/MemberActionModal";
-import { authTest } from "UTIL/authTest";
-import { useMemberContext } from "HOOK/index";
+import { authTest } from "@/util/authTest";
+import { useMemberContext } from "@/hook/useMemberContext";
+import { ColumnsType } from "antd/lib/table/interface";
+
+interface MemberInfoTableProps {
+  //成员信息数据
+  data: any;
+  //更新数据的回调
+  onRefreshData: () => void;
+}
 
 /**
- *
- * @param data {Object} 成员信息数据
- * @param onRefreshData {function} 更新数据的回调
+ * 成员信息表格.
+ * (any一把梭)
  * */
-function MemberInfoTable({ data, onRefreshData }) {
-  const [searchInput, setSearchInput] = useState(null);
-  const [searchedColumn, setSearchedColumn] = useState("");
-  const [searchText, setSearchText] = useState("");
+export const MemberInfoTable: React.FC<MemberInfoTableProps> = ({
+  data,
+  onRefreshData,
+}) => {
+  const [searchInput, setSearchInput] = useState<any>(null);
+  const [searchedColumn, setSearchedColumn] = useState<any>("");
+  const [searchText, setSearchText] = useState<string>("");
 
-  const [action, setAction] = useState(null);
+  const [action, setAction] = useState<any>(null);
 
   const memberContext = useMemberContext();
 
-  function handleAction({ member, type }) {
+  function handleAction({ member, type }: any) {
     setAction({ member, type, visible: true });
   }
 
@@ -46,7 +54,7 @@ function MemberInfoTable({ data, onRefreshData }) {
         selectedKeys,
         confirm,
         clearFilters,
-      }) => (
+      }: any) => (
         <div style={{ padding: 8 }}>
           <Input
             ref={(node) => {
@@ -78,20 +86,20 @@ function MemberInfoTable({ data, onRefreshData }) {
           </Button>
         </div>
       ),
-      filterIcon: (filtered) => (
+      filterIcon: (filtered: any) => (
         <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
       ),
-      onFilter: (value, record) =>
+      onFilter: (value: any, record: any) =>
         record[dataIndex]
           .toString()
           .toLowerCase()
           .includes(value.toLowerCase()),
-      onFilterDropdownVisibleChange: (visible) => {
+      onFilterDropdownVisibleChange: (visible: boolean) => {
         if (visible) {
           setTimeout(() => searchInput.select());
         }
       },
-      render: (text) =>
+      render: (text: any) =>
         searchedColumn === dataIndex ? (
           <Highlighter
             highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
@@ -106,18 +114,18 @@ function MemberInfoTable({ data, onRefreshData }) {
     [searchInput, searchedColumn, searchText]
   );
 
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+  const handleSearch = (selectedKeys: any, confirm: any, dataIndex: any) => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
 
-  const handleReset = (clearFilters) => {
+  const handleReset = (clearFilters: any) => {
     clearFilters();
     setSearchText("");
   };
 
-  const columns = useMemo(() => {
+  const columns: ColumnsType<any> = useMemo(() => {
     return [
       {
         title: "姓名",
@@ -251,11 +259,11 @@ function MemberInfoTable({ data, onRefreshData }) {
         dataIndex: "lastLogin",
         key: "lastLogin",
         sorter: ({ lastLogin: a }, { lastLogin: b }) => {
-          if (!!!a && !!!b) {
+          if (!a && !b) {
             return 0;
-          } else if (!!!a && !!b) {
+          } else if (!a && !!b) {
             return 1;
-          } else if (!!a && !!!b) {
+          } else if (!!a && !b) {
             return -1;
           } else {
             return Date.parse(b) - Date.parse(a);
@@ -359,6 +367,4 @@ function MemberInfoTable({ data, onRefreshData }) {
       />
     </>
   );
-}
-
-export { MemberInfoTable };
+};

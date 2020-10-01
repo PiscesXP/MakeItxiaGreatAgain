@@ -1,16 +1,20 @@
-import React, { useCallback, useEffect } from "react";
-import { useApi, useMemberContext, useTitleWCMS } from "HOOK";
+import React, { useEffect } from "react";
 import { MemberInfoTable } from "./MemberInfoTable";
-import "./index.css";
 import { Card, Divider, Modal } from "antd";
 import { MemberRecruit } from "./MemberRecruit";
+import { useTitleWCMS } from "@/hook/useTitle";
+import { useMemberContext } from "@/hook/useMemberContext";
+import { useApiRequest } from "@/hook/useApiRequest";
+import { MemberRoleEnum } from "@/util/enum";
+import "./index.css";
+import { usePersistFn } from "@/hook/usePersisFn";
 
-function MemberManage() {
+export const MemberManage: React.FC = () => {
   useTitleWCMS("成员管理");
 
   const memberContext = useMemberContext();
 
-  const { code, payload, send } = useApi({
+  const { code, payload, sendRequest } = useApiRequest({
     path: "/member/all",
     formatResult: (result) => {
       if (Array.isArray(result)) {
@@ -21,7 +25,7 @@ function MemberManage() {
   });
 
   useEffect(() => {
-    if (memberContext.role === "MEMBER") {
+    if (memberContext.role === MemberRoleEnum.MEMBER) {
       Modal.info({
         content: "只有管理员才能使用此功能.",
         centered: true,
@@ -29,9 +33,9 @@ function MemberManage() {
     }
   }, [memberContext.role]);
 
-  const handleRefreshData = useCallback(() => {
-    send();
-  }, [send]);
+  const handleRefreshData = usePersistFn(() => {
+    sendRequest();
+  });
 
   if (code !== 0) {
     return null;
@@ -48,6 +52,4 @@ function MemberManage() {
       </Card>
     </>
   );
-}
-
-export { MemberManage };
+};

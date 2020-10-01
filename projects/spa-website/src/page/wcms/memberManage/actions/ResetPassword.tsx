@@ -1,24 +1,25 @@
 import React from "react";
-import { useApi } from "HOOK/index";
-import { CenterMeFlex } from "COMPONENTS/layout";
-import { Button, Modal, Typography } from "antd";
+import { CenterMeFlex } from "@/components/layout";
+import { Button, Typography } from "antd";
+import { useApiRequest } from "@/hook/useApiRequest";
 
-function ResetPassword({ member }) {
-  const { code, loading, payload, send } = useApi({
+interface ResetPasswordProps {
+  member: any;
+}
+
+export const ResetPassword: React.FC<ResetPasswordProps> = ({ member }) => {
+  const { code, loading, payload, sendRequest } = useApiRequest({
     path: `/member/${member._id}/password`,
     method: "POST",
-    later: true,
-    onFail: ({ message }) => {
-      Modal.error({
-        title: "重置失败",
-        content: message,
-        centered: true,
-      });
+    manual: true,
+    popModal: {
+      onFail: true,
+      onError: true,
     },
   });
 
   function handleResetPassword() {
-    send();
+    sendRequest();
   }
 
   return (
@@ -35,6 +36,4 @@ function ResetPassword({ member }) {
       )}
     </CenterMeFlex>
   );
-}
-
-export { ResetPassword };
+};
