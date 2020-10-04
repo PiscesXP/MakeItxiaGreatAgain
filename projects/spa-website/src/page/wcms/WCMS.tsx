@@ -4,7 +4,7 @@ import { UserInfoProvider } from "@/context/UserInfo";
 import { routePath } from "../routePath";
 import { Col, Layout, Menu, Modal, Row } from "antd";
 import { Footer as MyFooter } from "@/components/footer";
-import { NotFound } from "@/components/notFound";
+import { PageNotFound } from "@/components/notFound";
 import { Login } from "./login";
 import { DashBoardPage } from "./dashboard";
 import { HandleOrderPage } from "./handleOrder";
@@ -101,7 +101,7 @@ function WCMSRouter() {
         <ExpPage />
       </Route>
       <Route>
-        <NotFound />
+        <PageNotFound />
       </Route>
     </Switch>
   );

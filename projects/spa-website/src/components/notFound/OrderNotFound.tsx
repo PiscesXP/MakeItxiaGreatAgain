@@ -1,7 +1,7 @@
 import React from "react";
 import { Result } from "antd";
 
-function OrderNotFound() {
+export const OrderNotFound = () => {
   return (
     <Result
       title="什么都没找到"
@@ -10,6 +10,4 @@ function OrderNotFound() {
       extra={null}
     />
   );
-}
-
-export { OrderNotFound };
+};

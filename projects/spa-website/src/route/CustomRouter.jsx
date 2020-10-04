@@ -3,7 +3,7 @@ import { routePath } from "./routePath";
 import { Route, Switch } from "react-router-dom";
 import { RequestOrder } from "COMPONENTS/requestOrder";
 import { CustomHomePage } from "page/custom/home";
-import { NotFound } from "COMPONENTS/notFound/NotFound";
+import { NotFound } from "COMPONENTS/notFound/PageNotFound";
 
 function CustomRouter() {
   return (

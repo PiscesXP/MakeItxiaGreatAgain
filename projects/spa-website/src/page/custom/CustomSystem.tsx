@@ -11,7 +11,7 @@ import { Divider, Layout, Menu } from "antd";
 import { Footer as MyFooter } from "@/components/footer";
 import { CustomHomePage } from "./home";
 import { RequestOrderPage } from "./requestOrder";
-import { NotFound } from "@/components/notFound";
+import { PageNotFound } from "@/components/notFound";
 import { CenterMeResponsive } from "@/components/layout";
 import { AnnouncementList } from "@/components/announcement";
 import { useTitle } from "@/hook";
@@ -37,7 +37,7 @@ function CustomRouter() {
         <RetrieveOrder />
       </Route>
       <Route path="*">
-        <NotFound />
+        <PageNotFound />
       </Route>
     </Switch>
   );

@@ -3,7 +3,7 @@ import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { routePath } from "./routePath";
 import { WCMS } from "./wcms";
 import { CustomSystem } from "./custom";
-import { NotFound } from "COMPONENTS/notFound";
+import { PageNotFound } from "COMPONENTS/notFound";
 import { OAuthPage } from "PAGE/oauth";
 
 /**
@@ -26,7 +26,7 @@ function Main() {
           <OAuthPage />
         </Route>
         <Route>
-          <NotFound />
+          <PageNotFound />
         </Route>
       </Switch>
     </BrowserRouter>

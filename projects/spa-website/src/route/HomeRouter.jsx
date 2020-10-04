@@ -6,7 +6,7 @@ import { Profile } from "page/wcms/profile";
 import { DashBoard } from "page/wcms/dashboard";
 import { AnnouncementEditor } from "page/wcms/announcementManage";
 import { HandleOrder } from "page/wcms/handleOrder";
-import { NotFound } from "COMPONENTS/notFound/NotFound";
+import { NotFound } from "COMPONENTS/notFound/PageNotFound";
 
 function HomeRouter() {
   return (
