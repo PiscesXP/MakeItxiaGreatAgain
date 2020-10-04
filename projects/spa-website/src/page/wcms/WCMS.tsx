@@ -12,14 +12,13 @@ import { Profile } from "./profile";
 import { AnnouncementManage } from "./announcementManage";
 import { MemberManage } from "./memberManage";
 import { useLocalStorageState, useMemberContext } from "HOOK";
-import { JoinPage } from "./join";
-import { ExpPage } from "./exp/ExpPage";
+import { JoinPage } from "@/page/wcms/join";
 import {
   CalendarOutlined,
   DashboardOutlined,
   FormOutlined,
   MenuOutlined,
-  ReadOutlined,
+  // ReadOutlined,
   SmileOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
@@ -97,9 +96,6 @@ function WCMSRouter() {
       <Route path={routePath.wcms.MEMBER_MANAGE}>
         <MemberManage />
       </Route>
-      <Route path={routePath.wcms.EXP}>
-        <ExpPage />
-      </Route>
       <Route>
         <PageNotFound />
       </Route>
@@ -146,11 +142,11 @@ function NavigateBar() {
         <Link to={routePath.wcms.HANDLE_ORDER} />
       </Menu.Item>
 
-      <Menu.Item key={routePath.wcms.EXP}>
+      {/*<Menu.Item key={routePath.wcms.EXP}>
         <ReadOutlined />
         经验记录
         <Link to={routePath.wcms.EXP} />
-      </Menu.Item>
+      </Menu.Item>*/}
 
       {isAdminOrSuperAdmin && (
         <Menu.Item key={routePath.wcms.ANNOUNCE_MANAGE}>
