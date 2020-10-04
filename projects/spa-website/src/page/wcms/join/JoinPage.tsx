@@ -117,7 +117,7 @@ export const JoinPage: React.FC = () => {
             hasFeedback
           >
             <Input.Password
-              prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+              prefix={<LockOutlined className="form-field-icon" />}
               placeholder="密码"
             />
           </Form.Item>
@@ -138,7 +138,7 @@ export const JoinPage: React.FC = () => {
             hasFeedback
           >
             <Input.Password
-              prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+              prefix={<LockOutlined className="form-field-icon" />}
               placeholder="请再次输入密码"
             />
           </Form.Item>

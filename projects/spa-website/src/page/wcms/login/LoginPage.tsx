@@ -60,7 +60,7 @@ function LoginForm() {
         ]}
       >
         <Input
-          prefix={<UserOutlined className="login-form-field-icon" />}
+          prefix={<UserOutlined className="form-field-icon" />}
           placeholder="账号"
         />
       </Form.Item>
@@ -78,7 +78,7 @@ function LoginForm() {
         ]}
       >
         <Input.Password
-          prefix={<LockOutlined className="login-form-field-icon" />}
+          prefix={<LockOutlined className="form-field-icon" />}
           placeholder="密码"
         />
       </Form.Item>

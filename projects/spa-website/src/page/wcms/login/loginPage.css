@@ -26,10 +26,6 @@
   max-height: 1.5rem;
 }
 
-.login-form-field-icon {
-  color: rgba(0, 0, 0, 0.25);
-}
-
 .login-container {
   min-height: 100vh;
   min-width: 100vw;

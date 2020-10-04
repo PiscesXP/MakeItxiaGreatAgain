@@ -23,6 +23,7 @@ import {
   TeamOutlined,
 } from "@ant-design/icons";
 import { LogoutButton } from "@/components/logout";
+import "./index.css";
 
 const { Header, Content, Footer } = Layout;
 

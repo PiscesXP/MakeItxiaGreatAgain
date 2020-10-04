@@ -52,7 +52,7 @@ export const PasswordReset: React.FC = () => {
         extra={<Alert message="密码要求：至少8个字符" type="info" />}
       >
         <Input.Password
-          prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+          prefix={<LockOutlined className="form-field-icon" />}
           placeholder="密码"
           autoComplete="new-password"
         />
@@ -71,7 +71,7 @@ export const PasswordReset: React.FC = () => {
         ]}
       >
         <Input.Password
-          prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+          prefix={<LockOutlined className="form-field-icon" />}
           placeholder="确认密码"
           autoComplete="new-password"
         />
