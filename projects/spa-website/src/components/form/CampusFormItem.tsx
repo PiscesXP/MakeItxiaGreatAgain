@@ -2,12 +2,21 @@ import React from "react";
 import { Form, Select } from "antd";
 import { CampusEnum } from "@/util/enum";
 
-export const CampusFormItem: React.FC = () => {
+interface CampusFormItemProps {
+  hasFeedback?: boolean;
+  required?: boolean;
+}
+
+export const CampusFormItem: React.FC<CampusFormItemProps> = ({
+  hasFeedback = true,
+  required = true,
+}) => {
   return (
     <Form.Item
       name="campus"
       label="校区"
-      hasFeedback
+      hasFeedback={hasFeedback}
+      required={required}
       rules={[{ required: true, message: "请选择你的校区" }]}
     >
       <Select placeholder="请选择你的校区">
