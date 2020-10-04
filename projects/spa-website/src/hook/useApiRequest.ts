@@ -253,10 +253,18 @@ function useApiRequest({
   /**
    * 直接改变结果值.
    * */
-  const mutate = usePersistFn(function <T>(arg: (previousPayload: T) => T) {
+  const mutate = usePersistFn(function <T>(
+    arg: ((previousPayload: T) => T) | T
+  ) {
+    let mutatedPayload;
+    if (typeof arg === "function") {
+      mutatedPayload = (arg as (previousPayload: T) => T)(reducerState.payload);
+    } else {
+      mutatedPayload = arg;
+    }
     dispatch({
       type: "mutate",
-      mutatedPayload: arg(reducerState.payload),
+      mutatedPayload,
     });
   });
 
