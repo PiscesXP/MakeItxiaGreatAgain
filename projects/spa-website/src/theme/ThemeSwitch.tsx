@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { DeepDarkFantasy } from "./DeepDarkFantasy";
 import { useMount } from "@/hook/useMount";
-import { Switch } from "antd";
+import { message, Switch } from "antd";
 import "./themeSwitch.css";
 import { useLocalStorageState } from "@/hook/useLocalStorageState";
 
@@ -49,6 +49,12 @@ export const ThemeSwitch: React.FC<ThemeSwitchProps> = ({
       preferDarkQuery.removeEventListener("change", darkListener);
       preferLightQuery.removeEventListener("change", lightListener);
     };
+  });
+
+  useMount(() => {
+    if (theme === Theme.dark) {
+      message.info("已启用暗黑主题.");
+    }
   });
 
   return (
