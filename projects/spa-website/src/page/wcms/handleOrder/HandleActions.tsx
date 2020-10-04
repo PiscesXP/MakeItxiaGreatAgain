@@ -100,7 +100,7 @@ export const HandleActions: React.FC<HandleActionsProps> = (props) => {
    */
   const onSubmit = (actionType: OrderHandleType) => async () => {
     setHandleType(actionType);
-    const result = await PUT(`/order/${_id}/deal`);
+    const result = await PUT(`/order/${_id}/deal/${actionType}`);
     //可以改成表驱动
     let actionName;
     switch (actionType) {
