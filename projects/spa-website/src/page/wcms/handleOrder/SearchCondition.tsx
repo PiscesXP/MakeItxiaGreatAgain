@@ -33,7 +33,7 @@ export const SearchCondition: React.FC<SearchConditionProps> = ({
   });
 
   function onValuesChange(changedValues: any, values: any) {
-    const { orderTime } = values;
+    const { orderTime, ...rest } = values;
     /**
      * orderTime: used to store date range in form, type is moment.js
      * startTime, endTime: date string 'yyyy-MM-dd' use to query order
@@ -45,16 +45,14 @@ export const SearchCondition: React.FC<SearchConditionProps> = ({
     if (Array.isArray(orderTime)) {
       //convert to date string like 'yyyy-MM-dd'
       if (orderTime[0]) {
-        startTime = orderTime[0].toDate().toISOString().substr(0, 10);
+        startTime = orderTime[0].format("YYYY-MM-DD");
       }
       if (orderTime[1]) {
         //+1d
-        const tmp = new Date(+orderTime[1].toDate() + 86400 * 1000);
-        endTime = tmp.toISOString().substr(0, 10);
+        endTime = orderTime[1].clone().add(1, "days").format("YYYY-MM-DD");
       }
     }
-    Object.assign(values, { startTime, endTime });
-    onConditionChange(values);
+    onConditionChange({ startTime, endTime, ...rest });
   }
 
   // noinspection NonAsciiCharacters
