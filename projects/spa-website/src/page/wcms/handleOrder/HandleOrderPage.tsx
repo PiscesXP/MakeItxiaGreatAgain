@@ -10,6 +10,8 @@ import { useDebounce } from "@/hook/useDebounce";
 import { useTitleWCMS } from "@/hook/useTitle";
 import { useMemberContext } from "@/hook/useMemberContext";
 import { useUpdateEffect } from "@/hook/useUpdateEffect";
+import { useMount } from "@/hook/useMount";
+import { usePersistFn } from "@/hook/usePersisFn";
 
 interface OrderSearchCondition {
   onlyMine: boolean;
@@ -44,7 +46,7 @@ export const HandleOrderPage: React.FC = () => {
   const memberContext = useMemberContext();
 
   const [condition, setCondition] = useLocalStorageState<OrderSearchCondition>(
-    "orderSearchCondition_v2",
+    "orderSearchCondition_v3",
     {
       onlyMine: false,
       campus: memberContext.campus,
@@ -58,23 +60,28 @@ export const HandleOrderPage: React.FC = () => {
 
   const { code, loading, payload, sendRequest } = useApiRequest({
     path: "/order",
-    requestQuery: { ...condition, ...pagination },
+    manual: true,
     popModal: { onFail: true, onError: true },
   });
 
-  const refreshOrder = useDebounce(() => {
+  const refreshOrder = usePersistFn(() => {
+    const { orderTime, ...restCondition } = condition as OrderSearchCondition;
     sendRequest({
-      requestQuery: { ...condition, ...pagination },
+      requestQuery: { ...restCondition, ...pagination },
     });
-  }, 1200);
+  });
+
+  useMount(() => {
+    refreshOrder();
+  });
 
   useUpdateEffect(() => {
     refreshOrder();
   }, [condition, pagination]);
 
-  function handleConditionChange(values: any) {
+  const handleConditionChange = useDebounce((values: any) => {
     setCondition(values);
-  }
+  }, 1200);
 
   function handlePaginationChange(page: number, size: number) {
     setPagination({ page, size });
