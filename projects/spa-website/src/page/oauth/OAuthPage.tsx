@@ -32,7 +32,7 @@ export const OAuthPage: React.FC = () => {
   useApiRequest({
     path: "/oauth/link/qq",
     method: "POST",
-    requestBody: parseQueryString(),
+    requestBody: { accessToken: parseQueryString()["token"] },
     onFail: ({ code, message }) => {
       switch (code) {
         case 16:
