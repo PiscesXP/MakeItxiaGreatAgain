@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    //可用 import XXX from "xxx" 替代 import * as XXX from "xxx"
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+    },
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "target": "ES5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ]
+
+  },
+  "include": [
+    "./src"
+  ]
+}

@@ -35,7 +35,7 @@ class OAuthService {
             if (oauth != null) {
                 val member = oauth.member
                 authenticationService.login(member, httpServletRequest, httpServletResponse)
-                return ResponseCode.SUCCESS.withPayload("登录成功")
+                return ResponseCode.QQ_OAUTH_LOGIN_SUCCESSFUL.withoutPayload()
             }
         }
         return ResponseCode.NO_OAUTH_ID_FOUND.withPayload("请先绑定后再通过QQ登录")
@@ -55,7 +55,7 @@ class OAuthService {
                 _id = ObjectId.get().toHexString(), member = itxiaMember, qqOpenID = openID
         )
         oAuthRepository.save(oauth)
-        return ResponseCode.SUCCESS.withPayload("绑定成功")
+        return ResponseCode.QQ_OAUTH_BIND_SUCCESSFUL.withoutPayload()
     }
 
     fun checkIfBoundQQOAuth(itxiaMember: ItxiaMember): Boolean {

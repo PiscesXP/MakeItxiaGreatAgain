@@ -1,0 +1,23 @@
+@import url("/antd.dark.css");
+
+.login-container {
+  background-color: black;
+}
+.row-dragging {
+  background: black;
+}
+.itxia-logo {
+  opacity: 60%;
+}
+.back-top-text {
+  color: rgba(255, 255, 255, 0.6);
+}
+.itxia-back-top-img {
+  opacity: 60%;
+}
+.join-page-container {
+  background-color: black;
+}
+.oauth-page-container {
+  background-color: black;
+}

@@ -89,7 +89,7 @@ class OrderService {
         }
         if (startTime != null && endTime != null) {
             try {
-                val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                val formatter = SimpleDateFormat("yyyy-MM-dd")
                 val start = formatter.parse(startTime)
                 val end = formatter.parse(endTime)
                 criteria.and("createTime").gte(start).lte(end)
