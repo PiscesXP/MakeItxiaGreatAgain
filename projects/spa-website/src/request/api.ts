@@ -1,4 +1,4 @@
-import { config } from "CONFIG";
+import { config } from "@/config";
 import { toQuerystring } from "@/util/query";
 import {
   ApiRequestParam,

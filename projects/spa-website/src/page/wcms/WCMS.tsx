@@ -11,7 +11,7 @@ import { HandleOrderPage } from "./handleOrder";
 import { Profile } from "./profile";
 import { AnnouncementManage } from "./announcementManage";
 import { MemberManage } from "./memberManage";
-import { useLocalStorageState, useMemberContext } from "HOOK";
+import { useLocalStorageState, useMemberContext } from "@/hook";
 import { JoinPage } from "@/page/wcms/join";
 import {
   CalendarOutlined,

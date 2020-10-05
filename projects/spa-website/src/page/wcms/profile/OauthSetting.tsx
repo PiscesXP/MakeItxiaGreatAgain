@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Alert, Button, Col, Modal, Row } from "antd";
-import { config } from "CONFIG";
+import { config } from "@/config";
 import { Loading } from "@/components/loading";
 import { useApiRequest } from "@/hook/useApiRequest";
 

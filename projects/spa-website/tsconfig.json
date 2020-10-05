@@ -12,13 +12,6 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "COMPONENTS": ["./src/components"],
-      "CONFIG": ["./src/config"],
-      "CONTEXT": ["./src/context"],
-      "ROUTE": ["./src/route"],
-      "UTIL": ["./src/util"],
-      "HOOK": ["./src/hook"],
-      "PAGE": ["./src/page"]
     },
     "resolveJsonModule": true,
     "isolatedModules": true,

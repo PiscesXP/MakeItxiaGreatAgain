@@ -14,7 +14,7 @@ import { RequestOrderPage } from "./requestOrder";
 import { PageNotFound } from "@/components/notFound";
 import { CenterMeResponsive } from "@/components/layout";
 import { AnnouncementList } from "@/components/announcement";
-import { useTitle } from "HOOK";
+import { useTitle } from "@/hook/useTitle";
 import { RetrieveOrder } from "@/page/custom/retrieveOrder";
 import { AnnouncementType } from "@/util/enum";
 import { CustomContextProvider } from "@/page/custom/CustomContext";

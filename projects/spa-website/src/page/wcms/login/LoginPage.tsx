@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Card, Divider, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import "./loginPage.css";
-import { config } from "CONFIG";
+import { config } from "@/config";
 import { useApiRequest } from "@/hook/useApiRequest";
 import { useHistory } from "react-router-dom";
 import { routePath } from "@/page/routePath";
