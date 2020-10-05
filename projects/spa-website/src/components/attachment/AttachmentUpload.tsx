@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Form, Modal, Upload } from "antd";
-import { config } from "CONFIG";
+import { config } from "@/config";
 import "./AttachmentUpload.css";
 import { UploadFile, UploadListType } from "antd/es/upload/interface";
 
@@ -54,24 +54,6 @@ export const AttachmentUpload: React.FC<AttachmentUploadProps> = ({
     </Form.Item>
   );
 };
-
-/**
- * TODO remove this
- * @deprecated
- * */
-export function attachmentUploadFormParser(uploadFormValue: any[]) {
-  if (Array.isArray(uploadFormValue)) {
-    return uploadFormValue
-      .filter(
-        (file) =>
-          file.percent === 100 &&
-          file.status === "done" &&
-          file.response.code === 0
-      )
-      .map((file) => file.response.payload._id);
-  }
-  return [];
-}
 
 const UploadInput: React.FC<{
   value?: string[];
