@@ -1,4 +1,4 @@
-function dateToText(date) {
+function dateToText(date: Date) {
   const arr = [
     date.getFullYear(),
     "-",
@@ -14,18 +14,17 @@ function dateToText(date) {
     if (typeof value === "number" && value < 10) {
       value = "0" + value;
     }
-    return result + value;
+    return `${result}${value}`;
   });
 }
 
-function unixToText(unixTime) {
+function unixToText(unixTime: number) {
   const date = new Date(unixTime * 1000);
   return dateToText(date);
 }
 
-function utcDateToText(utc) {
+function utcDateToText(utc: string) {
   const date = new Date(utc);
-  //return dateToText(new Date(date.toLocaleString()));
   return dateToText(date);
 }
 

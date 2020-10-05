@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Form, Modal, Upload } from "antd";
-import { config } from "@/config";
+import { config } from "CONFIG";
 import "./AttachmentUpload.css";
 import { UploadFile, UploadListType } from "antd/es/upload/interface";
 

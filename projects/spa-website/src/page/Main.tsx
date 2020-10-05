@@ -3,13 +3,13 @@ import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { routePath } from "./routePath";
 import { WCMS } from "./wcms";
 import { CustomSystem } from "./custom";
-import { PageNotFound } from "COMPONENTS/notFound";
-import { OAuthPage } from "PAGE/oauth";
+import { PageNotFound } from "@/components/notFound";
+import { OAuthPage } from "@/page/oauth";
 
 /**
  * 整个应用的router.
  * */
-function Main() {
+export const Main = () => {
   return (
     <BrowserRouter>
       <Switch>
@@ -31,6 +31,4 @@ function Main() {
       </Switch>
     </BrowserRouter>
   );
-}
-
-export { Main };
+};

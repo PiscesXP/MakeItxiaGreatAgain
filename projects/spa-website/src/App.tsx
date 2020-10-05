@@ -10,7 +10,7 @@ import { ConfigProvider } from "antd";
 import zhCN from "antd/es/locale/zh_CN";
 import moment from "moment";
 import "moment/locale/zh-cn";
-import { Main } from "@/page";
+import { Main } from "PAGE";
 import { ThemeSwitch } from "@/theme/ThemeSwitch";
 import { BackTop } from "@/components/backtop/BackTop";
 
