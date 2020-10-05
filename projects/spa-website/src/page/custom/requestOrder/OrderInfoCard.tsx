@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Descriptions, Popconfirm } from "antd";
 import { AttachmentList } from "@/components/attachment";
-import { parseEnumValue } from "@/util/enumParser";
+import { parseEnumValue } from "@/util/enum";
 import { utcDateToText } from "@/util/time";
 import { MultiLinePlainText } from "@/components/text";
 import { useCustomContext } from "@/page/custom/CustomContext";

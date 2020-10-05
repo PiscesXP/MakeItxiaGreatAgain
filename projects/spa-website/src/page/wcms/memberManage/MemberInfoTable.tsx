@@ -8,7 +8,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Button, Table, Input, Dropdown, Menu } from "antd";
-import { parseEnumValue, parseRoleAuthLevel } from "@/util/enumParser";
+import { parseEnumValue, parseRoleAuthLevel } from "@/util/enum";
 import { utcDateToText } from "@/util/time";
 import Highlighter from "react-highlight-words";
 import { MemberActionModal } from "./actions/MemberActionModal";

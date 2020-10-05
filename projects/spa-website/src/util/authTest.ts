@@ -1,4 +1,4 @@
-function notLessThan(myRole, hisOrHerRole) {
+function notLessThan(myRole: string, hisOrHerRole: string) {
   switch (myRole) {
     case "MEMBER":
       return false;
@@ -11,14 +11,12 @@ function notLessThan(myRole, hisOrHerRole) {
   }
 }
 
-function amISuperAdmin(myRole) {
+function amISuperAdmin(myRole: string) {
   return myRole === "SUPER_ADMIN";
 }
 
-function amIAdmin(myRole) {
+function amIAdmin(myRole: string) {
   return myRole === "ADMIN" || myRole === "SUPER_ADMIN";
 }
 
-const authTest = { notLessThan, amISuperAdmin, amIAdmin };
-
-export { authTest };
+export const authTest = { notLessThan, amISuperAdmin, amIAdmin };

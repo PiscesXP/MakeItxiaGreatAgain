@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react";
-import { parseEnumValue } from "@/util/enumParser";
+import { parseEnumValue } from "@/util/enum";
 import { CheckCircleOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import { Button, notification, Table, Typography } from "antd";
 import { DELETE, POST } from "@/request/api";

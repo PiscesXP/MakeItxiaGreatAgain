@@ -9,7 +9,7 @@ import { Card, Divider } from "antd";
 import * as timeUtil from "@/util/time";
 import { AttachmentList } from "@/components/attachment";
 import { HandleActions } from "./HandleActions";
-import { parseEnumValue } from "@/util/enumParser";
+import { parseEnumValue } from "@/util/enum";
 import { MultiLinePlainText } from "@/components/text";
 import { HighlightText } from "@/components/text/HighlightText";
 import { OrderStatusEnum } from "@/util/enum";

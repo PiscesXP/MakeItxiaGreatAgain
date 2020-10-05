@@ -1,6 +1,6 @@
 import React from "react";
 import { Descriptions } from "antd";
-import { parseEnumValue } from "@/util/enumParser";
+import { parseEnumValue } from "@/util/enum";
 import { useMemberContext } from "@/hook/useMemberContext";
 
 const { Item } = Descriptions;
