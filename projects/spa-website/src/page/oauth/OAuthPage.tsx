@@ -25,13 +25,14 @@ export const OAuthPage: React.FC = () => {
       icon: <LoadingOutlined />,
       title: "登录中...",
       content: "请稍等",
+      centered: true,
     });
   }, []);
 
   useApiRequest({
     path: "/oauth/link/qq",
     method: "POST",
-    requestBody: { token: parseQueryString() },
+    requestBody: parseQueryString(),
     onFail: ({ code, message }) => {
       switch (code) {
         case 16:
@@ -41,6 +42,7 @@ export const OAuthPage: React.FC = () => {
             icon: <CheckCircleOutlined />,
             title: "登陆成功",
             content: "正在跳转中...",
+            centered: true,
           });
           setTimeout(() => {
             modal.destroy();
@@ -58,6 +60,7 @@ export const OAuthPage: React.FC = () => {
             onOk: () => {
               history.push(routePath.wcms.SELF_PROFILE);
             },
+            centered: true,
           });
           break;
         default:
@@ -71,6 +74,7 @@ export const OAuthPage: React.FC = () => {
             onOk: () => {
               history.push(routePath.wcms.LOGIN);
             },
+            centered: true,
           });
       }
     },
@@ -84,6 +88,7 @@ export const OAuthPage: React.FC = () => {
         onOk: () => {
           history.push(routePath.wcms.LOGIN);
         },
+        centered: true,
       });
     },
   });
