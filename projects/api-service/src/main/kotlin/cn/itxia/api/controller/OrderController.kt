@@ -155,4 +155,15 @@ class OrderController {
         }
         return ResponseCode.NO_SUCH_ORDER.withoutPayload()
     }
+
+    /**
+     * 获取itxia已完成的但需要填写记录的预约单的列表.
+     * */
+    @GetMapping("/order/me/requireRecord")
+    @RequireItxiaMember
+    fun getMyDoneOrdersWhichRequireRecord(@CurrentItxiaMember requester: ItxiaMember): Response {
+        return ResponseCode.SUCCESS.withPayload(
+                orderService.getMyDoneOrdersWhichRequireRecord(requester)
+        )
+    }
 }

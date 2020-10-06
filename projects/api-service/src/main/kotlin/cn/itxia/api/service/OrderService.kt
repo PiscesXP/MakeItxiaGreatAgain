@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.core.query.Update
 import org.springframework.stereotype.Service
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -306,4 +307,29 @@ class OrderService {
         return mongoTemplate.findById(orderID, Order::class.java)
     }
 
+    /**
+     * 获取itxia已完成的但需要填写记录的预约单的列表.
+     * */
+    fun getMyDoneOrdersWhichRequireRecord(requester: ItxiaMember): List<Order> {
+        return mongoTemplate.find(
+                Query.query(
+                        Criteria.where("requireRecord").`is`(true)
+                                .and("handler").`is`(requester._id)
+                ),
+                Order::class.java
+        )
+    }
+
+    /**
+     * 将预约单设置为已记录.
+     * */
+    fun setOrderAsRecorded(orderID: String, recordID: String) {
+        mongoTemplate.updateFirst(
+                Query.query(
+                        Criteria.where("_id").`is`(orderID)
+                ),
+                Update.update("recordID", recordID).set("requireRecord", false),
+                Order::class.java
+        )
+    }
 }

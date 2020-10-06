@@ -22,8 +22,8 @@ data class OrderRecordTag(
         //创建时间
         val createTime: Date = Date(),
 
-        //被预约单记录引用
-        val usedBy: List<OrderRecord> = listOf()
+        //被预约单记录引用次数
+        val referCount: Int = 0
 ) {
     @Document(COLLECTION_NAME)
     data class Simple(

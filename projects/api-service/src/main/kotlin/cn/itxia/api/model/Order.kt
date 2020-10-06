@@ -56,8 +56,7 @@ data class Order(
         @DBRef
         val attachments: List<Attachment> = listOf(),
 
-        @DBRef
-        val record: OrderRecord? = null,
+        val recordID: String? = null,
 
         var requireRecord: Boolean = false
 

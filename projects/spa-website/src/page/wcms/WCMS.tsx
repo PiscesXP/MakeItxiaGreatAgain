@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { Link, Redirect, Route, Switch, useLocation } from "react-router-dom";
 import { UserInfoProvider } from "@/context/UserInfo";
 import { routePath } from "../routePath";
-import { Col, Layout, Menu, Modal, Row } from "antd";
+import { Badge, Col, Layout, Menu, Modal, Row } from "antd";
 import { Footer as MyFooter } from "@/components/footer";
 import { PageNotFound } from "@/components/notFound";
 import { Login } from "./login";
@@ -18,12 +18,13 @@ import {
   DashboardOutlined,
   FormOutlined,
   MenuOutlined,
-  // ReadOutlined,
+  ReadOutlined,
   SmileOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
 import { LogoutButton } from "@/components/logout";
 import "./index.css";
+import { OrderRecordPage } from "@/page/wcms/orderRecord";
 
 const { Header, Content, Footer } = Layout;
 
@@ -88,6 +89,9 @@ function WCMSRouter() {
       <Route path={routePath.wcms.HANDLE_ORDER}>
         <HandleOrderPage />
       </Route>
+      <Route path={routePath.wcms.EXP}>
+        <OrderRecordPage />
+      </Route>
       <Route path={routePath.wcms.SELF_PROFILE}>
         <Profile />
       </Route>
@@ -143,11 +147,11 @@ function NavigateBar() {
         <Link to={routePath.wcms.HANDLE_ORDER} />
       </Menu.Item>
 
-      {/*<Menu.Item key={routePath.wcms.EXP}>
+      <Menu.Item key={routePath.wcms.EXP}>
         <ReadOutlined />
         经验记录
         <Link to={routePath.wcms.EXP} />
-      </Menu.Item>*/}
+      </Menu.Item>
 
       {isAdminOrSuperAdmin && (
         <Menu.Item key={routePath.wcms.ANNOUNCE_MANAGE}>

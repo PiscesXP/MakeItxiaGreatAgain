@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.core.query.Update
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
@@ -96,6 +97,14 @@ class OrderRecordService {
 
         val saved = mongoTemplate.insert(record)
 
+        orderService.setOrderAsRecorded(orderID = order._id, recordID = saved._id)
+
+        mongoTemplate.updateMulti(
+                Query.query(Criteria.where("_id").`in`(tags.map { it._id })),
+                Update().inc("referCount", 1),
+                OrderRecordTag::class.java
+        )
+
         return ResponseCode.SUCCESS.withPayload(saved)
     }
 
@@ -132,6 +141,5 @@ class OrderRecordService {
 
         return ResponseCode.SUCCESS.withPayload(result)
     }
-
 
 }
