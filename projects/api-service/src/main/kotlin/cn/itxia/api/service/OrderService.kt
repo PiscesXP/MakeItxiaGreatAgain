@@ -199,7 +199,7 @@ class OrderService {
         val canIDelete = itxiaMember.role == MemberRoleEnum.ADMIN || itxiaMember.role == MemberRoleEnum.SUPER_ADMIN
 
         //switch true真好玩
-        val response = when (true) {
+        return when (true) {
             action == OrderActionEnum.ACCEPT && order.status == OrderStatusEnum.PENDING -> {
                 //接单
                 order.status = OrderStatusEnum.HANDLING
@@ -217,6 +217,7 @@ class OrderService {
             action == OrderActionEnum.DONE && order.status == OrderStatusEnum.HANDLING && isMyOrder -> {
                 //完成预约单
                 order.status = OrderStatusEnum.DONE
+                order.requireRecord = true
                 orderRepository.save(order)
                 ResponseCode.SUCCESS.withoutPayload()
             }
@@ -235,7 +236,6 @@ class OrderService {
                 ResponseCode.ORDER_STATUS_INCORRECT.withPayload("请检查预约单状态 (也许已经被别人接单了)")
             }
         }
-        return response
     }
 
     fun postReply(orderID: String, dto: OrderReplyDto, itxiaMember: ItxiaMember): Boolean {

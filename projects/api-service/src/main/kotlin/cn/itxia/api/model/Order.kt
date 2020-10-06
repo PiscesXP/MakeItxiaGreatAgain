@@ -54,6 +54,11 @@ data class Order(
         val discuss: MutableList<Reply> = mutableListOf(),
 
         @DBRef
-        val attachments: List<Attachment> = listOf()
+        val attachments: List<Attachment> = listOf(),
+
+        @DBRef
+        val record: OrderRecord? = null,
+
+        var requireRecord: Boolean = false
 
 )
