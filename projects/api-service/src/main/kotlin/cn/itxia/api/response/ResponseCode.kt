@@ -23,6 +23,8 @@ enum class ResponseCode(val code: Int, val message: String) {
     LOGIN_NAME_ALREADY_EXISTED(15, "登录ID已存在"),
     QQ_OAUTH_LOGIN_SUCCESSFUL(16, "QQ OAuth登录成功"),
     QQ_OAUTH_BIND_SUCCESSFUL(17, "QQ OAuth绑定成功"),
+    ORDER_TAG_ALREADY_EXISTED(18, "同名标签已存在"),
+    ORDER_TAG_NOT_DELETED(19, "标签未删除，可能是标签已被引用过"),
     UNKNOWN_ERROR(999, "未知错误"),
 
     ;

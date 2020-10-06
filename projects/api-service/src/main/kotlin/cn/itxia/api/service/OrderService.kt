@@ -299,4 +299,11 @@ class OrderService {
         return order?._id
     }
 
+    /**
+     * 返回ID对应的预约单.
+     * */
+    fun getOrderByID(orderID: String): Order? {
+        return mongoTemplate.findById(orderID, Order::class.java)
+    }
+
 }
