@@ -1,0 +1,11 @@
+.tag-dropDown {
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 8px;
+}
+.tag-dropDown > * {
+  margin-right: 8px;
+}
+.tag-dropDown-divider {
+  margin: 4px 0;
+}

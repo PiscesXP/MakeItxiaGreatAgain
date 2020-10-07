@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.core.query.Update
 import org.springframework.stereotype.Service
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -199,7 +200,7 @@ class OrderService {
         val canIDelete = itxiaMember.role == MemberRoleEnum.ADMIN || itxiaMember.role == MemberRoleEnum.SUPER_ADMIN
 
         //switch true真好玩
-        val response = when (true) {
+        return when (true) {
             action == OrderActionEnum.ACCEPT && order.status == OrderStatusEnum.PENDING -> {
                 //接单
                 order.status = OrderStatusEnum.HANDLING
@@ -217,6 +218,7 @@ class OrderService {
             action == OrderActionEnum.DONE && order.status == OrderStatusEnum.HANDLING && isMyOrder -> {
                 //完成预约单
                 order.status = OrderStatusEnum.DONE
+                order.requireRecord = true
                 orderRepository.save(order)
                 ResponseCode.SUCCESS.withoutPayload()
             }
@@ -235,7 +237,6 @@ class OrderService {
                 ResponseCode.ORDER_STATUS_INCORRECT.withPayload("请检查预约单状态 (也许已经被别人接单了)")
             }
         }
-        return response
     }
 
     fun postReply(orderID: String, dto: OrderReplyDto, itxiaMember: ItxiaMember): Boolean {
@@ -299,4 +300,36 @@ class OrderService {
         return order?._id
     }
 
+    /**
+     * 返回ID对应的预约单.
+     * */
+    fun getOrderByID(orderID: String): Order? {
+        return mongoTemplate.findById(orderID, Order::class.java)
+    }
+
+    /**
+     * 获取itxia已完成的但需要填写记录的预约单的列表.
+     * */
+    fun getMyDoneOrdersWhichRequireRecord(requester: ItxiaMember): List<Order> {
+        return mongoTemplate.find(
+                Query.query(
+                        Criteria.where("requireRecord").`is`(true)
+                                .and("handler").`is`(requester._id)
+                ),
+                Order::class.java
+        )
+    }
+
+    /**
+     * 将预约单设置为已记录.
+     * */
+    fun setOrderAsRecorded(orderID: String, recordID: String) {
+        mongoTemplate.updateFirst(
+                Query.query(
+                        Criteria.where("_id").`is`(orderID)
+                ),
+                Update.update("recordID", recordID).set("requireRecord", false),
+                Order::class.java
+        )
+    }
 }
