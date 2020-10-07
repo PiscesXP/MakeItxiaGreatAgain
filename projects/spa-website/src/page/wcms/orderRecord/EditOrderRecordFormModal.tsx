@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useImperativeHandle, useRef } from "react";
 import { Form, Input, Modal } from "antd";
 import { AttachmentUpload } from "@/components/attachment";
-import { RecordTagSelect } from "@/page/wcms/orderRecord/RecordTagSelect";
+import { RecordTagSelect } from "./RecordTagSelect";
 import { useApiRequest } from "@/hook";
 
 interface EditOrderRecordFormModalProps {
@@ -17,7 +17,8 @@ export const EditOrderRecordFormModal: React.FC<EditOrderRecordFormModalProps> =
   onSubmit,
   onHide,
 }) => {
-  const [form] = Form.useForm();
+  const ref = useRef<OrderRecordFormRefObject>(null);
+
   const { loading, sendRequest } = useApiRequest({
     path: "/orderRecord",
     method: "POST",
@@ -30,7 +31,7 @@ export const EditOrderRecordFormModal: React.FC<EditOrderRecordFormModalProps> =
       onError: true,
     },
     onSuccess: () => {
-      form.resetFields();
+      ref.current?.resetFields();
       onHide();
       onSubmit();
     },
@@ -42,11 +43,9 @@ export const EditOrderRecordFormModal: React.FC<EditOrderRecordFormModalProps> =
     });
   }
 
-  useEffect(() => {
-    form.setFieldsValue({
-      _id: order?._id,
-    });
-  }, [form, order]);
+  function handleClickOK() {
+    ref.current?.triggerSubmit();
+  }
 
   return (
     <Modal
@@ -55,54 +54,92 @@ export const EditOrderRecordFormModal: React.FC<EditOrderRecordFormModalProps> =
       onCancel={onHide}
       centered
       okText="发布"
-      onOk={() => {
-        form.submit();
-      }}
+      onOk={handleClickOK}
       okButtonProps={{ loading: loading }}
     >
-      <Form form={form} labelCol={{ span: 4 }} onFinish={handleSubmit}>
-        <Form.Item name="order" label="预约单ID" initialValue={order?._id}>
-          <Input disabled />
-        </Form.Item>
-
-        <Form.Item
-          name="title"
-          label="标 题"
-          rules={[
-            {
-              required: true,
-              message: "标题没填噢",
-            },
-          ]}
-          hasFeedback
-        >
-          <Input placeholder="起个名字真难" />
-        </Form.Item>
-
-        <Form.Item
-          name="content"
-          label="经验记录"
-          rules={[
-            {
-              required: true,
-              message: "写点记录...",
-            },
-          ]}
-          hasFeedback
-        >
-          <Input.TextArea
-            autoSize={{ minRows: 4 }}
-            placeholder="维修历程，经验..."
-            allowClear
-          />
-        </Form.Item>
-
-        <Form.Item name="tags" label="标 签" initialValue={[]}>
-          <RecordTagSelect />
-        </Form.Item>
-
-        <AttachmentUpload label="附 件" />
-      </Form>
+      <OrderRecordForm ref={ref} order={order} onSubmit={handleSubmit} />
     </Modal>
   );
 };
+
+interface OrderRecordFormRefObject {
+  triggerSubmit: () => void;
+  resetFields: () => void;
+}
+
+interface OrderRecordFormProps {
+  order: any;
+  onSubmit: (formValues: any) => void;
+}
+
+const OrderRecordForm = React.forwardRef<
+  OrderRecordFormRefObject,
+  OrderRecordFormProps
+>(({ order, onSubmit }, ref) => {
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue({
+      _id: order?._id,
+    });
+  }, [form, order]);
+
+  useImperativeHandle(ref, () => ({
+    triggerSubmit: () => {
+      form.submit();
+    },
+    resetFields: () => {
+      form.resetFields();
+    },
+  }));
+
+  function handleSubmit(values: any) {
+    onSubmit(values);
+  }
+
+  return (
+    <Form form={form} labelCol={{ span: 4 }} onFinish={handleSubmit}>
+      <Form.Item name="order" label="预约单ID" initialValue={order?._id} hidden>
+        <Input disabled />
+      </Form.Item>
+
+      <Form.Item
+        name="title"
+        label="标 题"
+        rules={[
+          {
+            required: true,
+            message: "标题没填噢",
+          },
+        ]}
+        hasFeedback
+      >
+        <Input placeholder="起个名字真难" />
+      </Form.Item>
+
+      <Form.Item
+        name="content"
+        label="经验记录"
+        rules={[
+          {
+            required: true,
+            message: "写点记录...",
+          },
+        ]}
+        hasFeedback
+      >
+        <Input.TextArea
+          autoSize={{ minRows: 4 }}
+          placeholder="维修历程，经验..."
+          allowClear
+        />
+      </Form.Item>
+
+      <Form.Item name="tags" label="标 签" initialValue={[]}>
+        <RecordTagSelect />
+      </Form.Item>
+
+      <AttachmentUpload label="附 件" />
+    </Form>
+  );
+});

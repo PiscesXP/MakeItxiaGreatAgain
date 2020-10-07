@@ -122,9 +122,9 @@ class OrderRecordService {
     ): Response {
         val criteria = Criteria()
         if (onlyStar != null) {
-            criteria.and("onlyStar").`is`(requester)
+            criteria.and("starBy").`is`(requester)
         }
-        if (tags != null) {
+        if (!tags.isNullOrEmpty()) {
             //convert to tag id array
             val tagIDArray = tags.split(",")
             criteria.and("tags").`in`(tagIDArray)

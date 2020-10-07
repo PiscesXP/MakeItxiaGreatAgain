@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { Link, Redirect, Route, Switch, useLocation } from "react-router-dom";
 import { UserInfoProvider } from "@/context/UserInfo";
 import { routePath } from "../routePath";
-import { Badge, Col, Layout, Menu, Modal, Row } from "antd";
+import { Col, Layout, Menu, Modal, Row } from "antd";
 import { Footer as MyFooter } from "@/components/footer";
 import { PageNotFound } from "@/components/notFound";
 import { Login } from "./login";

@@ -15,20 +15,7 @@ import { PUT } from "@/request/api";
 import { ApiRequestStateEnum } from "@/request/types";
 import { useMemberContext } from "@/hook";
 import { ReplyList } from "@/components/reply";
-import { OrderInfoModal } from "@/page/wcms/orderRecord/OrderInfoModal";
-
-const listData: any[] | undefined = [];
-for (let i = 0; i < 23; i++) {
-  listData.push({
-    href: "https://ant.design",
-    title: `ant design part ${i}`,
-    avatar: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
-    description:
-      "Ant Design, a design language for background applications, is refined by Ant UED Team.",
-    content:
-      "We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.",
-  });
-}
+import { OrderInfoModal } from "./OrderInfoModal";
 
 const IconText = ({ icon, text, onClick }: any) => (
   <div onClick={onClick}>
@@ -41,15 +28,17 @@ const IconText = ({ icon, text, onClick }: any) => (
 
 const TagList = ({ tags }: { tags: { _id: string; name: string }[] }) => (
   <div>
-    {tags.map((value) => (
-      <Tag id={value._id}>{value.name}</Tag>
-    ))}
+    {tags.length === 0 ? (
+      <span style={{ fontSize: "0.75em" }}>暂无标签</span>
+    ) : (
+      tags.map((value) => <Tag key={value._id}>{value.name}</Tag>)
+    )}
   </div>
 );
 interface OrderRecordListProps {
   loading: boolean;
   payload: any;
-  onPaginationChange: () => void;
+  onPaginationChange: (page: number, size: number) => void;
   refresh: () => void;
 }
 
@@ -57,6 +46,7 @@ export const OrderRecordList: React.FC<OrderRecordListProps> = ({
   loading,
   payload,
   refresh,
+  onPaginationChange,
 }) => {
   const { data, pagination } = payload || {};
 
@@ -70,10 +60,17 @@ export const OrderRecordList: React.FC<OrderRecordListProps> = ({
     PUT(`/orderRecord/${recordID}/${isUndo ? "unstar" : "star"}`)
       .then((result) => {
         if (result.state === ApiRequestStateEnum.success) {
-          message.success({
-            content: isUndo ? "取消收藏" : "收藏成功",
-            duration: 1.5,
-          });
+          if (isUndo) {
+            message.warning({
+              content: "取消收藏",
+              duration: 1.5,
+            });
+          } else {
+            message.success({
+              content: "收藏成功",
+              duration: 1.5,
+            });
+          }
         }
       })
       .finally(() => {
@@ -91,18 +88,17 @@ export const OrderRecordList: React.FC<OrderRecordListProps> = ({
 
   return (
     <List
+      loading={loading}
       itemLayout="vertical"
       size="large"
       pagination={{
-        onChange: (page) => {
-          console.log(page);
+        ...pagination,
+        onChange: (page, size) => {
+          onPaginationChange(page, size || 10);
         },
-        pageSize: 5,
       }}
       dataSource={data || []}
       renderItem={(record: any) => {
-        console.log(record);
-
         const likeByCount = record.likeBy.length;
         const didILike = record.likeBy.some((value: any) => {
           return value._id === memberContext._id;

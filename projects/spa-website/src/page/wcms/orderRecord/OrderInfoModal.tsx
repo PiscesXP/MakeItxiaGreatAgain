@@ -41,15 +41,6 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
       onCancel={onHide}
     >
       <Descriptions bordered column={1}>
-        <Item label="姓名">{name}</Item>
-        <Item label="校区">{parseEnumValue(campus)}</Item>
-        <Item label="电话">{phone}</Item>
-        <Item label="QQ">{qq}</Item>
-        <Item label="邮箱">{email}</Item>
-        <Item label="电脑型号">{brandModel}</Item>
-        <Item label="操作系统">{os}</Item>
-        <Item label="保修状况">{warranty}</Item>
-        <Item label="预约时间">{utcDateToText(createTime)}</Item>
         <Item label="问题描述">
           <MultiLinePlainText content={description} />
         </Item>
@@ -60,6 +51,15 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
             <AttachmentList data={attachments} />
           )}
         </Item>
+        <Item label="电脑型号">{brandModel}</Item>
+        <Item label="操作系统">{os}</Item>
+        <Item label="姓名">{name}</Item>
+        <Item label="保修状况">{warranty}</Item>
+        <Item label="预约时间">{utcDateToText(createTime)}</Item>
+        <Item label="校区">{parseEnumValue(campus)}</Item>
+        <Item label="电话">{phone}</Item>
+        <Item label="QQ">{qq}</Item>
+        <Item label="邮箱">{email}</Item>
       </Descriptions>
     </Modal>
   );

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Loading } from "@/components/loading";
-import { Button, Table } from "antd";
+import { Button, Card, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { utcDateToText } from "@/util/time";
-import { EditOrderRecordFormModal } from "@/page/wcms/orderRecord/EditOrderRecordFormModal";
+import { EditOrderRecordFormModal } from "./EditOrderRecordFormModal";
+import { OrderInfoModal } from "./OrderInfoModal";
 
 interface RequireRecordListProps {
   loading: boolean;
@@ -19,16 +19,10 @@ export const RequireRecordList: React.FC<RequireRecordListProps> = ({
   const [editFormVisible, setEditFormVisible] = useState(false);
   const [editingOrder, setEditingOrder] = useState(null);
 
-  if (loading) {
-    return <Loading />;
-  }
+  const [previewOrderID, setPreviewOrderID] = useState<string | null>(null);
 
-  if (orderList.length === 0) {
-    return <span>暂无</span>;
-  }
-
-  function handleViewOrder() {
-    //TODO
+  if (loading || orderList?.length === 0) {
+    return null;
   }
 
   function handleEditOrderRecord(order: any) {
@@ -51,16 +45,25 @@ export const RequireRecordList: React.FC<RequireRecordListProps> = ({
     {
       title: "",
       key: "action",
-      render: (value, record) => {
+      render: (value, record: any) => {
         return (
           <>
             <Button
               size="small"
-              style={{ marginRight: "6px" }}
-              onClick={handleViewOrder}
+              style={{ marginRight: "10px" }}
+              onClick={() => {
+                setPreviewOrderID(record._id);
+              }}
             >
               查看
             </Button>
+            <OrderInfoModal
+              visible={record._id === previewOrderID}
+              order={record}
+              onHide={() => {
+                setPreviewOrderID(null);
+              }}
+            />
             <Button
               type="primary"
               size="small"
@@ -77,7 +80,7 @@ export const RequireRecordList: React.FC<RequireRecordListProps> = ({
   ];
 
   return (
-    <>
+    <Card title="未记录的预约单" style={{ marginBottom: "8px" }}>
       <Table
         columns={columns}
         dataSource={orderList}
@@ -93,6 +96,6 @@ export const RequireRecordList: React.FC<RequireRecordListProps> = ({
         }}
         order={editingOrder}
       />
-    </>
+    </Card>
   );
 };
