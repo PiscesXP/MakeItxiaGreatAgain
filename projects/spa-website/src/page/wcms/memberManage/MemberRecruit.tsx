@@ -97,13 +97,13 @@ export const MemberRecruit: React.FC = () => {
         children: [
           {
             title: "姓名",
-            dataIndex: "receiver.realName",
+            dataIndex: ["receiver", "realName"],
             key: "name",
             width: 150,
           },
           {
             title: "校区",
-            dataIndex: "receiver.campus",
+            dataIndex: ["receiver", "campus"],
             key: "campus",
             width: 150,
             filters: [
@@ -123,13 +123,13 @@ export const MemberRecruit: React.FC = () => {
           },
           {
             title: "登录账号",
-            dataIndex: "receiver.loginName",
+            dataIndex: ["receiver", "loginName"],
             key: "loginName",
             width: 200,
           },
           {
             title: "系统ID",
-            dataIndex: "receiver._id",
+            dataIndex: ["receiver", "_id"],
             key: "_id",
             //这里如果设置width，右边会有白边，原因未明
             maxWidth: 200,
