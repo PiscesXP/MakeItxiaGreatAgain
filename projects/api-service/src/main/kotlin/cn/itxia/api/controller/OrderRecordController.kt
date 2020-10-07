@@ -106,7 +106,7 @@ class OrderRecordController {
                   @RequestBody replyDto: ReplyDto,
                   @CurrentItxiaMember requester: ItxiaMember
     ): Response {
-        //TODO
+        orderRecordService.postReplyToOrderRecord(recordID, replyDto, requester)
         return ResponseCode.SUCCESS.withoutPayload()
     }
 
@@ -115,8 +115,10 @@ class OrderRecordController {
      * */
     @PutMapping("/orderRecord/{recordID}/star")
     @RequireItxiaMember
-    fun starOrderRecord(@PathVariable recordID: String): Response {
-        //TODO
+    fun starOrderRecord(@PathVariable recordID: String,
+                        @CurrentItxiaMember requester: ItxiaMember
+    ): Response {
+        orderRecordService.starOrUnstarOrderRecord(recordID, requester, false)
         return ResponseCode.SUCCESS.withoutPayload()
     }
 
@@ -125,8 +127,10 @@ class OrderRecordController {
      * */
     @PutMapping("/orderRecord/{recordID}/unstar")
     @RequireItxiaMember
-    fun unstarOrderRecord(@PathVariable recordID: String): Response {
-        //TODO
+    fun unstarOrderRecord(@PathVariable recordID: String,
+                          @CurrentItxiaMember requester: ItxiaMember
+    ): Response {
+        orderRecordService.starOrUnstarOrderRecord(recordID, requester, true)
         return ResponseCode.SUCCESS.withoutPayload()
     }
 
@@ -135,8 +139,10 @@ class OrderRecordController {
      * */
     @PutMapping("/orderRecord/{recordID}/like")
     @RequireItxiaMember
-    fun likeOrderRecord(@PathVariable recordID: String): Response {
-        //TODO
+    fun likeOrderRecord(@PathVariable recordID: String,
+                        @CurrentItxiaMember requester: ItxiaMember
+    ): Response {
+        orderRecordService.likeOrUnlikeOrderRecord(recordID, requester, false)
         return ResponseCode.SUCCESS.withoutPayload()
     }
 
@@ -145,8 +151,10 @@ class OrderRecordController {
      * */
     @PutMapping("/orderRecord/{recordID}/unlike")
     @RequireItxiaMember
-    fun unlikeOrderRecord(@PathVariable recordID: String): Response {
-        //TODO
+    fun unlikeOrderRecord(@PathVariable recordID: String,
+                          @CurrentItxiaMember requester: ItxiaMember
+    ): Response {
+        orderRecordService.likeOrUnlikeOrderRecord(recordID, requester, true)
         return ResponseCode.SUCCESS.withoutPayload()
     }
 

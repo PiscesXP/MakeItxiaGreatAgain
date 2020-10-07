@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Select, Divider, Input, Button } from "antd";
 import { useApiRequest } from "@/hook";
 import { PlusOutlined } from "@ant-design/icons";
-import "./condition.css";
 
 const { Option } = Select;
 

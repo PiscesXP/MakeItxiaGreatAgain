@@ -3,6 +3,7 @@ package cn.itxia.api.service
 import cn.itxia.api.annotation.CurrentItxiaMember
 import cn.itxia.api.dto.OrderRecordCreateDto
 import cn.itxia.api.dto.OrderRecordTagCreateDto
+import cn.itxia.api.dto.ReplyDto
 import cn.itxia.api.model.ItxiaMember
 import cn.itxia.api.model.OrderRecord
 import cn.itxia.api.model.OrderRecordTag
@@ -11,6 +12,7 @@ import cn.itxia.api.response.ResponseCode
 import cn.itxia.api.util.PageRequestHelper
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
@@ -30,6 +32,9 @@ class OrderRecordService {
 
     @Autowired
     private lateinit var attachmentService: AttachmentService
+
+    @Autowired
+    private lateinit var replyService: ReplyService
 
     fun createTag(@RequestBody dto: OrderRecordTagCreateDto,
                   @CurrentItxiaMember requester: ItxiaMember
@@ -135,11 +140,39 @@ class OrderRecordService {
                 page = page,
                 size = size,
                 criteria = criteria,
+                sort = Sort.by("createTime").descending(),
                 entityClass = OrderRecord::class.java,
                 mongoTemplate = mongoTemplate
         )
 
         return ResponseCode.SUCCESS.withPayload(result)
+    }
+
+    fun starOrUnstarOrderRecord(recordID: String, requester: ItxiaMember, isUndo: Boolean) {
+        val update = if (isUndo) Update().pull("starBy", requester) else Update().addToSet("starBy", requester)
+        mongoTemplate.updateFirst(
+                Query.query(Criteria.where("_id").`is`(recordID)),
+                update,
+                OrderRecord::class.java
+        )
+    }
+
+    fun likeOrUnlikeOrderRecord(recordID: String, requester: ItxiaMember, isUndo: Boolean) {
+        val update = if (isUndo) Update().pull("likeBy", requester) else Update().addToSet("likeBy", requester)
+        mongoTemplate.updateFirst(
+                Query.query(Criteria.where("_id").`is`(recordID)),
+                update,
+                OrderRecord::class.java
+        )
+    }
+
+    fun postReplyToOrderRecord(recordID: String, replyDto: ReplyDto, requester: ItxiaMember) {
+        val savedReply = replyService.saveReply(replyDto, requester)
+        mongoTemplate.updateFirst(
+                Query.query(Criteria.where("_id").`is`(recordID)),
+                Update().push("comments", savedReply),
+                OrderRecord::class.java
+        )
     }
 
 }

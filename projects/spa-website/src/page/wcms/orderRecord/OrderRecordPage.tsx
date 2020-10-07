@@ -4,6 +4,7 @@ import { OrderRecordList } from "./OrderRecordList";
 import { SearchCondition } from "./SearchCondition";
 import { RequireRecordList } from "./RequireRecordList";
 import { useApiRequest } from "@/hook";
+import "./index.css";
 
 export const OrderRecordPage: React.FC = () => {
   const recordListApiRequest = useApiRequest({
@@ -14,9 +15,14 @@ export const OrderRecordPage: React.FC = () => {
     path: "/order/me/requireRecord",
   });
 
+  function handleRefreshRecordList() {
+    recordListApiRequest.sendRequest();
+  }
+
   function handlePostRecord() {
     //刷新
     requireRecordOrderListApiRequest.sendRequest();
+    recordListApiRequest.sendRequest();
   }
 
   return (
@@ -43,6 +49,7 @@ export const OrderRecordPage: React.FC = () => {
             onPaginationChange={() => {
               //TODO
             }}
+            refresh={handleRefreshRecordList}
           />
         </Card>
       </Col>
