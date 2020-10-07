@@ -96,7 +96,7 @@ export const MemberInfoTable: React.FC<MemberInfoTableProps> = ({
           .includes(value.toLowerCase()),
       onFilterDropdownVisibleChange: (visible: boolean) => {
         if (visible) {
-          setTimeout(() => searchInput.select());
+          setTimeout(() => searchInput?.select());
         }
       },
       render: (text: any) =>
@@ -240,17 +240,17 @@ export const MemberInfoTable: React.FC<MemberInfoTableProps> = ({
         ],
       },
       {
-        title: "需要重置密码",
+        title: "密码过期",
         dataIndex: "requirePasswordReset",
         key: "requirePasswordReset",
         filters: [
-          { text: "需要", value: true },
-          { text: "不需要", value: false },
+          { text: "已过期", value: true },
+          { text: "正常", value: false },
         ],
         filterMultiple: false,
         onFilter: (value, record) => record.requirePasswordReset === value,
         render: (requirePasswordReset) => {
-          return requirePasswordReset ? "需要" : "";
+          return requirePasswordReset ? "已过期" : "";
         },
       },
       { title: "登录账号ID", dataIndex: "loginName", key: "loginName" },
