@@ -91,10 +91,10 @@ class OrderRecordController {
     @PutMapping("/orderRecord/{recordID}")
     @RequireItxiaMember
     fun modifyOrderRecord(@RequestBody dto: OrderRecordModifyDto,
-                          @PathVariable recordID: String
+                          @PathVariable recordID: String,
+                          @CurrentItxiaMember requester: ItxiaMember
     ): Response {
-        //TODO
-        return ResponseCode.SUCCESS.withoutPayload()
+        return orderRecordService.modifyOrderRecord(dto, recordID, requester)
     }
 
     /**

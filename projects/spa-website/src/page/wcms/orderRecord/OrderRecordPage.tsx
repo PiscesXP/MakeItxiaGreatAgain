@@ -12,6 +12,7 @@ import {
   useUpdateEffect,
 } from "@/hook";
 import "./index.css";
+import { OrderRecordTagContext } from "./OrderRecordTagContext";
 
 export const OrderRecordPage: React.FC = () => {
   useTitleWCMS("经验纪录");
@@ -73,27 +74,29 @@ export const OrderRecordPage: React.FC = () => {
   }, 1500);
 
   return (
-    <Row gutter={[8, 8]} justify="center" align="top">
-      <Col sm={24} lg={8}>
-        <RequireRecordList
-          loading={requireRecordOrderListApiRequest.loading}
-          orderList={requireRecordOrderListApiRequest.payload}
-          onPostRecord={handlePostRecord}
-        />
-        <Card title="筛选">
-          <SearchCondition onConditionChange={handleConditionChange} />
-        </Card>
-      </Col>
-      <Col sm={24} lg={16}>
-        <Card title="经验记录">
-          <OrderRecordList
-            loading={recordListApiRequest.loading}
-            payload={recordListApiRequest.payload}
-            onPaginationChange={handlePaginationChange}
-            refresh={handleRefreshRecordList}
+    <OrderRecordTagContext>
+      <Row gutter={[8, 8]} justify="center" align="top">
+        <Col sm={24} lg={8}>
+          <RequireRecordList
+            loading={requireRecordOrderListApiRequest.loading}
+            orderList={requireRecordOrderListApiRequest.payload}
+            onPostRecord={handlePostRecord}
           />
-        </Card>
-      </Col>
-    </Row>
+          <Card title="筛选">
+            <SearchCondition onConditionChange={handleConditionChange} />
+          </Card>
+        </Col>
+        <Col sm={24} lg={16}>
+          <Card title="经验记录">
+            <OrderRecordList
+              loading={recordListApiRequest.loading}
+              payload={recordListApiRequest.payload}
+              onPaginationChange={handlePaginationChange}
+              refresh={handleRefreshRecordList}
+            />
+          </Card>
+        </Col>
+      </Row>
+    </OrderRecordTagContext>
   );
 };

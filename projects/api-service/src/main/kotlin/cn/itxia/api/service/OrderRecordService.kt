@@ -2,10 +2,12 @@ package cn.itxia.api.service
 
 import cn.itxia.api.annotation.CurrentItxiaMember
 import cn.itxia.api.dto.OrderRecordCreateDto
+import cn.itxia.api.dto.OrderRecordModifyDto
 import cn.itxia.api.dto.OrderRecordTagCreateDto
 import cn.itxia.api.dto.ReplyDto
 import cn.itxia.api.model.ItxiaMember
 import cn.itxia.api.model.OrderRecord
+import cn.itxia.api.model.OrderRecordHistory
 import cn.itxia.api.model.OrderRecordTag
 import cn.itxia.api.response.Response
 import cn.itxia.api.response.ResponseCode
@@ -173,6 +175,47 @@ class OrderRecordService {
                 Update().push("comments", savedReply),
                 OrderRecord::class.java
         )
+    }
+
+    fun modifyOrderRecord(dto: OrderRecordModifyDto,
+                          recordID: String,
+                          requester: ItxiaMember
+    ): Response {
+        val record = mongoTemplate.findById(recordID, OrderRecord::class.java)
+                ?: return ResponseCode.NO_SUCH_ORDER_RECORD.withoutPayload()
+        val history = OrderRecordHistory(
+                modifyTime = record.lastModified ?: record.createTime,
+                author = record.author,
+                title = record.title,
+                content = record.content,
+                tags = record.tags
+        )
+
+
+        mongoTemplate.updateMulti(
+                Query.query(Criteria.where("_id").`in`(record.tags.map { it._id })),
+                Update().inc("referCount", -1),
+                OrderRecordTag::class.java
+        )
+        val newTags = this.getSimpleTagsByID(dto.tags)
+        mongoTemplate.updateMulti(
+                Query.query(Criteria.where("_id").`in`(newTags.map { it._id })),
+                Update().inc("referCount", 1),
+                OrderRecordTag::class.java
+        )
+
+        mongoTemplate.updateFirst(
+                Query.query(Criteria.where("_id").`is`(recordID)),
+                Update().set("title", dto.title)
+                        .set("content", dto.content)
+                        .set("tags", newTags)
+                        .currentDate("lastModified")
+                        .set("lastModifiedBy", requester)
+                        .push("modifyHistory", history),
+                OrderRecord::class.java
+        )
+
+        return ResponseCode.SUCCESS.withoutPayload()
     }
 
 }
