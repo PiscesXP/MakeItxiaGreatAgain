@@ -163,9 +163,15 @@ export const OrderRecordList: React.FC<OrderRecordListProps> = ({
           >
             <List.Item.Meta
               title={record.title}
-              description={`${record.author.realName} 发布于 ${utcDateToText(
-                record.createTime
-              )}`}
+              description={
+                record.lastModified
+                  ? `${record.lastModifiedBy.realName} 修改于 ${utcDateToText(
+                      record.lastModified
+                    )}`
+                  : `${record.author.realName} 发布于 ${utcDateToText(
+                      record.createTime
+                    )}`
+              }
             />
             <TagList tags={record.tags} />
             <br />
