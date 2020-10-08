@@ -79,7 +79,7 @@ export const OrderRecordPage: React.FC = () => {
 
   useUpdateEffect(() => {
     refreshRecord();
-  }, [condition]);
+  }, [condition, pagination]);
 
   const requireRecordOrderListApiRequest = useApiRequest({
     path: "/order/me/requireRecord",
