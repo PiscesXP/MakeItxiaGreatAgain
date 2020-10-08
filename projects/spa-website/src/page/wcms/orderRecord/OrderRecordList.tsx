@@ -20,7 +20,7 @@ import { OrderInfoModal } from "./OrderInfoModal";
 import { ModifyOrderRecordModal } from "./ModifyOrderRecordModal";
 
 const IconText = ({ icon, text, onClick }: any) => (
-  <div onClick={onClick}>
+  <div onClick={onClick} className="record-action">
     <Space>
       {React.createElement(icon)}
       {text}
