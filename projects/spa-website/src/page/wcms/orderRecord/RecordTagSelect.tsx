@@ -30,6 +30,7 @@ export const RecordTagSelect: React.FC<RecordTagProps> = ({
       setSelectedValue(idArrayValue);
       onChange(idArrayValue);
     }
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [value]);
 
   const addTagApiRequest = useApiRequest({
