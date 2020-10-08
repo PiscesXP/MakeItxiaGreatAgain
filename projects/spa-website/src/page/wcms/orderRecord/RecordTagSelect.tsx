@@ -1,25 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Select, Divider, Input, Button } from "antd";
 import { useApiRequest } from "@/hook";
 import { PlusOutlined } from "@ant-design/icons";
+import { useOrderRecordTags } from "./OrderRecordTagContext";
 
 const { Option } = Select;
 
 interface RecordTagProps {
+  value?: any;
   onChange?: any;
 }
 
-export const RecordTagSelect: React.FC<RecordTagProps> = ({ onChange }) => {
-  const { loading, payload, sendRequest: refreshTags } = useApiRequest({
-    path: "/orderRecordTag",
-    requestQuery: {
-      detail: 1,
-    },
-    popModal: {
-      onFail: true,
-      onError: true,
-    },
-  });
+export const RecordTagSelect: React.FC<RecordTagProps> = ({
+  value,
+  onChange,
+}) => {
+  const tagsContext = useOrderRecordTags();
+
+  const [selectedValue, setSelectedValue] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (
+      Array.isArray(value) &&
+      value[0] &&
+      typeof value[0] !== "string" &&
+      value[0]["_id"]
+    ) {
+      const idArrayValue = value.map((item: any) => item._id);
+      setSelectedValue(idArrayValue);
+      onChange(idArrayValue);
+    }
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  }, [value]);
 
   const addTagApiRequest = useApiRequest({
     path: "/orderRecordTag",
@@ -31,7 +43,7 @@ export const RecordTagSelect: React.FC<RecordTagProps> = ({ onChange }) => {
     },
     onSuccess: () => {
       //刷新数据
-      refreshTags();
+      tagsContext.refreshTags();
     },
   });
 
@@ -52,11 +64,14 @@ export const RecordTagSelect: React.FC<RecordTagProps> = ({ onChange }) => {
 
   return (
     <Select
-      loading={loading}
       placeholder="选择标签"
       mode="tags"
       allowClear
-      onChange={onChange}
+      value={selectedValue}
+      onChange={(selectValue) => {
+        setSelectedValue(selectValue);
+        onChange(selectValue);
+      }}
       dropdownRender={(menu) => (
         <div>
           {menu}
@@ -80,14 +95,13 @@ export const RecordTagSelect: React.FC<RecordTagProps> = ({ onChange }) => {
         </div>
       )}
     >
-      {Array.isArray(payload) &&
-        payload.map((tagItem: any) => {
-          return (
-            <Option key={tagItem._id} value={tagItem._id}>
-              {`${tagItem.name} (${tagItem.referCount || "0"})`}
-            </Option>
-          );
-        })}
+      {tagsContext.tags.map((tagItem: any) => {
+        return (
+          <Option key={tagItem._id} value={tagItem._id}>
+            {`${tagItem.name} (${tagItem.referCount || "0"})`}
+          </Option>
+        );
+      })}
     </Select>
   );
 };

@@ -9,3 +9,6 @@
 .tag-dropDown-divider {
   margin: 4px 0;
 }
+.record-action:hover {
+  cursor: pointer;
+}

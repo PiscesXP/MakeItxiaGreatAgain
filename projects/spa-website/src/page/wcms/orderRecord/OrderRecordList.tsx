@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { List, message, Space, Tag } from "antd";
 import {
   CalendarOutlined,
+  EditOutlined,
   LikeOutlined,
   LikeTwoTone,
   MessageOutlined,
@@ -16,9 +17,10 @@ import { ApiRequestStateEnum } from "@/request/types";
 import { useMemberContext } from "@/hook";
 import { ReplyList } from "@/components/reply";
 import { OrderInfoModal } from "./OrderInfoModal";
+import { ModifyOrderRecordModal } from "./ModifyOrderRecordModal";
 
 const IconText = ({ icon, text, onClick }: any) => (
-  <div onClick={onClick}>
+  <div onClick={onClick} className="record-action">
     <Space>
       {React.createElement(icon)}
       {text}
@@ -53,6 +55,8 @@ export const OrderRecordList: React.FC<OrderRecordListProps> = ({
   const [replyModalID, setReplyModalID] = useState<string | null>(null);
 
   const [orderInfoModalID, setOrderInfoModalID] = useState<string | null>(null);
+
+  const [modifyModalID, setModifyModalID] = useState<string | null>(null);
 
   const memberContext = useMemberContext();
 
@@ -116,6 +120,14 @@ export const OrderRecordList: React.FC<OrderRecordListProps> = ({
             key={record._id}
             actions={[
               <IconText
+                icon={EditOutlined}
+                text="修改"
+                key="edit"
+                onClick={() => {
+                  setModifyModalID(record._id);
+                }}
+              />,
+              <IconText
                 icon={CalendarOutlined}
                 text="预约单"
                 key="order"
@@ -151,9 +163,15 @@ export const OrderRecordList: React.FC<OrderRecordListProps> = ({
           >
             <List.Item.Meta
               title={record.title}
-              description={`${record.author.realName} 发布于 ${utcDateToText(
-                record.createTime
-              )}`}
+              description={
+                record.lastModified
+                  ? `${record.lastModifiedBy.realName} 修改于 ${utcDateToText(
+                      record.lastModified
+                    )}`
+                  : `${record.author.realName} 发布于 ${utcDateToText(
+                      record.createTime
+                    )}`
+              }
             />
             <TagList tags={record.tags} />
             <br />
@@ -176,6 +194,14 @@ export const OrderRecordList: React.FC<OrderRecordListProps> = ({
               order={record.order}
               onHide={() => {
                 setOrderInfoModalID(null);
+              }}
+            />
+            <ModifyOrderRecordModal
+              visible={modifyModalID === record._id}
+              record={record}
+              refresh={refresh}
+              onHide={() => {
+                setModifyModalID(null);
               }}
             />
           </List.Item>

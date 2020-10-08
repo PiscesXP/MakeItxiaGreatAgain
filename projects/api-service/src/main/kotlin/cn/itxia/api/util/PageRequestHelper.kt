@@ -48,8 +48,8 @@ class PageRequestHelper {
 
             return PaginationResult(
                     pagination = PaginationResult.Pagination(
-                            currentPage = currentPage,
-                            totalCount = totalCount,
+                            current = currentPage,
+                            total = totalCount,
                             pageSize = requestSize
                     ),
                     data = data
@@ -64,8 +64,11 @@ data class PaginationResult<T>(
         val data: List<T>
 ) {
     data class Pagination(
-            val currentPage: Int,
-            val totalCount: Int,
+            //当前页码，从1开始数
+            val current: Int,
+            //数据总数
+            val total: Int,
+            //每页条数
             val pageSize: Int
     )
 }

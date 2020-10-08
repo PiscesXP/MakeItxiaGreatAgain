@@ -51,7 +51,6 @@ data class OrderRecord(
 data class OrderRecordHistory(
         val modifyTime: Date,
         val author: ItxiaMember.BaseInfoOnly,
-        val createTime: Date,
         val title: String,
         val content: String,
         val tags: List<OrderRecordTag.Simple>

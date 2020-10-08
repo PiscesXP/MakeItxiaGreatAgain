@@ -25,6 +25,7 @@ enum class ResponseCode(val code: Int, val message: String) {
     QQ_OAUTH_BIND_SUCCESSFUL(17, "QQ OAuth绑定成功"),
     ORDER_TAG_ALREADY_EXISTED(18, "同名标签已存在"),
     ORDER_TAG_NOT_DELETED(19, "标签未删除，可能是标签已被引用过"),
+    NO_SUCH_ORDER_RECORD(20, "无此预约单记录"),
     UNKNOWN_ERROR(999, "未知错误"),
 
     ;

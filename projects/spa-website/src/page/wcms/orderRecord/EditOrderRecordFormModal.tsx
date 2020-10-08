@@ -3,6 +3,7 @@ import { Form, Input, Modal } from "antd";
 import { AttachmentUpload } from "@/components/attachment";
 import { RecordTagSelect } from "./RecordTagSelect";
 import { useApiRequest } from "@/hook";
+import { useOrderRecordTags } from "./OrderRecordTagContext";
 
 interface EditOrderRecordFormModalProps {
   visible: boolean;
@@ -19,6 +20,8 @@ export const EditOrderRecordFormModal: React.FC<EditOrderRecordFormModalProps> =
 }) => {
   const ref = useRef<OrderRecordFormRefObject>(null);
 
+  const tagsContext = useOrderRecordTags();
+
   const { loading, sendRequest } = useApiRequest({
     path: "/orderRecord",
     method: "POST",
@@ -33,6 +36,7 @@ export const EditOrderRecordFormModal: React.FC<EditOrderRecordFormModalProps> =
     onSuccess: () => {
       ref.current?.resetFields();
       onHide();
+      tagsContext.refreshTags();
       onSubmit();
     },
   });
