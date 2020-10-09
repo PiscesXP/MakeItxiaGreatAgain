@@ -12,6 +12,7 @@ import cn.itxia.api.model.OrderRecordTag
 import cn.itxia.api.response.Response
 import cn.itxia.api.response.ResponseCode
 import cn.itxia.api.util.PageRequestHelper
+import com.mongodb.DBRef
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Sort
@@ -204,11 +205,15 @@ class OrderRecordService {
                 OrderRecordTag::class.java
         )
 
+        val dbRefNewTags = newTags.map {
+            DBRef("order_record_tag", ObjectId(it._id))
+        }
+
         mongoTemplate.updateFirst(
                 Query.query(Criteria.where("_id").`is`(recordID)),
                 Update().set("title", dto.title)
                         .set("content", dto.content)
-                        .set("tags", newTags)
+                        .set("tags", dbRefNewTags)
                         .currentDate("lastModified")
                         .set("lastModifiedBy", requester)
                         .push("modifyHistory", history),
