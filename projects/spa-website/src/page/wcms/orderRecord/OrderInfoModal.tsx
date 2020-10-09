@@ -3,7 +3,8 @@ import { parseEnumValue } from "@/util/enum";
 import { utcDateToText } from "@/util/time";
 import { MultiLinePlainText } from "@/components/text";
 import { AttachmentList } from "@/components/attachment";
-import { Descriptions, Modal } from "antd";
+import { Alert, Descriptions, Modal } from "antd";
+import { useMemberContext } from "@/hook";
 
 const { Item } = Descriptions;
 
@@ -30,7 +31,12 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
     warranty,
     description,
     attachments,
+    handler,
   } = order;
+
+  const memberContext = useMemberContext();
+
+  const isMyOrder = memberContext._id === handler?._id;
 
   return (
     <Modal
@@ -40,6 +46,14 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
       footer={null}
       onCancel={onHide}
     >
+      <Alert
+        message={
+          isMyOrder
+            ? `你已完成此预约单.`
+            : `此预约单已由 ${handler?.realName} 完成.`
+        }
+      />
+      <br />
       <Descriptions bordered column={1}>
         <Item label="问题描述">
           <MultiLinePlainText content={description} />
