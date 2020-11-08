@@ -125,6 +125,19 @@ class AuthenticationService {
     }
 
     /**
+     * 注销其它登录状态.
+     * 除了当前请求的session外，删除其它全部session.
+     * */
+    fun logoutOnOtherDevices(requester: ItxiaMember,
+                             request: HttpServletRequest
+    ) {
+        val allSession = sessionRepository.findAllByMember(requester.toBaseInfoOnly()).toMutableList()
+        val currentSession = getSessionFromRequest(request)
+        allSession.removeIf { it._id == currentSession?._id }
+        sessionRepository.deleteAll(allSession)
+    }
+
+    /**
      * 从请求中获取对应的session.
      * @return 当前请求的session model. 若没有session则为null.
      * */
