@@ -151,7 +151,7 @@ class OrderRecordService {
     ): Response {
         val criteria = Criteria()
         if (onlyStar != null) {
-            criteria.and("starBy").`is`(requester)
+            criteria.and("starBy").`is`(DBRef("users", requester._id))
         }
         if (!tags.isNullOrEmpty()) {
             //convert to tag id array
