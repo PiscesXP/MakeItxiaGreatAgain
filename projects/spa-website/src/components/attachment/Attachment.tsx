@@ -56,7 +56,7 @@ export const Attachment: React.FC<AttachmentProps> = ({ data }) => {
         {isImage ? (
           <img src={url} alt="无法显示图片" width="100%" />
         ) : (
-          <div className="not-img-atech" onClick={onShowModal}>
+          <div className="not-img-atech">
             <FileUnknownOutlined className="not-img-icon" />
             <br />
             <span>附件</span>
