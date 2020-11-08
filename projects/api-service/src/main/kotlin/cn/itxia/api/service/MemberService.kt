@@ -2,6 +2,7 @@ package cn.itxia.api.service
 
 import cn.itxia.api.dto.*
 import cn.itxia.api.enum.CampusEnum
+import cn.itxia.api.enum.MemberGroupEnum
 import cn.itxia.api.enum.MemberRoleEnum
 import cn.itxia.api.enum.RedeemCodeTypeEnum
 import cn.itxia.api.model.ItxiaMember
@@ -68,6 +69,7 @@ class MemberService {
         if (optional.isPresent) {
             val member = optional.get()
             member.campus = dto.campus.let { CampusEnum.parse(it) } ?: member.campus
+            member.group = dto.group.let { MemberGroupEnum.parse(it) } ?: member.group
             if (dto.email.isNullOrEmpty()) {
                 member.email = null
                 member.emailNotification.apply {
@@ -290,6 +292,7 @@ class MemberService {
                 realName = dto.realName,
                 password = PasswordUtil.encrypt(dto.password),
                 campus = dto.campus,
+                group = dto.group,
                 role = MemberRoleEnum.MEMBER,
                 disabled = true,        //需要管理员手动启用，相当于审核
                 joinDate = Date(),

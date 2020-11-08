@@ -8,7 +8,11 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Button, Table, Input, Dropdown, Menu } from "antd";
-import { parseEnumValue, parseRoleAuthLevel } from "@/util/enum";
+import {
+  MemberGroupEnum,
+  parseEnumValue,
+  parseRoleAuthLevel,
+} from "@/util/enum";
 import { utcDateToText } from "@/util/time";
 import Highlighter from "react-highlight-words";
 import { MemberActionModal } from "./actions/MemberActionModal";
@@ -152,6 +156,28 @@ export const MemberInfoTable: React.FC<MemberInfoTableProps> = ({
         filterMultiple: false,
         onFilter: (value, record) => record.campus === value,
         render: (campus) => parseEnumValue(campus),
+      },
+      {
+        title: "分组",
+        dataIndex: "group",
+        key: "group",
+        filters: [
+          {
+            text: "geek",
+            value: MemberGroupEnum.GEEK,
+          },
+          {
+            text: "op",
+            value: MemberGroupEnum.OP,
+          },
+          {
+            text: "web",
+            value: MemberGroupEnum.WEB,
+          },
+        ],
+        filterMultiple: false,
+        onFilter: (value, record) => record.group === value,
+        render: (group) => parseEnumValue(group, ""),
       },
       {
         title: "账号状态",

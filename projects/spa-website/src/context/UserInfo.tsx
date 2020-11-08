@@ -5,10 +5,11 @@ import { routePath } from "@/page/routePath";
 import { Modal } from "antd";
 import { useApiRequest } from "@/hook/useApiRequest";
 import { usePersistFn } from "@/hook/usePersisFn";
-import { CampusEnum, MemberRoleEnum } from "@/util/enum";
+import { CampusEnum, MemberGroupEnum, MemberRoleEnum } from "@/util/enum";
 
 export interface WhoamiData {
   readonly campus: CampusEnum;
+  readonly group: MemberGroupEnum;
   readonly _id: string;
   readonly loginName: string;
   readonly realName: string;

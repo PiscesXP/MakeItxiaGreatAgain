@@ -1,6 +1,7 @@
 package cn.itxia.api.dto
 
 import cn.itxia.api.enum.CampusEnum
+import cn.itxia.api.enum.MemberGroupEnum
 
 data class MemberRecruitDto(
 
@@ -12,6 +13,8 @@ data class MemberRecruitDto(
 
         var password: String,
 
-        var campus: CampusEnum
+        var campus: CampusEnum,
+
+        val group: MemberGroupEnum
 
 )

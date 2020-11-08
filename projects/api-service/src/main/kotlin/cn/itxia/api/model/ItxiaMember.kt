@@ -1,6 +1,7 @@
 package cn.itxia.api.model
 
 import cn.itxia.api.enum.CampusEnum
+import cn.itxia.api.enum.MemberGroupEnum
 import cn.itxia.api.enum.MemberRoleEnum
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
@@ -22,6 +23,8 @@ data class ItxiaMember(
         var password: String,
 
         var campus: CampusEnum,
+
+        var group: MemberGroupEnum? = null,
 
         var role: MemberRoleEnum,
 

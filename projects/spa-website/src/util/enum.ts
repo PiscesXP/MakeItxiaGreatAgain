@@ -25,6 +25,13 @@ export enum AnnouncementType {
   EXTERNAL = "EXTERNAL",
 }
 
+// eslint-disable-next-line no-shadow
+export enum MemberGroupEnum {
+  GEEK = "GEEK",
+  OP = "OP",
+  WEB = "WEB",
+}
+
 const enumPairs: { [enumName: string]: string } = {
   GULOU: "鼓楼",
   XIANLIN: "仙林",
@@ -35,10 +42,13 @@ const enumPairs: { [enumName: string]: string } = {
   MEMBER: "普通成员",
   ADMIN: "管理员",
   SUPER_ADMIN: "超级管理员",
+  GEEK: "geek",
+  OP: "op",
+  WEB: "web",
 };
 
-export function parseEnumValue(enumValue: string) {
-  return enumPairs[enumValue] || "?";
+export function parseEnumValue(enumValue: string, fallback: string = "?") {
+  return enumPairs[enumValue] || fallback;
 }
 
 export function parseRoleAuthLevel(roleEnumValue: string) {
