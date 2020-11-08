@@ -36,10 +36,10 @@ data class OrderRecord(
         var lastModifiedBy: ItxiaMember.BaseInfoOnly? = null,
 
         @DBRef
-        val starBy: Iterable<ItxiaMember.BaseInfoOnly> = mutableListOf(),
+        var starBy: Iterable<ItxiaMember.BaseInfoOnly> = mutableListOf(),
 
         @DBRef
-        val likeBy: Iterable<ItxiaMember.BaseInfoOnly> = mutableListOf(),
+        var likeBy: Iterable<ItxiaMember.BaseInfoOnly> = mutableListOf(),
 
         @DBRef
         val comments: Iterable<Reply> = mutableListOf(),

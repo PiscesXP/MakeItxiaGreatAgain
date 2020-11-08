@@ -190,6 +190,7 @@ class OrderRecordService {
             starBy.add(requester.toBaseInfoOnly())
         }
 
+        record.starBy = starBy
         orderRecordRepository.save(record)
     }
 
@@ -206,6 +207,7 @@ class OrderRecordService {
             likeBy.add(requester.toBaseInfoOnly())
         }
 
+        record.likeBy = likeBy
         orderRecordRepository.save(record)
     }
 
