@@ -31,7 +31,7 @@ function LoginForm() {
     },
     onSuccess: () => {
       //登录成功, 跳转到主页
-      history.push(routePath.wcms.DASHBOARD);
+      history.replace(routePath.wcms.DASHBOARD);
     },
   });
 
