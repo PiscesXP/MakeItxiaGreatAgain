@@ -23,7 +23,7 @@ data class OrderRecordTag(
         val createTime: Date = Date(),
 
         //被预约单记录引用次数
-        val referCount: Int = 0
+        var referCount: Int = 0
 ) {
     @Document(COLLECTION_NAME)
     data class Simple(
@@ -32,4 +32,11 @@ data class OrderRecordTag(
 
             val name: String
     )
+
+    fun toSimple(): Simple {
+        return Simple(
+                _id = this._id,
+                name = this.name
+        )
+    }
 }
