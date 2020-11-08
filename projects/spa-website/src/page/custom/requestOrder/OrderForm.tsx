@@ -123,6 +123,7 @@ export const OrderForm: React.FC = () => {
       <Form
         {...formItemLayout}
         form={form}
+        scrollToFirstError
         onFinish={handleSubmit}
         onValuesChange={saveDraft}
       >
