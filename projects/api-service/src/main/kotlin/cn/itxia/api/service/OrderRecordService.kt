@@ -248,30 +248,11 @@ class OrderRecordService {
         newTags.forEach { it.referCount++ }
         val actualNewTags = orderRecordTagRepository.saveAll(newTags)
 
-<<<<<<< Updated upstream
-        val dbRefNewTags = newTags.map {
-            DBRef("order_record_tag", ObjectId(it._id))
-        }
-
-        mongoTemplate.updateFirst(
-                Query.query(Criteria.where("_id").`is`(recordID)),
-                Update().set("title", dto.title)
-                        .set("content", dto.content)
-                        .set("tags", dbRefNewTags)
-                        .currentDate("lastModified")
-                        .set("lastModifiedBy", requester)
-                        .push("modifyHistory", history),
-                OrderRecord::class.java
-        )
-=======
         record.apply {
             title = dto.title
             content = dto.content
             tags = actualNewTags.map {
-                OrderRecordTag.Simple(
-                        _id = it._id,
-                        name = it.name
-                )
+                it.toSimple()
             }
             lastModified = Date()
             lastModifiedBy = requester.toBaseInfoOnly()
@@ -279,9 +260,13 @@ class OrderRecordService {
         }
 
         orderRecordRepository.save(record)
->>>>>>> Stashed changes
 
         return ResponseCode.SUCCESS.withoutPayload()
+    }
+
+    fun resetDBRefs() {
+        val all = orderRecordRepository.findAll()
+        orderRecordRepository.saveAll(all)
     }
 
 }
