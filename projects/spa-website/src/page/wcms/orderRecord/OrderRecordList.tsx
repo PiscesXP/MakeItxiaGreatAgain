@@ -181,6 +181,7 @@ export const OrderRecordList: React.FC<OrderRecordListProps> = ({
               title={record.title}
               description={
                 <span
+                  className={record.lastModified && "record-item-desc"}
                   onClick={() => {
                     handleClickDescription(record._id);
                   }}
