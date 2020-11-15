@@ -2,12 +2,14 @@ package cn.itxia.api.advice
 
 import cn.itxia.api.response.ResponseCode
 import cn.itxia.api.util.ResponseUtil
+import org.springframework.core.annotation.Order
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import javax.servlet.http.HttpServletResponse
 
 @ControllerAdvice
+@Order(100)
 class HttpMessageNotReadableExceptionHandler {
 
     /**

@@ -16,42 +16,48 @@ data class OrderRecord(
         val order: Order,
 
         @DBRef
-        val tags: List<OrderRecordTag.Simple>,
+        var tags: Iterable<OrderRecordTag.Simple>,
 
-        val title: String,
+        var title: String,
 
-        val content: String,
+        var content: String,
 
         @DBRef
-        val attachments: List<Attachment>,
+        val attachments: Iterable<Attachment>,
 
         @DBRef
         val author: ItxiaMember.BaseInfoOnly,
 
         val createTime: Date = Date(),
 
-        val lastModified: Date? = null,
+        var lastModified: Date? = null,
 
         @DBRef
-        val lastModifiedBy: ItxiaMember.BaseInfoOnly? = null,
+        var lastModifiedBy: ItxiaMember.BaseInfoOnly? = null,
 
         @DBRef
-        val starBy: List<ItxiaMember.BaseInfoOnly> = listOf(),
+        var starBy: Iterable<ItxiaMember.BaseInfoOnly> = mutableListOf(),
 
         @DBRef
-        val likeBy: List<ItxiaMember.BaseInfoOnly> = listOf(),
+        var likeBy: Iterable<ItxiaMember.BaseInfoOnly> = mutableListOf(),
 
         @DBRef
-        val comments: List<Reply> = listOf(),
+        val comments: Iterable<Reply> = mutableListOf(),
 
-        val modifyHistory: List<OrderRecordHistory> = listOf()
+        val modifyHistory: Iterable<OrderRecordHistory> = mutableListOf()
 )
 
 
 data class OrderRecordHistory(
         val modifyTime: Date,
+
+        @DBRef
         val author: ItxiaMember.BaseInfoOnly,
+
         val title: String,
+
         val content: String,
-        val tags: List<OrderRecordTag.Simple>
+
+        @DBRef
+        val tags: Iterable<OrderRecordTag.Simple>
 )

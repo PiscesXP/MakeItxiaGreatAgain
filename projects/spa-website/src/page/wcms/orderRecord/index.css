@@ -12,3 +12,7 @@
 .record-action:hover {
   cursor: pointer;
 }
+
+.record-item-desc:hover {
+  cursor: pointer;
+}

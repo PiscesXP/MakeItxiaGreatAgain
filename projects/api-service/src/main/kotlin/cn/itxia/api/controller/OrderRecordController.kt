@@ -38,7 +38,7 @@ class OrderRecordController {
     @GetMapping("/orderRecordTag")
     @RequireItxiaMember
     fun getTags(@RequestParam(required = false) detail: String?): Response {
-        return orderRecordService.getTags(detail)
+        return orderRecordService.getTags(detail != null)
     }
 
     /**

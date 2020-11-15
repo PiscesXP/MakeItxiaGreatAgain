@@ -11,6 +11,7 @@ import cn.itxia.api.service.MemberService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletRequest
 
 @RestController
 class MemberController {
@@ -24,9 +25,14 @@ class MemberController {
     @PutMapping("/member/me/password")
     @RequireItxiaMember
     fun modifyPassword(
-            @RequestBody @Validated passwordModifyDto: PasswordModifyDto,
-            @CurrentItxiaMember itxiaMember: ItxiaMember): Response {
-        return if (memberService.passwordModify(passwordModifyDto, itxiaMember)) {
+            @RequestBody @Validated dto: PasswordModifyDto,
+            @CurrentItxiaMember requester: ItxiaMember,
+            request: HttpServletRequest
+    ): Response {
+        if (dto.password != dto.confirmPassword) {
+            return ResponseCode.INVALID_PARAM.withPayload("两次输入的密码不一致.")
+        }
+        return if (memberService.passwordModify(dto, requester, request)) {
             ResponseCode.SUCCESS.withPayload("密码修改成功.")
         } else {
             ResponseCode.UNKNOWN_ERROR.withPayload("修改失败.")

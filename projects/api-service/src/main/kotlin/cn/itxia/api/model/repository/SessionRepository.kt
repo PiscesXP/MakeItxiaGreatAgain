@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository
 @Repository
 interface SessionRepository : CrudRepository<Session, String> {
 
-    fun findByMember(member: ItxiaMember): Session?
-
     fun findByValue(sessionValue: String): Session?
 
     fun deleteAllByMember(member: ItxiaMember.BaseInfoOnly)
+
+    fun findAllByMember(member: ItxiaMember.BaseInfoOnly): Iterable<Session>
 
 }

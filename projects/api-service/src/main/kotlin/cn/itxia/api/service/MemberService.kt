@@ -2,6 +2,7 @@ package cn.itxia.api.service
 
 import cn.itxia.api.dto.*
 import cn.itxia.api.enum.CampusEnum
+import cn.itxia.api.enum.MemberGroupEnum
 import cn.itxia.api.enum.MemberRoleEnum
 import cn.itxia.api.enum.RedeemCodeTypeEnum
 import cn.itxia.api.model.ItxiaMember
@@ -18,9 +19,10 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.RequestBody
 import java.util.*
+import javax.servlet.http.HttpServletRequest
 
 @Service
 class MemberService {
@@ -38,18 +40,24 @@ class MemberService {
      * 修改密码.
      * @return 修改是否成功.
      * */
-    fun passwordModify(passwordModifyDto: PasswordModifyDto,
-                       itxiaMember: ItxiaMember): Boolean {
+    fun passwordModify(dto: PasswordModifyDto,
+                       requester: ItxiaMember,
+                       request: HttpServletRequest
+    ): Boolean {
         //好像不用再查一次，但又感觉有点不对劲
-        val optional = memberRepository.findById(itxiaMember._id)
-        if (optional.isPresent) {
-            val member = optional.get()
-            member.password = PasswordUtil.encrypt(passwordModifyDto.newPassword)
-            member.requirePasswordReset = false
-            memberRepository.save(member)
-            return true
+        val member = memberRepository.findByIdOrNull(requester._id) ?: return false
+        member.apply {
+            password = PasswordUtil.encrypt(dto.password)
+            requirePasswordReset = false
         }
-        return false
+        memberRepository.save(member)
+
+        //注销其它登录状态
+        if (dto.logoutOnOtherDevices) {
+            authenticationService.logoutOnOtherDevices(requester, request)
+        }
+
+        return true
     }
 
     /**
@@ -61,6 +69,7 @@ class MemberService {
         if (optional.isPresent) {
             val member = optional.get()
             member.campus = dto.campus.let { CampusEnum.parse(it) } ?: member.campus
+            member.group = dto.group.let { MemberGroupEnum.parse(it) } ?: member.group
             if (dto.email.isNullOrEmpty()) {
                 member.email = null
                 member.emailNotification.apply {
@@ -283,6 +292,7 @@ class MemberService {
                 realName = dto.realName,
                 password = PasswordUtil.encrypt(dto.password),
                 campus = dto.campus,
+                group = dto.group,
                 role = MemberRoleEnum.MEMBER,
                 disabled = true,        //需要管理员手动启用，相当于审核
                 joinDate = Date(),

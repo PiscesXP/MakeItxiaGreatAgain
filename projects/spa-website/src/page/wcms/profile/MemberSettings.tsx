@@ -1,9 +1,10 @@
 import React, { useMemo } from "react";
-import { Button, Checkbox, Col, Form, Input, Row } from "antd";
+import { Button, Checkbox, Col, Form, Input, Row, Select } from "antd";
 import { CenterMeFlex } from "@/components/layout";
 import { useApiRequest } from "@/hook/useApiRequest";
 import { CampusFormItem } from "@/components/form/CampusFormItem";
 import { useMemberContext } from "@/hook/useMemberContext";
+import { MemberGroupEnum } from "@/util/enum";
 
 export const MemberSettings: React.FC = () => {
   const context = useMemberContext();
@@ -12,6 +13,7 @@ export const MemberSettings: React.FC = () => {
     const result = {
       campus: context.campus,
       email: context.email,
+      group: context.group,
       emailNotification: [] as string[],
     };
     const { emailNotification } = context;
@@ -26,7 +28,7 @@ export const MemberSettings: React.FC = () => {
       }
     }
     return result;
-  }, [context]);
+  }, [context.campus, context.email, context.group, context.emailNotification]);
 
   const { loading, sendRequest } = useApiRequest({
     path: "/member/me/profile",
@@ -59,6 +61,20 @@ export const MemberSettings: React.FC = () => {
       onFinish={handleSubmit}
     >
       <CampusFormItem />
+
+      <Form.Item
+        name="group"
+        label="分组"
+        required
+        rules={[{ required: true, message: "请填写你的分组" }]}
+      >
+        <Select placeholder="请填写你的分组">
+          <Select.Option value={MemberGroupEnum.GEEK}>geek</Select.Option>
+          <Select.Option value={MemberGroupEnum.OP}>op</Select.Option>
+          <Select.Option value={MemberGroupEnum.WEB}>web</Select.Option>
+        </Select>
+      </Form.Item>
+
       <Form.Item
         name="email"
         label="Email"

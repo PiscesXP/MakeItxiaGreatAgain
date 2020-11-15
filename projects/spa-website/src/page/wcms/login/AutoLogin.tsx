@@ -30,7 +30,7 @@ function AutoLogin() {
           duration: 3,
         });
       }, 500);
-      history.push(routePath.wcms.DASHBOARD);
+      history.replace(routePath.wcms.DASHBOARD);
     },
     onUnsuccessful: () => {
       setTimeout(() => {

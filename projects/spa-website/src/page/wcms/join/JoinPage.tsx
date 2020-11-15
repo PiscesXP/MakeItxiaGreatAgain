@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { LockOutlined } from "@ant-design/icons";
-import { Button, Card, Form, Input, Modal } from "antd";
+import { Button, Card, Form, Input, Modal, Select } from "antd";
 import { CenterMeFlex } from "@/components/layout";
 import { parseQueryString } from "@/util/query";
 import { useHistory } from "react-router-dom";
@@ -9,6 +9,7 @@ import "./join.css";
 import { useTitle } from "@/hook/useTitle";
 import { CampusFormItem } from "@/components/form/CampusFormItem";
 import { useApiRequest } from "@/hook/useApiRequest";
+import { MemberGroupEnum } from "@/util/enum";
 
 export const JoinPage: React.FC = () => {
   useTitle("欢迎加入IT侠");
@@ -144,6 +145,19 @@ export const JoinPage: React.FC = () => {
           </Form.Item>
 
           <CampusFormItem />
+
+          <Form.Item
+            name="group"
+            label="分组"
+            required
+            rules={[{ required: true, message: "请填写你的分组" }]}
+          >
+            <Select placeholder="请填写你的分组">
+              <Select.Option value={MemberGroupEnum.GEEK}>geek</Select.Option>
+              <Select.Option value={MemberGroupEnum.OP}>op</Select.Option>
+              <Select.Option value={MemberGroupEnum.WEB}>web</Select.Option>
+            </Select>
+          </Form.Item>
 
           <Form.Item wrapperCol={{ span: 24 }}>
             <CenterMeFlex>

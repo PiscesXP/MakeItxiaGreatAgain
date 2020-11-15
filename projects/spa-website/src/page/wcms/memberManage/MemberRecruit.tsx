@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react";
-import { parseEnumValue } from "@/util/enum";
+import { MemberGroupEnum, parseEnumValue } from "@/util/enum";
 import { CheckCircleOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import { Button, notification, Table, Typography } from "antd";
 import { DELETE, POST } from "@/request/api";
@@ -120,6 +120,13 @@ export const MemberRecruit: React.FC = () => {
             onFilter: (value: CampusEnum, record: any) =>
               record.receiver && record.receiver.campus === value,
             render: (campus: string) => campus && parseEnumValue(campus),
+          },
+          {
+            title: "分组",
+            dataIndex: ["receiver", "group"],
+            key: "group",
+            width: 150,
+            render: (group) => parseEnumValue(group, ""),
           },
           {
             title: "登录账号",

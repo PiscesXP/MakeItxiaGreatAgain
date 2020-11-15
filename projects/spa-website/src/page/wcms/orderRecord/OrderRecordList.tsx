@@ -58,6 +58,10 @@ export const OrderRecordList: React.FC<OrderRecordListProps> = ({
 
   const [modifyModalID, setModifyModalID] = useState<string | null>(null);
 
+  const [showOriginAuthorItems, setShowOriginAuthorItems] = useState<
+    Set<string>
+  >(new Set());
+
   const memberContext = useMemberContext();
 
   function handleClickStar(recordID: string, isUndo: boolean) {
@@ -88,6 +92,18 @@ export const OrderRecordList: React.FC<OrderRecordListProps> = ({
         refresh();
       }
     );
+  }
+
+  /**
+   * 点击切换显示原作者/修改作者.
+   * */
+  function handleClickDescription(recordID: string) {
+    if (showOriginAuthorItems.has(recordID)) {
+      showOriginAuthorItems.delete(recordID);
+    } else {
+      showOriginAuthorItems.add(recordID);
+    }
+    setShowOriginAuthorItems(new Set(showOriginAuthorItems));
   }
 
   return (
@@ -164,13 +180,20 @@ export const OrderRecordList: React.FC<OrderRecordListProps> = ({
             <List.Item.Meta
               title={record.title}
               description={
-                record.lastModified
-                  ? `${record.lastModifiedBy.realName} 修改于 ${utcDateToText(
-                      record.lastModified
-                    )}`
-                  : `${record.author.realName} 发布于 ${utcDateToText(
-                      record.createTime
-                    )}`
+                <span
+                  className={record.lastModified && "record-item-desc"}
+                  onClick={() => {
+                    handleClickDescription(record._id);
+                  }}
+                >
+                  {record.lastModified && showOriginAuthorItems.has(record._id)
+                    ? `${record.lastModifiedBy.realName} 修改于 ${utcDateToText(
+                        record.lastModified
+                      )}`
+                    : `${record.author.realName} 发布于 ${utcDateToText(
+                        record.createTime
+                      )}`}
+                </span>
               }
             />
             <TagList tags={record.tags} />

@@ -1,6 +1,6 @@
 import React from "react";
 import { LockOutlined } from "@ant-design/icons";
-import { Alert, Button, Col, Form, Input, Row } from "antd";
+import { Alert, Button, Checkbox, Col, Form, Input, Row } from "antd";
 import { useApiRequest } from "@/hook/useApiRequest";
 
 export const PasswordReset: React.FC = () => {
@@ -25,9 +25,7 @@ export const PasswordReset: React.FC = () => {
 
   function handleSubmit(values: any) {
     sendRequest({
-      requestBody: {
-        newPassword: values.password,
-      },
+      requestBody: values,
     });
   }
 
@@ -40,7 +38,7 @@ export const PasswordReset: React.FC = () => {
     >
       <Form.Item
         name="password"
-        label="密码"
+        label="新密码"
         rules={[
           { required: true, message: "请填写密码" },
           {
@@ -53,28 +51,45 @@ export const PasswordReset: React.FC = () => {
       >
         <Input.Password
           prefix={<LockOutlined className="form-field-icon" />}
-          placeholder="密码"
+          placeholder="新密码"
           autoComplete="new-password"
         />
       </Form.Item>
       <Form.Item
         name="confirmPassword"
         label="确认密码"
+        required
         rules={[
           {
-            /*validator: async (rule, value) => {
+            validator: async (rule, value) => {
               if (form.getFieldValue("password") !== value) {
                 return Promise.reject("两次密码不一致");
               }
-            },*/
+            },
           },
         ]}
+        hasFeedback
       >
         <Input.Password
           prefix={<LockOutlined className="form-field-icon" />}
           placeholder="确认密码"
           autoComplete="new-password"
         />
+      </Form.Item>
+
+      <Form.Item
+        name="logoutOnOtherDevices"
+        label="登录状态"
+        initialValue={true}
+        valuePropName="checked"
+        extra={
+          <Alert
+            message="如果你曾在公共电脑上登录，或担心账号泄露，最好勾选这个。"
+            type="warning"
+          />
+        }
+      >
+        <Checkbox>注销其他设备上的登录状态</Checkbox>
       </Form.Item>
 
       <Form.Item wrapperCol={{ span: 24 }}>
