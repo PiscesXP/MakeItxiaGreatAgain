@@ -219,7 +219,10 @@ class OrderRecordService {
 
         val savedReply = replyService.saveReply(replyDto, requester)
 
-        record.comments.toMutableList().add(savedReply)
+        val comments = record.comments.toMutableList()
+        comments.add(savedReply)
+        record.comments = comments
+
         orderRecordRepository.save(record)
     }
 
