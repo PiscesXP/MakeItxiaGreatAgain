@@ -4,6 +4,8 @@ import {
   CheckCircleTwoTone,
   ClockCircleTwoTone,
   CloseCircleTwoTone,
+  EyeInvisibleOutlined,
+  EyeOutlined,
 } from "@ant-design/icons";
 import { Card, Divider } from "antd";
 import * as timeUtil from "@/util/time";
@@ -40,11 +42,18 @@ const getStatusIcon = (status: OrderStatusEnum) => {
 interface OrderInfoCardProps {
   data: any;
   highlightWords: string[];
+  showOrderPrivateInfo: boolean;
+  toggleShowOrderPrivateInfo: () => void;
   onHandleOrder: () => void;
 }
 
-export const OrderInfoCard: React.FC<OrderInfoCardProps> = (props) => {
-  const { data, highlightWords, onHandleOrder } = props;
+export const OrderInfoCard: React.FC<OrderInfoCardProps> = ({
+  data,
+  highlightWords,
+  showOrderPrivateInfo,
+  toggleShowOrderPrivateInfo,
+  onHandleOrder,
+}) => {
   const {
     name,
     campus,
@@ -53,6 +62,7 @@ export const OrderInfoCard: React.FC<OrderInfoCardProps> = (props) => {
     email,
     brandModel,
     os,
+    qq,
     warranty,
     description,
     attachments,
@@ -69,7 +79,17 @@ export const OrderInfoCard: React.FC<OrderInfoCardProps> = (props) => {
       <Divider dashed className="order-hr" />
       <p>
         <strong>姓名: </strong>
-        <HighlightText text={name} highlightWords={highlightWords} />
+        {showOrderPrivateInfo ? (
+          <HighlightText text={name} highlightWords={highlightWords} />
+        ) : (
+          "******"
+        )}
+        <span
+          className="order-private-bottom"
+          onClick={toggleShowOrderPrivateInfo}
+        >
+          {showOrderPrivateInfo ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+        </span>
       </p>
       <p>
         <strong>校区: </strong>
@@ -81,12 +101,30 @@ export const OrderInfoCard: React.FC<OrderInfoCardProps> = (props) => {
       </p>
       <p>
         <strong>电话: </strong>
-        <HighlightText text={phone} highlightWords={highlightWords} />
+        {showOrderPrivateInfo ? (
+          <HighlightText text={phone} highlightWords={highlightWords} />
+        ) : (
+          "********"
+        )}
       </p>
+      {qq && (
+        <p>
+          <strong>QQ: </strong>
+          {showOrderPrivateInfo ? (
+            <HighlightText text={qq} highlightWords={highlightWords} />
+          ) : (
+            "********"
+          )}
+        </p>
+      )}
       {email ? (
         <p>
           <strong>邮箱: </strong>
-          <HighlightText text={email} highlightWords={highlightWords} />
+          {showOrderPrivateInfo ? (
+            <HighlightText text={email} highlightWords={highlightWords} />
+          ) : (
+            "********"
+          )}
         </p>
       ) : null}
       <p>

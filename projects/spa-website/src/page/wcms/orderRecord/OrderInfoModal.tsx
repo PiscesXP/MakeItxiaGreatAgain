@@ -4,7 +4,8 @@ import { utcDateToText } from "@/util/time";
 import { MultiLinePlainText } from "@/components/text";
 import { AttachmentList } from "@/components/attachment";
 import { Alert, Descriptions, Modal } from "antd";
-import { useMemberContext } from "@/hook";
+import { useLocalStorageState, useMemberContext } from "@/hook";
+import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 
 const { Item } = Descriptions;
 
@@ -33,6 +34,11 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
     attachments,
     handler,
   } = order;
+
+  const [
+    showOrderPrivateInfo,
+    setShowOrderPrivateInfo,
+  ] = useLocalStorageState<boolean>("showOrderPrivateInfo", false);
 
   const memberContext = useMemberContext();
 
@@ -67,13 +73,23 @@ export const OrderInfoModal: React.FC<OrderInfoModalProps> = ({
         </Item>
         <Item label="电脑型号">{brandModel}</Item>
         <Item label="操作系统">{os}</Item>
-        <Item label="姓名">{name}</Item>
+        <Item label="姓名">
+          {showOrderPrivateInfo ? name : "******"}
+          <span
+            className="order-private-bottom"
+            onClick={() => {
+              setShowOrderPrivateInfo(!showOrderPrivateInfo);
+            }}
+          >
+            {showOrderPrivateInfo ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+          </span>
+        </Item>
         <Item label="保修状况">{warranty}</Item>
         <Item label="预约时间">{utcDateToText(createTime)}</Item>
         <Item label="校区">{parseEnumValue(campus)}</Item>
-        <Item label="电话">{phone}</Item>
-        <Item label="QQ">{qq}</Item>
-        <Item label="邮箱">{email}</Item>
+        <Item label="电话">{showOrderPrivateInfo ? phone : "*********"}</Item>
+        <Item label="QQ">{showOrderPrivateInfo ? qq : "*********"}</Item>
+        <Item label="邮箱">{showOrderPrivateInfo ? email : "*********"}</Item>
       </Descriptions>
     </Modal>
   );

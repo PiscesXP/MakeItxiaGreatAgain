@@ -4,6 +4,7 @@ import { OrderPagination } from "./OrderPagination";
 import { EmbeddableLoading, Loading } from "@/components/loading";
 import { OrderInfoCard } from "./OrderInfoCard";
 import { OrderNotFound } from "@/components/notFound";
+import { useLocalStorageState } from "@/hook";
 
 interface OrderListProps {
   code: number | null;
@@ -22,6 +23,15 @@ export const OrderList: React.FC<OrderListProps> = ({
   onHandleOrder,
   onPaginationChange,
 }) => {
+  const [
+    showOrderPrivateInfo,
+    setShowOrderPrivateInfo,
+  ] = useLocalStorageState<boolean>("showOrderPrivateInfo", false);
+
+  function toggleShowOrderPrivateInfo() {
+    setShowOrderPrivateInfo(!showOrderPrivateInfo);
+  }
+
   //加载中
   if (code !== 0) {
     return <Loading delay={0} />;
@@ -59,6 +69,8 @@ export const OrderList: React.FC<OrderListProps> = ({
                 <OrderInfoCard
                   key={value._id}
                   data={value}
+                  showOrderPrivateInfo={!!showOrderPrivateInfo}
+                  toggleShowOrderPrivateInfo={toggleShowOrderPrivateInfo}
                   highlightWords={highlightWords}
                   onHandleOrder={onHandleOrder}
                 />
@@ -75,6 +87,8 @@ export const OrderList: React.FC<OrderListProps> = ({
                 <OrderInfoCard
                   key={value._id}
                   data={value}
+                  showOrderPrivateInfo={!!showOrderPrivateInfo}
+                  toggleShowOrderPrivateInfo={toggleShowOrderPrivateInfo}
                   highlightWords={highlightWords}
                   onHandleOrder={onHandleOrder}
                 />

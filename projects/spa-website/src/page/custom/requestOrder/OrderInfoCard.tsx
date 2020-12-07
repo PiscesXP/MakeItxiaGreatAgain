@@ -10,6 +10,8 @@ import { routePath } from "@/page/routePath";
 import { Loading } from "@/components/loading";
 import { useApiRequest } from "@/hook/useApiRequest";
 import { OrderStatusEnum } from "@/util/enum";
+import { useLocalStorageState } from "@/hook";
+import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 
 const { Item } = Descriptions;
 
@@ -19,6 +21,11 @@ export const OrderInfoCard: React.FC<{
   const { hasOrder, order, orderID, resetOrder } = useCustomContext();
 
   const history = useHistory();
+
+  const [
+    showMyOrderPrivateInfo,
+    setShowMyOrderPrivateInfo,
+  ] = useLocalStorageState<boolean>("showMyOrderPrivateInfo", false);
 
   const cancelApiRequest = useApiRequest({
     path: `/custom/order/${orderID}/cancel`,
@@ -77,9 +84,19 @@ export const OrderInfoCard: React.FC<{
     <Descriptions bordered column={1}>
       <Item label="姓名">{name}</Item>
       <Item label="校区">{parseEnumValue(campus)}</Item>
-      <Item label="电话">{phone}</Item>
-      <Item label="QQ">{qq}</Item>
-      <Item label="邮箱">{email}</Item>
+      <Item label="电话">
+        {showMyOrderPrivateInfo ? phone : "*********"}
+        <span
+          className="order-private-bottom"
+          onClick={() => {
+            setShowMyOrderPrivateInfo(!showMyOrderPrivateInfo);
+          }}
+        >
+          {showMyOrderPrivateInfo ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+        </span>
+      </Item>
+      <Item label="QQ">{showMyOrderPrivateInfo ? qq : "*********"}</Item>
+      <Item label="邮箱">{showMyOrderPrivateInfo ? email : "*********"}</Item>
       <Item label="电脑型号">{brandModel}</Item>
       <Item label="操作系统">{os}</Item>
       <Item label="保修状况">{warranty}</Item>
