@@ -44,7 +44,7 @@ data class OrderRecord(
         @DBRef
         var comments: Iterable<Reply> = mutableListOf(),
 
-        val modifyHistory: Iterable<OrderRecordHistory> = mutableListOf()
+        val modifyHistory: MutableList<OrderRecordHistory> = mutableListOf()
 )
 
 
