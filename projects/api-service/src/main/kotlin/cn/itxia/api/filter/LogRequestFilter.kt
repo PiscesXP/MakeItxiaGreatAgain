@@ -1,5 +1,6 @@
 package cn.itxia.api.filter
 
+/*
 import cn.itxia.api.service.RequestLogService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.annotation.Order
@@ -11,6 +12,7 @@ import javax.servlet.ServletResponse
 
 @Component
 @Order(2)
+@Deprecated
 class LogRequestFilter : Filter {
 
     @Autowired
@@ -23,3 +25,6 @@ class LogRequestFilter : Filter {
     }
 
 }
+*/
+
+class LogRequestFilter
