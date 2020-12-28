@@ -3,6 +3,7 @@ package cn.itxia.api.service
 import cn.itxia.api.model.ItxiaMember
 import cn.itxia.api.model.Order
 import cn.itxia.api.model.Reply
+import cn.itxia.api.util.getLogger
 import com.aliyuncs.DefaultAcsClient
 import com.aliyuncs.dm.model.v20151123.SingleSendMailRequest
 import com.aliyuncs.exceptions.ClientException
@@ -21,6 +22,8 @@ class EmailService {
 
     @Value("\${aliyun.email.region}")
     private lateinit var region: String
+
+    private val logger = getLogger()
 
     private fun sendEmail(address: String, title: String, content: String, isHtmlContent: Boolean = false) {
         val profile = DefaultProfile.getProfile(region, accessKeyId, accessKeySecret)
@@ -45,9 +48,9 @@ class EmailService {
         }
         try {
             client.getAcsResponse(request)
-            println("Sent email to ${address}")
+            logger.info("发送邮件到:${address}.")
         } catch (e: ClientException) {
-            println(e.errMsg)
+            logger.error("邮件发送失败:${e.errMsg}.")
         }
     }
 
