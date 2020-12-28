@@ -5,17 +5,13 @@ import org.springframework.data.mongodb.core.mapping.Document
 
 @Document(collection = "request_log")
 data class RequestLog(
-        @Id
-        val _id: String,
+    @Id
+    val _id: String,
 
-        val uri: String,
+    val uri: String,
 
-        val method: String,
+    val method: String,
 
-        val requestBody: String? = null,
-
-        val responseBody: String? = null,
-
-        val member: ItxiaMember.BaseInfoOnly? = null
+    val member: ItxiaMember.BaseInfoOnly? = null
 
 )

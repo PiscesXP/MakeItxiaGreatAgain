@@ -27,6 +27,9 @@ repositories {
 
 dependencies {
 
+    //coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
+
     //导出excel
     implementation("com.alibaba:easyexcel:2.2.7")
 
