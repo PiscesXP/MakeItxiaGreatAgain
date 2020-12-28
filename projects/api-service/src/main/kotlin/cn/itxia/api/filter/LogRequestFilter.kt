@@ -1,9 +1,8 @@
 package cn.itxia.api.filter
-/*
-
-暂时停用记录功能
 
 import cn.itxia.api.service.RequestLogService
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
@@ -14,18 +13,16 @@ import javax.servlet.ServletResponse
 
 @Component
 @Order(2)
-@Deprecated
 class LogRequestFilter : Filter {
 
     @Autowired
-    lateinit var requestLogService: RequestLogService
-
+    private lateinit var requestLogService: RequestLogService
 
     override fun doFilter(servletRequest: ServletRequest, servletResponse: ServletResponse, chain: FilterChain) {
-        requestLogService.logRequest(servletRequest, servletResponse)
+        GlobalScope.launch {
+            requestLogService.logMemberActivity(servletRequest, servletResponse)
+        }
         chain.doFilter(servletRequest, servletResponse)
     }
 
 }
-
-*/

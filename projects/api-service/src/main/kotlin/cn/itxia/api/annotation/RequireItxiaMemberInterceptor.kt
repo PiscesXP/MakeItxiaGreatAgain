@@ -2,10 +2,7 @@ package cn.itxia.api.annotation
 
 import cn.itxia.api.response.ResponseCode
 import cn.itxia.api.service.AuthenticationService
-import cn.itxia.api.service.RequestLogService
 import cn.itxia.api.util.ResponseUtil
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.method.HandlerMethod
@@ -18,9 +15,6 @@ class RequireItxiaMemberInterceptor : HandlerInterceptor {
 
     @Autowired
     private lateinit var authenticationService: AuthenticationService
-
-    @Autowired
-    private lateinit var requestLogService: RequestLogService
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
         if (handler !is HandlerMethod) {
@@ -36,13 +30,6 @@ class RequireItxiaMemberInterceptor : HandlerInterceptor {
                 false
             }
             member.role.isEnoughFor(annotation.role) -> {
-                GlobalScope.launch {
-                    requestLogService.logMemberActivity(
-                        uri = request.requestURI,
-                        method = request.method,
-                        member = member
-                    )
-                }
                 true
             }
             else -> {
