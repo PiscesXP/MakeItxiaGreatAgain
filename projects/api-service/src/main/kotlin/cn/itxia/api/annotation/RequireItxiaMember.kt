@@ -9,5 +9,5 @@ import cn.itxia.api.enum.MemberRoleEnum
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class RequireItxiaMember(
-        val role: MemberRoleEnum = MemberRoleEnum.MEMBER
+    val role: MemberRoleEnum = MemberRoleEnum.MEMBER
 )

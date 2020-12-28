@@ -5,16 +5,16 @@ import cn.itxia.api.enum.MemberGroupEnum
 
 data class MemberRecruitDto(
 
-        val redeemCode: String,
+    val redeemCode: String,
 
-        val loginName: String,
+    val loginName: String,
 
-        val realName: String,
+    val realName: String,
 
-        var password: String,
+    var password: String,
 
-        var campus: CampusEnum,
+    var campus: CampusEnum,
 
-        val group: MemberGroupEnum
+    val group: MemberGroupEnum
 
 )

@@ -9,55 +9,55 @@ import java.util.*
 
 @Document(collection = "orders")
 data class Order(
-        @Id
-        val _id: String,
+    @Id
+    val _id: String,
 
-        val name: String,
+    val name: String,
 
-        val phone: String,
+    val phone: String,
 
-        val qq: String?,
+    val qq: String?,
 
-        val email: String?,
+    val email: String?,
 
-        val acceptEmailNotification: Boolean = false,
+    val acceptEmailNotification: Boolean = false,
 
-        val os: String,
+    val os: String,
 
-        val brandModel: String,
+    val brandModel: String,
 
-        val warranty: String?,
+    val warranty: String?,
 
-        val campus: CampusEnum,
+    val campus: CampusEnum,
 
-        val description: String,
+    val description: String,
 
-        val createTime: Date = Date(),
+    val createTime: Date = Date(),
 
-        /**
-         * 正在处理的it侠.
-         * */
-        @DBRef
-        var handler: ItxiaMember.BaseInfoOnly? = null,
+    /**
+     * 正在处理的it侠.
+     * */
+    @DBRef
+    var handler: ItxiaMember.BaseInfoOnly? = null,
 
-        var deleted: Boolean = false,
+    var deleted: Boolean = false,
 
-        /**
-         * 预约单状态.
-         * */
-        var status: OrderStatusEnum = OrderStatusEnum.PENDING,
+    /**
+     * 预约单状态.
+     * */
+    var status: OrderStatusEnum = OrderStatusEnum.PENDING,
 
-        @DBRef
-        val reply: MutableList<Reply> = mutableListOf(),
+    @DBRef
+    val reply: MutableList<Reply> = mutableListOf(),
 
-        @DBRef
-        val discuss: MutableList<Reply> = mutableListOf(),
+    @DBRef
+    val discuss: MutableList<Reply> = mutableListOf(),
 
-        @DBRef
-        val attachments: List<Attachment> = listOf(),
+    @DBRef
+    val attachments: List<Attachment> = listOf(),
 
-        val recordID: String? = null,
+    val recordID: String? = null,
 
-        var requireRecord: Boolean = false
+    var requireRecord: Boolean = false
 
 )

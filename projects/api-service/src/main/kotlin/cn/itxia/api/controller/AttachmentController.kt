@@ -19,16 +19,20 @@ class AttachmentController {
     private lateinit var attachmentService: AttachmentService
 
     @PostMapping("/upload")
-    fun upload(@RequestParam("file") file: MultipartFile,
-               @CurrentItxiaMember itxiaMember: ItxiaMember?): Response {
+    fun upload(
+        @RequestParam("file") file: MultipartFile,
+        @CurrentItxiaMember itxiaMember: ItxiaMember?
+    ): Response {
         return attachmentService.handleUpload(file, itxiaMember)
     }
 
     @GetMapping("/upload/{_id}")
-    fun getFile(@PathVariable _id: String,
-                @RequestParam(required = false) thumbnail: String?,
-                @RequestParam(required = false) download: String?,
-                response: HttpServletResponse) {
+    fun getFile(
+        @PathVariable _id: String,
+        @RequestParam(required = false) thumbnail: String?,
+        @RequestParam(required = false) download: String?,
+        response: HttpServletResponse
+    ) {
         val isDownload = download != null
         val isThumbnail = thumbnail != null
         attachmentService.getFile(_id, isDownload, isThumbnail, response)

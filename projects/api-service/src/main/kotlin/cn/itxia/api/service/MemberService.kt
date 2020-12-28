@@ -40,9 +40,10 @@ class MemberService {
      * 修改密码.
      * @return 修改是否成功.
      * */
-    fun passwordModify(dto: PasswordModifyDto,
-                       requester: ItxiaMember,
-                       request: HttpServletRequest
+    fun passwordModify(
+        dto: PasswordModifyDto,
+        requester: ItxiaMember,
+        request: HttpServletRequest
     ): Boolean {
         //好像不用再查一次，但又感觉有点不对劲
         val member = memberRepository.findByIdOrNull(requester._id) ?: return false
@@ -63,8 +64,10 @@ class MemberService {
     /**
      * 修改个人信息.
      * */
-    fun modifyProfile(dto: MemberProfileModifyDto,
-                      itxiaMember: ItxiaMember) {
+    fun modifyProfile(
+        dto: MemberProfileModifyDto,
+        itxiaMember: ItxiaMember
+    ) {
         val optional = memberRepository.findById(itxiaMember._id)
         if (optional.isPresent) {
             val member = optional.get()
@@ -78,10 +81,11 @@ class MemberService {
                 }
             } else {
                 member.email = dto.email
-                member.emailNotification.onMyCampusHasNewOrder = dto.emailNotification?.contains("onMyCampusHasNewOrder")
+                member.emailNotification.onMyCampusHasNewOrder =
+                    dto.emailNotification?.contains("onMyCampusHasNewOrder")
                         ?: false
                 member.emailNotification.onMyOrderHasNewReply = dto.emailNotification?.contains("onMyOrderHasNewReply")
-                        ?: false
+                    ?: false
             }
             memberRepository.save(member)
         }
@@ -109,10 +113,10 @@ class MemberService {
 
     fun getAllMemberThatReceiveEmailNotification(notificationName: String, campus: CampusEnum): List<ItxiaMember> {
         return mongoTemplate.query(ItxiaMember::class.java).matching(
-                Query.query(
-                        Criteria.where("emailNotification.${notificationName}").`is`(true)
-                                .and("campus").`is`(campus)
-                )
+            Query.query(
+                Criteria.where("emailNotification.${notificationName}").`is`(true)
+                    .and("campus").`is`(campus)
+            )
         ).all()
     }
 
@@ -130,9 +134,11 @@ class MemberService {
     /**
      * 更改指定成员的权限.
      * */
-    fun changeMemberRole(memberID: String,
-                         dto: MemberRoleChangeDto,
-                         requester: ItxiaMember): Boolean {
+    fun changeMemberRole(
+        memberID: String,
+        dto: MemberRoleChangeDto,
+        requester: ItxiaMember
+    ): Boolean {
         val criteria = Criteria()
         if (requester.role == MemberRoleEnum.ADMIN) {
             if (dto.role == MemberRoleEnum.SUPER_ADMIN) {
@@ -141,19 +147,21 @@ class MemberService {
             criteria.and("role").ne(MemberRoleEnum.SUPER_ADMIN)
         }
         return modifyOneMember(
-                memberID = memberID,
-                criteria = criteria,
-                update = Update.update("role", dto.role)
+            memberID = memberID,
+            criteria = criteria,
+            update = Update.update("role", dto.role)
         )
-                .modifiedCount == 1L
+            .modifiedCount == 1L
     }
 
     /**
      * 更改指定成员的禁用状态.
      * */
-    fun changeMemberDisabledStatus(memberID: String,
-                                   dto: MemberDisabledStatusChangeDto,
-                                   requester: ItxiaMember): Boolean {
+    fun changeMemberDisabledStatus(
+        memberID: String,
+        dto: MemberDisabledStatusChangeDto,
+        requester: ItxiaMember
+    ): Boolean {
         val criteria = Criteria()
         if (requester.role == MemberRoleEnum.ADMIN) {
             criteria.and("role").ne(MemberRoleEnum.SUPER_ADMIN)
@@ -164,11 +172,11 @@ class MemberService {
         authenticationService.removeAllSessionOfMember(memberToChange.toBaseInfoOnly())
 
         return modifyOneMember(
-                memberID = memberID,
-                criteria = criteria,
-                update = Update.update("disabled", dto.disabled)
+            memberID = memberID,
+            criteria = criteria,
+            update = Update.update("disabled", dto.disabled)
         )
-                .modifiedCount == 1L
+            .modifiedCount == 1L
     }
 
     /**
@@ -182,9 +190,9 @@ class MemberService {
         }
         val newPassword = RandomStringUtils.randomAlphanumeric(16)
         val result = mongoTemplate.updateFirst(
-                Query.query(Criteria.where("_id").`is`(memberID)),
-                Update.update("password", PasswordUtil.encrypt(newPassword)).set("requirePasswordReset", true),
-                ItxiaMember::class.java
+            Query.query(Criteria.where("_id").`is`(memberID)),
+            Update.update("password", PasswordUtil.encrypt(newPassword)).set("requirePasswordReset", true),
+            ItxiaMember::class.java
         )
         return if (result.modifiedCount == 1L) {
             ResponseCode.SUCCESS.withPayload(newPassword)
@@ -196,15 +204,16 @@ class MemberService {
     /**
      * 更新一个成员的数据.
      * */
-    fun modifyOneMember(memberID: String,
-                        criteria: Criteria = Criteria(),
-                        update: Update = Update()
+    fun modifyOneMember(
+        memberID: String,
+        criteria: Criteria = Criteria(),
+        update: Update = Update()
     ): UpdateResult {
         criteria.and("_id").`is`(memberID)
         return mongoTemplate.updateFirst(
-                Query.query(criteria),
-                update,
-                ItxiaMember::class.java
+            Query.query(criteria),
+            update,
+            ItxiaMember::class.java
         )
     }
 
@@ -214,11 +223,11 @@ class MemberService {
     fun recruitNewMemberByRedeemCode(requester: ItxiaMember): String {
         val redeemCodeValue = RandomStringUtils.randomAlphanumeric(16)
         val redeemCode = RedeemCode(
-                _id = ObjectId.get().toHexString(),
-                provider = requester,
-                hasRedeemed = false,
-                type = RedeemCodeTypeEnum.RECRUIT,
-                redeemCode = redeemCodeValue
+            _id = ObjectId.get().toHexString(),
+            provider = requester,
+            hasRedeemed = false,
+            type = RedeemCodeTypeEnum.RECRUIT,
+            redeemCode = redeemCodeValue
         )
         mongoTemplate.save(redeemCode)
         return redeemCodeValue
@@ -229,8 +238,8 @@ class MemberService {
      * */
     fun getMyRedeemCode(requester: ItxiaMember): List<RedeemCode> {
         return mongoTemplate.find(
-                Query.query(Criteria.where("provider").`is`(requester)),
-                RedeemCode::class.java
+            Query.query(Criteria.where("provider").`is`(requester)),
+            RedeemCode::class.java
         )
     }
 
@@ -239,18 +248,19 @@ class MemberService {
      * */
     fun validateRecruitRedeemCode(codeValue: String): Boolean {
         return mongoTemplate.exists(
-                Query.query(Criteria.where("redeemCode").`is`(codeValue)
-                        .and("hasRedeemed").`is`(false)
-                        .and("type").`is`(RedeemCodeTypeEnum.RECRUIT)
-                ),
-                RedeemCode::class.java
+            Query.query(
+                Criteria.where("redeemCode").`is`(codeValue)
+                    .and("hasRedeemed").`is`(false)
+                    .and("type").`is`(RedeemCodeTypeEnum.RECRUIT)
+            ),
+            RedeemCode::class.java
         )
     }
 
     fun checkIfLoginNameAlreadyExisted(loginName: String): Boolean {
         return mongoTemplate.exists(
-                Query.query(Criteria.where("loginName").`is`(loginName)),
-                ItxiaMember::class.java
+            Query.query(Criteria.where("loginName").`is`(loginName)),
+            ItxiaMember::class.java
         )
     }
 
@@ -260,44 +270,45 @@ class MemberService {
     fun registerNewMemberByRedeemCode(dto: MemberRecruitDto): Response {
 
         if (mongoTemplate.exists(
-                        Query.query(Criteria.where("loginName").`is`(dto.loginName)),
-                        ItxiaMember::class.java
-                )) {
+                Query.query(Criteria.where("loginName").`is`(dto.loginName)),
+                ItxiaMember::class.java
+            )
+        ) {
             return ResponseCode.LOGIN_NAME_ALREADY_EXISTED.withoutPayload()
         }
 
         //验证邀请码，并使用该邀请码
         val update = mongoTemplate.updateFirst(
-                Query.query(
-                        Criteria.where("redeemCode").`is`(dto.redeemCode)
-                                .and("hasRedeemed").ne(true)
-                ),
-                Update.update("hasRedeemed", true),
-                RedeemCode::class.java
+            Query.query(
+                Criteria.where("redeemCode").`is`(dto.redeemCode)
+                    .and("hasRedeemed").ne(true)
+            ),
+            Update.update("hasRedeemed", true),
+            RedeemCode::class.java
         )
         if (update.modifiedCount != 1L) {
             return ResponseCode.INVALID_REDEEM_CODE.withoutPayload()
         }
 
         val redeemCode = mongoTemplate.findOne(
-                Query.query(Criteria.where("redeemCode").`is`(dto.redeemCode)),
-                RedeemCode::class.java
+            Query.query(Criteria.where("redeemCode").`is`(dto.redeemCode)),
+            RedeemCode::class.java
         )
-                ?: return ResponseCode.UNKNOWN_ERROR.withoutPayload()
+            ?: return ResponseCode.UNKNOWN_ERROR.withoutPayload()
 
         //创建新成员
         val newMember = ItxiaMember(
-                _id = ObjectId.get().toHexString(),
-                loginName = dto.loginName,
-                realName = dto.realName,
-                password = PasswordUtil.encrypt(dto.password),
-                campus = dto.campus,
-                group = dto.group,
-                role = MemberRoleEnum.MEMBER,
-                disabled = true,        //需要管理员手动启用，相当于审核
-                joinDate = Date(),
-                requirePasswordReset = false,
-                inviteBy = redeemCode.provider.toBaseInfoOnly()
+            _id = ObjectId.get().toHexString(),
+            loginName = dto.loginName,
+            realName = dto.realName,
+            password = PasswordUtil.encrypt(dto.password),
+            campus = dto.campus,
+            group = dto.group,
+            role = MemberRoleEnum.MEMBER,
+            disabled = true,        //需要管理员手动启用，相当于审核
+            joinDate = Date(),
+            requirePasswordReset = false,
+            inviteBy = redeemCode.provider.toBaseInfoOnly()
         )
         mongoTemplate.save(newMember)
 
@@ -309,11 +320,11 @@ class MemberService {
 
     fun deleteRedeemCode(redeemCodeID: String): Boolean {
         return mongoTemplate.remove(
-                Query.query(
-                        Criteria.where("_id").`is`(redeemCodeID)
-                                .and("hasRedeemed").ne(true)
-                ),
-                RedeemCode::class.java
+            Query.query(
+                Criteria.where("_id").`is`(redeemCodeID)
+                    .and("hasRedeemed").ne(true)
+            ),
+            RedeemCode::class.java
         ).deletedCount == 1L
     }
 }

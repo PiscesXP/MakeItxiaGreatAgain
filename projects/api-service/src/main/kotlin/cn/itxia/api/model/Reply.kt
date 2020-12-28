@@ -7,16 +7,16 @@ import java.util.*
 
 @Document(collection = "reply")
 data class Reply(
-        @Id
-        val _id: String,
+    @Id
+    val _id: String,
 
-        val content: String,
+    val content: String,
 
-        @DBRef
-        val attachments: List<Attachment>,
+    @DBRef
+    val attachments: List<Attachment>,
 
-        @DBRef
-        val postBy: ItxiaMember.BaseInfoOnly?,
+    @DBRef
+    val postBy: ItxiaMember.BaseInfoOnly?,
 
-        val createTime: Date = Date()
+    val createTime: Date = Date()
 )

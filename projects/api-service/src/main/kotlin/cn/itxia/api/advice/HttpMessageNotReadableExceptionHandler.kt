@@ -16,9 +16,12 @@ class HttpMessageNotReadableExceptionHandler {
      * 处理JSON解析错误、参数校验错误.
      * */
     @ExceptionHandler(HttpMessageNotReadableException::class)
-    fun httpMessageNotReadableExceptionHandler(exception: HttpMessageNotReadableException, response: HttpServletResponse) {
+    fun httpMessageNotReadableExceptionHandler(
+        exception: HttpMessageNotReadableException,
+        response: HttpServletResponse
+    ) {
         ResponseUtil.writeToResponse(
-                response, ResponseCode.INCORRECT_PARAM_FORMAT.withPayload("参数校验不正确, 或是json格式错误.")
+            response, ResponseCode.INCORRECT_PARAM_FORMAT.withPayload("参数校验不正确, 或是json格式错误.")
         )
     }
 

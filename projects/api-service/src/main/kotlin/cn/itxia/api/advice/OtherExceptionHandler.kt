@@ -5,7 +5,6 @@ import cn.itxia.api.util.ResponseUtil
 import org.springframework.core.annotation.Order
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
-import java.lang.Exception
 import javax.servlet.http.HttpServletResponse
 
 @ControllerAdvice
@@ -15,7 +14,7 @@ class OtherExceptionHandler {
     @ExceptionHandler(Exception::class)
     fun otherExceptionHandler(exception: Exception, response: HttpServletResponse) {
         ResponseUtil.writeToResponse(
-                response, ResponseCode.UNKNOWN_ERROR.withPayload("未知错误")
+            response, ResponseCode.UNKNOWN_ERROR.withPayload("未知错误")
         )
     }
 

@@ -19,20 +19,40 @@ interface OrderRepository : PagingAndSortingRepository<Order, String> {
 
     fun countByStatusAndDeletedFalse(status: OrderStatusEnum): Int
 
-    fun countByCampusAndStatusAndCreateTimeBeforeAndDeletedFalse(campus: CampusEnum, status: OrderStatusEnum, createTimeBefore: Date): Int
+    fun countByCampusAndStatusAndCreateTimeBeforeAndDeletedFalse(
+        campus: CampusEnum,
+        status: OrderStatusEnum,
+        createTimeBefore: Date
+    ): Int
 
     fun countByHandlerAndStatusAndDeletedFalse(handler: ItxiaMember.BaseInfoOnly, status: OrderStatusEnum): Int
 
     fun findAllByDeletedFalse(): List<Order>
 
 
-    fun findByCampusInAndStatusInAndDeletedFalse(campus: Collection<CampusEnum>, status: Collection<OrderStatusEnum>, pageable: Pageable): List<Order>
+    fun findByCampusInAndStatusInAndDeletedFalse(
+        campus: Collection<CampusEnum>,
+        status: Collection<OrderStatusEnum>,
+        pageable: Pageable
+    ): List<Order>
 
-    fun countByCampusInAndStatusInAndDeletedFalse(campus: Collection<CampusEnum>, status: Collection<OrderStatusEnum>): Int
+    fun countByCampusInAndStatusInAndDeletedFalse(
+        campus: Collection<CampusEnum>,
+        status: Collection<OrderStatusEnum>
+    ): Int
 
 
-    fun findByCampusInAndStatusInAndHandlerAndDeletedFalse(campus: Collection<CampusEnum>, status: Collection<OrderStatusEnum>, handler: ItxiaMember.BaseInfoOnly, pageable: Pageable): List<Order>
+    fun findByCampusInAndStatusInAndHandlerAndDeletedFalse(
+        campus: Collection<CampusEnum>,
+        status: Collection<OrderStatusEnum>,
+        handler: ItxiaMember.BaseInfoOnly,
+        pageable: Pageable
+    ): List<Order>
 
-    fun countByCampusInAndStatusInAndHandlerAndDeletedFalse(campus: Collection<CampusEnum>, status: Collection<OrderStatusEnum>, handler: ItxiaMember.BaseInfoOnly): Int
+    fun countByCampusInAndStatusInAndHandlerAndDeletedFalse(
+        campus: Collection<CampusEnum>,
+        status: Collection<OrderStatusEnum>,
+        handler: ItxiaMember.BaseInfoOnly
+    ): Int
 
 }

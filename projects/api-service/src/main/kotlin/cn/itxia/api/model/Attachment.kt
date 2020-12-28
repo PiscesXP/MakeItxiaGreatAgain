@@ -6,21 +6,21 @@ import java.util.*
 
 data class Attachment(
 
-        @Id
-        val _id: String,
+    @Id
+    val _id: String,
 
-        val fileName: String,
+    val fileName: String,
 
-        val size: Long,
+    val size: Long,
 
-        val mimeType: String?,
+    val mimeType: String?,
 
-        val md5: String,
+    val md5: String,
 
-        @DBRef
-        val uploadBy: ItxiaMember.BaseInfoOnly?,
+    @DBRef
+    val uploadBy: ItxiaMember.BaseInfoOnly?,
 
-        val uploadTime: Date,
+    val uploadTime: Date,
 
-        val deleted: Boolean
+    val deleted: Boolean
 )

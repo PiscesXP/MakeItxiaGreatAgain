@@ -40,10 +40,12 @@ class OAuthController {
      * 已登录：绑定QQ OAuth.
      * */
     @PostMapping("/oauth/link/qq")
-    fun qqOAuthLogin(@RequestBody qqoAuthDto: QQOAuthDto,
-                     @CurrentItxiaMember itxiaMember: ItxiaMember?,
-                     httpServletRequest: HttpServletRequest,
-                     httpServletResponse: HttpServletResponse): Response {
+    fun qqOAuthLogin(
+        @RequestBody qqoAuthDto: QQOAuthDto,
+        @CurrentItxiaMember itxiaMember: ItxiaMember?,
+        httpServletRequest: HttpServletRequest,
+        httpServletResponse: HttpServletResponse
+    ): Response {
         return if (itxiaMember == null) {
             oAuthService.qqOAuthLogin(qqoAuthDto.accessToken, httpServletRequest, httpServletResponse)
         } else {

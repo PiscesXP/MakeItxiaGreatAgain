@@ -50,8 +50,9 @@ class OrderController {
      * (预约者)回复预约单.
      * */
     @PostMapping("/custom/order/{orderID}/reply")
-    fun postReplyByCustom(@PathVariable orderID: String,
-                          @RequestBody dto: ReplyDto
+    fun postReplyByCustom(
+        @PathVariable orderID: String,
+        @RequestBody dto: ReplyDto
     ): Response {
         if (orderService.postReplyByCustom(orderID, dto)) {
             return ResponseCode.SUCCESS.withoutPayload()
@@ -65,7 +66,7 @@ class OrderController {
      * */
     @PostMapping("/custom/order/retrieve")
     fun retrieveOrder(
-            @RequestBody retrieveOrderDto: RetrieveOrderDto
+        @RequestBody retrieveOrderDto: RetrieveOrderDto
     ): Response {
         val orderID = orderService.retrieveOrder(retrieveOrderDto)
         return if (orderID != null) {
@@ -82,30 +83,31 @@ class OrderController {
      * */
     @GetMapping("/order")
     @RequireItxiaMember
-    fun getAllOrders(@RequestParam(required = false) page: Int?,
-                     @RequestParam(required = false) size: Int?,
-                     @RequestParam(required = false) campus: String?,
-                     @RequestParam(required = false) status: String?,
-                     @RequestParam(required = false) direction: String?,
-                     @RequestParam(required = false) onlyMine: String?,
-                     @RequestParam(required = false) startTime: String?,
-                     @RequestParam(required = false) endTime: String?,
-                     @RequestParam(required = false) text: String?,
-                     @CurrentItxiaMember member: ItxiaMember
+    fun getAllOrders(
+        @RequestParam(required = false) page: Int?,
+        @RequestParam(required = false) size: Int?,
+        @RequestParam(required = false) campus: String?,
+        @RequestParam(required = false) status: String?,
+        @RequestParam(required = false) direction: String?,
+        @RequestParam(required = false) onlyMine: String?,
+        @RequestParam(required = false) startTime: String?,
+        @RequestParam(required = false) endTime: String?,
+        @RequestParam(required = false) text: String?,
+        @CurrentItxiaMember member: ItxiaMember
     ): Response {
         val actualPage = if (page == null || page < 1) 1 else page
         val actualSize = if (size == null || size < 10 || size > 50) 20 else size
 
         val result = orderService.queryOrder(
-                page = actualPage,
-                size = actualSize,
-                onlyMine = onlyMine != null,
-                campus = campus?.let { CampusEnum.parse(it) },
-                status = status?.let { OrderStatusEnum.parse(it) },
-                text = text,
-                startTime = startTime,
-                endTime = endTime,
-                itxiaMember = member
+            page = actualPage,
+            size = actualSize,
+            onlyMine = onlyMine != null,
+            campus = campus?.let { CampusEnum.parse(it) },
+            status = status?.let { OrderStatusEnum.parse(it) },
+            text = text,
+            startTime = startTime,
+            endTime = endTime,
+            itxiaMember = member
         )
 
         return ResponseCode.SUCCESS.withPayload(result)
@@ -117,12 +119,13 @@ class OrderController {
      * */
     @PutMapping("/order/{oid}/deal/{action}")
     @RequireItxiaMember
-    fun dealWithOrder(@PathVariable oid: String,
-                      @PathVariable action: String,
-                      @CurrentItxiaMember itxiaMember: ItxiaMember
+    fun dealWithOrder(
+        @PathVariable oid: String,
+        @PathVariable action: String,
+        @CurrentItxiaMember itxiaMember: ItxiaMember
     ): Response {
         val trueAction = OrderActionEnum.parse(action)
-                ?: return ResponseCode.INVALID_PARAM.withPayload("处理字段参数错误")
+            ?: return ResponseCode.INVALID_PARAM.withPayload("处理字段参数错误")
         return orderService.dealWithOrder(oid, trueAction, itxiaMember)
     }
 
@@ -131,9 +134,10 @@ class OrderController {
      * */
     @PostMapping("/order/{orderID}/reply")
     @RequireItxiaMember
-    fun postReply(@PathVariable orderID: String,
-                  @RequestBody dto: OrderReplyDto,
-                  @CurrentItxiaMember itxiaMember: ItxiaMember
+    fun postReply(
+        @PathVariable orderID: String,
+        @RequestBody dto: OrderReplyDto,
+        @CurrentItxiaMember itxiaMember: ItxiaMember
     ): Response {
         if (orderService.postReply(orderID, dto, itxiaMember)) {
             return ResponseCode.SUCCESS.withoutPayload()
@@ -146,9 +150,10 @@ class OrderController {
      * */
     @PostMapping("/order/{orderID}/discuss")
     @RequireItxiaMember
-    fun postDiscuss(@PathVariable orderID: String,
-                    @RequestBody dto: ReplyDto,
-                    @CurrentItxiaMember itxiaMember: ItxiaMember
+    fun postDiscuss(
+        @PathVariable orderID: String,
+        @RequestBody dto: ReplyDto,
+        @CurrentItxiaMember itxiaMember: ItxiaMember
     ): Response {
         if (orderService.postDiscuss(orderID, dto, itxiaMember)) {
             return ResponseCode.SUCCESS.withoutPayload()
@@ -163,7 +168,7 @@ class OrderController {
     @RequireItxiaMember
     fun getMyDoneOrdersWhichRequireRecord(@CurrentItxiaMember requester: ItxiaMember): Response {
         return ResponseCode.SUCCESS.withPayload(
-                orderService.getMyDoneOrdersWhichRequireRecord(requester)
+            orderService.getMyDoneOrdersWhichRequireRecord(requester)
         )
     }
 }

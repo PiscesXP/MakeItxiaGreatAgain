@@ -38,9 +38,14 @@ class AuthenticationService {
      * 若登录成功，会给response添加token.
      * @return 验证是否成功.
      * */
-    fun loginByPassword(loginName: String, password: String, httpServletRequest: HttpServletRequest, httpServletResponse: HttpServletResponse): Response {
+    fun loginByPassword(
+        loginName: String,
+        password: String,
+        httpServletRequest: HttpServletRequest,
+        httpServletResponse: HttpServletResponse
+    ): Response {
         val member = itxiaMemberRepository.findByLoginName(loginName)
-                ?: return ResponseCode.INCORRECT_PASSWORD.withoutPayload()
+            ?: return ResponseCode.INCORRECT_PASSWORD.withoutPayload()
         val verifyResult = PasswordUtil.verify(password, member.password)
         if (verifyResult) {
             if (member.disabled) {
@@ -60,10 +65,10 @@ class AuthenticationService {
         val sessionValue = this.generateSessionValue()
         //保存session到数据库
         val session = Session(
-                _id = ObjectId.get().toHexString(),
-                value = sessionValue,
-                member = member.toBaseInfoOnly(),
-                expiresAfter = Date(Date().time + cookieService.getCookieMaxAge() * 1000)
+            _id = ObjectId.get().toHexString(),
+            value = sessionValue,
+            member = member.toBaseInfoOnly(),
+            expiresAfter = Date(Date().time + cookieService.getCookieMaxAge() * 1000)
         )
         sessionRepository.save(session)
 
@@ -128,8 +133,9 @@ class AuthenticationService {
      * 注销其它登录状态.
      * 除了当前请求的session外，删除其它全部session.
      * */
-    fun logoutOnOtherDevices(requester: ItxiaMember,
-                             request: HttpServletRequest
+    fun logoutOnOtherDevices(
+        requester: ItxiaMember,
+        request: HttpServletRequest
     ) {
         val allSession = sessionRepository.findAllByMember(requester.toBaseInfoOnly()).toMutableList()
         val currentSession = getSessionFromRequest(request)
@@ -146,7 +152,7 @@ class AuthenticationService {
             return null
         }
         val sessionCookie = cookieService.getCookieFromRequest(request)
-                ?: return null
+            ?: return null
         val sessionValue = sessionCookie.value
         return sessionRepository.findByValue(sessionValue)
     }

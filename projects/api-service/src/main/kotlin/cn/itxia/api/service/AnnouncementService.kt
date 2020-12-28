@@ -12,7 +12,9 @@ import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.data.mongodb.core.query.*
+import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.core.query.Update
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -56,8 +58,9 @@ class AnnouncementService {
         return getAllAnnouncement(type)
     }
 
-    fun getAllAnnouncement(type: AnnouncementTypeEnum? = null,
-                           includeDeleted: Boolean = false
+    fun getAllAnnouncement(
+        type: AnnouncementTypeEnum? = null,
+        includeDeleted: Boolean = false
     ): List<Announcement> {
         val criteria = Criteria()
         if (type != null) {
@@ -67,12 +70,12 @@ class AnnouncementService {
             criteria.and("deleted").ne(true)
         }
         return mongoTemplate.find(
-                Query.query(
-                        criteria
-                ).with(
-                        Sort.by("order").ascending()
-                ),
-                Announcement::class.java
+            Query.query(
+                criteria
+            ).with(
+                Sort.by("order").ascending()
+            ),
+            Announcement::class.java
         )
     }
 
@@ -86,15 +89,15 @@ class AnnouncementService {
 
         val announcement = AnnouncementTypeEnum.parse(dto.type)?.let {
             Announcement(
-                    _id = ObjectId.get().toHexString(),
-                    type = it,
-                    title = dto.title,
-                    content = dto.content,
-                    attachments = attachmentList,
-                    createTime = Date(),
-                    postBy = postByMember.toBaseInfoOnly(),
-                    comments = emptyList(),
-                    likedBy = emptyList()
+                _id = ObjectId.get().toHexString(),
+                type = it,
+                title = dto.title,
+                content = dto.content,
+                attachments = attachmentList,
+                createTime = Date(),
+                postBy = postByMember.toBaseInfoOnly(),
+                comments = emptyList(),
+                likedBy = emptyList()
             )
         }
         return announcement?.let { announcementRepository.save(announcement) }
@@ -105,7 +108,7 @@ class AnnouncementService {
      * */
     fun likeOrUnlike(announcementID: String, itxiaMember: ItxiaMember, isLike: Boolean) {
         val announcement = findAnnouncementByID(announcementID)
-                ?: return
+            ?: return
         val list = announcement.likedBy.toMutableList()
         if (isLike) {
             //点赞
@@ -130,7 +133,7 @@ class AnnouncementService {
      * */
     fun comment(announcementID: String, replyDto: ReplyDto, itxiaMember: ItxiaMember): Boolean {
         val announcement = findAnnouncementByID(announcementID)
-                ?: return false
+            ?: return false
         val list = announcement.comments.toMutableList()
         val reply = replyService.saveReply(replyDto, itxiaMember)
         list.add(reply)
@@ -144,9 +147,9 @@ class AnnouncementService {
      * */
     fun deleteAnnouncement(announcementID: String): Boolean {
         val result = mongoTemplate.updateFirst(
-                Query.query(Criteria.where("_id").`is`(announcementID)),
-                Update.update("deleted", true),
-                Announcement::class.java
+            Query.query(Criteria.where("_id").`is`(announcementID)),
+            Update.update("deleted", true),
+            Announcement::class.java
         )
         return result.modifiedCount == 1L
     }
@@ -157,9 +160,9 @@ class AnnouncementService {
     fun reorderAnnouncement(reorderDto: List<AnnouncementReorderDto>) {
         reorderDto.forEach {
             mongoTemplate.updateFirst(
-                    Query.query(Criteria.where("_id").`is`(it._id)),
-                    Update.update("order", it.order),
-                    Announcement::class.java
+                Query.query(Criteria.where("_id").`is`(it._id)),
+                Update.update("order", it.order),
+                Announcement::class.java
             )
         }
     }
@@ -168,13 +171,13 @@ class AnnouncementService {
      * 修改公告.
      * */
     fun modifyAnnouncement(
-            announcementID: String,
-            dto: AnnouncementModifyDto
+        announcementID: String,
+        dto: AnnouncementModifyDto
     ): Boolean {
         val result = mongoTemplate.updateFirst(
-                Query.query(Criteria.where("_id").`is`(announcementID)),
-                Update.update("title", dto.title).set("content", dto.content),
-                Announcement::class.java
+            Query.query(Criteria.where("_id").`is`(announcementID)),
+            Update.update("title", dto.title).set("content", dto.content),
+            Announcement::class.java
         )
         return result.modifiedCount == 1L
     }

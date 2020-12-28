@@ -5,10 +5,10 @@ import javax.validation.constraints.NotBlank
 
 data class AnnouncementModifyDto(
 
-        @field:NotBlank
-        val title: String,
+    @field:NotBlank
+    val title: String,
 
-        @field:NotBlank
-        val content: String
+    @field:NotBlank
+    val content: String
 
 )

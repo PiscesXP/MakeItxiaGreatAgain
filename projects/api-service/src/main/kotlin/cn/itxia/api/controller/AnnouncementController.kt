@@ -54,9 +54,12 @@ class AnnouncementController {
      * */
     @PostMapping("/announcement")
     @RequireItxiaMember(MemberRoleEnum.ADMIN)
-    fun publishAnnouncement(@RequestBody dto: AnnouncementPublishDto, @CurrentItxiaMember itxiaMember: ItxiaMember): Response {
+    fun publishAnnouncement(
+        @RequestBody dto: AnnouncementPublishDto,
+        @CurrentItxiaMember itxiaMember: ItxiaMember
+    ): Response {
         val result = announcementService.publishAnnouncement(dto, itxiaMember)
-                ?: return ResponseCode.INVALID_PARAM.withPayload("公告类型必须为内部或外部.")
+            ?: return ResponseCode.INVALID_PARAM.withPayload("公告类型必须为内部或外部.")
         return ResponseCode.SUCCESS.withPayload(result)
     }
 
@@ -65,8 +68,10 @@ class AnnouncementController {
      * */
     @PutMapping("/announcement/{aid}/like")
     @RequireItxiaMember
-    fun like(@PathVariable aid: String,
-             @CurrentItxiaMember itxiaMember: ItxiaMember): Response {
+    fun like(
+        @PathVariable aid: String,
+        @CurrentItxiaMember itxiaMember: ItxiaMember
+    ): Response {
         announcementService.likeOrUnlike(aid, itxiaMember, true)
         return ResponseCode.SUCCESS.withoutPayload()
     }
@@ -76,8 +81,10 @@ class AnnouncementController {
      * */
     @PutMapping("/announcement/{aid}/unlike")
     @RequireItxiaMember
-    fun unlike(@PathVariable aid: String,
-               @CurrentItxiaMember itxiaMember: ItxiaMember): Response {
+    fun unlike(
+        @PathVariable aid: String,
+        @CurrentItxiaMember itxiaMember: ItxiaMember
+    ): Response {
         announcementService.likeOrUnlike(aid, itxiaMember, false)
         return ResponseCode.SUCCESS.withoutPayload()
     }
@@ -87,9 +94,10 @@ class AnnouncementController {
      * */
     @PostMapping("/announcement/{aid}/comment")
     @RequireItxiaMember
-    fun comment(@PathVariable aid: String,
-                @RequestBody @Validated replyDto: ReplyDto,
-                @CurrentItxiaMember itxiaMember: ItxiaMember
+    fun comment(
+        @PathVariable aid: String,
+        @RequestBody @Validated replyDto: ReplyDto,
+        @CurrentItxiaMember itxiaMember: ItxiaMember
     ): Response {
         if (announcementService.comment(aid, replyDto, itxiaMember)) {
             return ResponseCode.SUCCESS.withPayload("评论发表成功")
@@ -123,8 +131,8 @@ class AnnouncementController {
     @PutMapping("/announcement/{aid}")
     @RequireItxiaMember(role = MemberRoleEnum.ADMIN)
     fun modifyAnnouncement(
-            @PathVariable aid: String,
-            @RequestBody dto: AnnouncementModifyDto
+        @PathVariable aid: String,
+        @RequestBody dto: AnnouncementModifyDto
     ): Response {
         announcementService.modifyAnnouncement(aid, dto)
         return ResponseCode.SUCCESS.withoutPayload()

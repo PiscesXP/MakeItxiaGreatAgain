@@ -47,14 +47,14 @@ class AttachmentService {
         val md5 = DigestUtils.md5DigestAsHex(file.bytes)
 
         val attachment = Attachment(
-                _id = ObjectId.get().toHexString(),
-                fileName = file.originalFilename!!,
-                size = file.size,
-                mimeType = file.contentType,
-                md5 = md5,
-                uploadBy = itxiaMember?.toBaseInfoOnly(),
-                uploadTime = Date(),
-                deleted = false
+            _id = ObjectId.get().toHexString(),
+            fileName = file.originalFilename!!,
+            size = file.size,
+            mimeType = file.contentType,
+            md5 = md5,
+            uploadBy = itxiaMember?.toBaseInfoOnly(),
+            uploadTime = Date(),
+            deleted = false
         )
         val savedResult = attachmentRepository.save(attachment)
         //save to file system
@@ -72,7 +72,7 @@ class AttachmentService {
      * */
     fun getFile(_id: String, isDownload: Boolean, isThumbnail: Boolean, response: HttpServletResponse) {
         val attachment = attachmentRepository.findBy_idAndDeletedFalse(_id)
-                ?: return
+            ?: return
         val isImage = attachment.mimeType?.contains("image") ?: false
 
         if (isThumbnail && !isImage) {
@@ -95,10 +95,10 @@ class AttachmentService {
                 if (attachment.size > 100 * 1024) {
                     //只为100KB以上的图片生成缩略图
                     Thumbnails.of(file)
-                            .size(200, 200)
-                            .outputQuality(0.6)
-                            .keepAspectRatio(true)
-                            .toOutputStream(response.outputStream)
+                        .size(200, 200)
+                        .outputQuality(0.6)
+                        .keepAspectRatio(true)
+                        .toOutputStream(response.outputStream)
                 } else {
                     //返回原文件
                     val fileBytes = file.readBytes()
@@ -107,9 +107,9 @@ class AttachmentService {
             } else if (isImage && !isDownload && attachment.size > 100 * 1024) {
                 //大于100KB的图片，生成等尺寸压缩图(不是缩略图)
                 Thumbnails.of(file)
-                        .scale(1.0)
-                        .outputQuality(0.6)
-                        .toOutputStream(response.outputStream)
+                    .scale(1.0)
+                    .outputQuality(0.6)
+                    .toOutputStream(response.outputStream)
             } else if (!isImage && !isDownload) {
                 //do nothing
             } else {

@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service
 class EmailService {
 
     @Value("\${aliyun.email.access-key-id}")
-    private lateinit var accessKeyId: String;
+    private lateinit var accessKeyId: String
 
     @Value("\${aliyun.email.access-key-secret}")
-    private lateinit var accessKeySecret: String;
+    private lateinit var accessKeySecret: String
 
     @Value("\${aliyun.email.region}")
-    private lateinit var region: String;
+    private lateinit var region: String
 
     private fun sendEmail(address: String, title: String, content: String, isHtmlContent: Boolean = false) {
         val profile = DefaultProfile.getProfile(region, accessKeyId, accessKeySecret)
@@ -56,9 +56,9 @@ class EmailService {
      * */
     fun noticeCustomNewReply(address: String, order: Order, reply: Reply, handler: ItxiaMember) {
         sendEmail(
-                address = address,
-                title = "你的预约单有新回复",
-                content = """
+            address = address,
+            title = "你的预约单有新回复",
+            content = """
 ${order.name}同学:
 你好，${handler.realName} 在你的预约单回复了消息:
 -------------------------------
@@ -78,9 +78,9 @@ NJU IT侠
      * */
     fun noticeItxiaMemberThatCampusHasNewOrder(address: String, order: Order, itxiaMember: ItxiaMember) {
         sendEmail(
-                address = address,
-                title = "新预约单提醒",
-                content = """
+            address = address,
+            title = "新预约单提醒",
+            content = """
 ${itxiaMember.realName}同学:
 
 ${order.campus.campusName}校区的 ${order.name} 发起了预约，问题描述如下:
@@ -102,9 +102,9 @@ NJU IT侠
      * */
     fun noticeItxiaMemberThatOrderHasNewReply(address: String, order: Order, reply: Reply, itxiaMember: ItxiaMember) {
         sendEmail(
-                address = address,
-                title = "新回复",
-                content = """
+            address = address,
+            title = "新回复",
+            content = """
 ${itxiaMember.realName}同学:
 
 你在处理的 ${order.name} 的单子有了新回复，内容如下:

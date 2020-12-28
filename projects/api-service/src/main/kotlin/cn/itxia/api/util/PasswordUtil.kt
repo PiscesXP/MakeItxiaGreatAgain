@@ -30,8 +30,8 @@ class PasswordUtil {
          * */
         fun verify(rawPassword: String, encryptedPassword: String): Boolean {
             val verifyResult = BCrypt.verifyer().verify(
-                    rawPassword.toByteArray(charset),
-                    encryptedPassword.toByteArray(charset)
+                rawPassword.toByteArray(charset),
+                encryptedPassword.toByteArray(charset)
             )
             return verifyResult.validFormat && verifyResult.verified
         }

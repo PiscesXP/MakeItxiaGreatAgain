@@ -12,10 +12,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 class WebMvcConfig : WebMvcConfigurer {
 
     @Autowired
-    lateinit var currentItxiaMemberArgumentResolver: CurrentItxiaMemberArgumentResolver
+    private lateinit var currentItxiaMemberArgumentResolver: CurrentItxiaMemberArgumentResolver
 
     @Autowired
-    lateinit var requireItxiaMemberInterceptor: RequireItxiaMemberInterceptor
+    private lateinit var requireItxiaMemberInterceptor: RequireItxiaMemberInterceptor
 
     override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
         resolvers.add(currentItxiaMemberArgumentResolver)

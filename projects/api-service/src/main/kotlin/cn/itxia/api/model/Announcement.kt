@@ -6,30 +6,30 @@ import org.springframework.data.mongodb.core.mapping.DBRef
 import java.util.*
 
 data class Announcement(
-        @Id
-        val _id: String,
+    @Id
+    val _id: String,
 
-        val type: AnnouncementTypeEnum,
+    val type: AnnouncementTypeEnum,
 
-        val title: String,
+    val title: String,
 
-        val content: String,
-        @DBRef
-        val attachments: List<Attachment>,
+    val content: String,
+    @DBRef
+    val attachments: List<Attachment>,
 
-        val createTime: Date = Date(),
+    val createTime: Date = Date(),
 
-        val deleted: Boolean = false,
+    val deleted: Boolean = false,
 
-        val order: Int = 0,
+    val order: Int = 0,
 
 
-        @DBRef
-        val postBy: ItxiaMember.BaseInfoOnly,
+    @DBRef
+    val postBy: ItxiaMember.BaseInfoOnly,
 
-        @DBRef
-        var comments: List<Reply>,
+    @DBRef
+    var comments: List<Reply>,
 
-        @DBRef
-        var likedBy: List<ItxiaMember.BaseInfoOnly>
+    @DBRef
+    var likedBy: List<ItxiaMember.BaseInfoOnly>
 )
