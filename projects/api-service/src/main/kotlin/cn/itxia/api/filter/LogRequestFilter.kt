@@ -1,6 +1,8 @@
 package cn.itxia.api.filter
-
 /*
+
+暂时停用记录功能
+
 import cn.itxia.api.service.RequestLogService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.annotation.Order
@@ -25,6 +27,5 @@ class LogRequestFilter : Filter {
     }
 
 }
-*/
 
-class LogRequestFilter
+*/
