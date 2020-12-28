@@ -3,7 +3,7 @@ package cn.itxia.api.enum
 /**
  * 预约单状态.
  * */
-enum class OrderStatusEnum(private val statusName: String) {
+enum class OrderStatusEnum(val statusName: String) {
     PENDING("等待处理"),
     HANDLING("正在处理"),
     DONE("已完成"),

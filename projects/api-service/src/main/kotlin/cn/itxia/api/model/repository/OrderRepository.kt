@@ -23,6 +23,8 @@ interface OrderRepository : PagingAndSortingRepository<Order, String> {
 
     fun countByHandlerAndStatusAndDeletedFalse(handler: ItxiaMember.BaseInfoOnly, status: OrderStatusEnum): Int
 
+    fun findAllByDeletedFalse(): List<Order>
+
 
     fun findByCampusInAndStatusInAndDeletedFalse(campus: Collection<CampusEnum>, status: Collection<OrderStatusEnum>, pageable: Pageable): List<Order>
 

@@ -27,6 +27,9 @@ repositories {
 
 dependencies {
 
+    //导出excel
+    implementation("com.alibaba:easyexcel:2.2.7")
+
     //用于生成缩略图
     implementation("net.coobird:thumbnailator:0.4.11")
 
