@@ -42,9 +42,9 @@ data class OrderRecord(
         var likeBy: Iterable<ItxiaMember.BaseInfoOnly> = mutableListOf(),
 
         @DBRef
-        val comments: Iterable<Reply> = mutableListOf(),
+        var comments: Iterable<Reply> = mutableListOf(),
 
-        val modifyHistory: Iterable<OrderRecordHistory> = mutableListOf()
+        val modifyHistory: MutableList<OrderRecordHistory> = mutableListOf()
 )
 
 

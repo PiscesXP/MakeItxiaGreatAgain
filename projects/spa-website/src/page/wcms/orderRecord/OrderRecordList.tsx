@@ -40,6 +40,7 @@ const TagList = ({ tags }: { tags: { _id: string; name: string }[] }) => (
 interface OrderRecordListProps {
   loading: boolean;
   payload: any;
+  highLightText: string;
   onPaginationChange: (page: number, size: number) => void;
   refresh: () => void;
 }
@@ -47,6 +48,7 @@ interface OrderRecordListProps {
 export const OrderRecordList: React.FC<OrderRecordListProps> = ({
   loading,
   payload,
+  highLightText,
   refresh,
   onPaginationChange,
 }) => {
@@ -198,7 +200,10 @@ export const OrderRecordList: React.FC<OrderRecordListProps> = ({
             />
             <TagList tags={record.tags} />
             <br />
-            <MultiLinePlainText content={record.content} />
+            <MultiLinePlainText
+              content={record.content}
+              highlightWords={[highLightText]}
+            />
             <AttachmentList data={record.attachments} />
             <ReplyList
               visible={replyModalID === record._id}

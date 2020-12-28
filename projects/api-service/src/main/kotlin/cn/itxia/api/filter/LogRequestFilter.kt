@@ -14,6 +14,7 @@ import javax.servlet.ServletResponse
 
 @Component
 @Order(2)
+@Deprecated
 class LogRequestFilter : Filter {
 
     @Autowired
@@ -26,4 +27,5 @@ class LogRequestFilter : Filter {
     }
 
 }
+
 */

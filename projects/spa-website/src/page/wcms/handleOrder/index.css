@@ -21,3 +21,11 @@
 .order-status-icon {
   font-size: 1.25em;
 }
+
+.order-private-bottom {
+  margin-left: 0.6em;
+}
+
+.order-private-bottom:hover {
+  cursor: pointer;
+}

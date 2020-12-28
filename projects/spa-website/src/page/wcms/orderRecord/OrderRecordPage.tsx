@@ -121,6 +121,7 @@ export const OrderRecordPage: React.FC = () => {
             <OrderRecordList
               loading={recordListApiRequest.loading}
               payload={recordListApiRequest.payload}
+              highLightText={condition.text}
               onPaginationChange={handlePaginationChange}
               refresh={handleRefreshRecordList}
             />

@@ -25,6 +25,9 @@ import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.RequestBody
 import java.util.*
 
+/**
+ * 维修经验记录.
+ * */
 @Service
 class OrderRecordService {
 
@@ -149,6 +152,7 @@ class OrderRecordService {
                         text: String?,
                         requester: ItxiaMember
     ): Response {
+
         val criteria = Criteria()
         if (onlyStar != null) {
             criteria.and("starBy").`is`(DBRef("users", requester._id))
@@ -219,7 +223,10 @@ class OrderRecordService {
 
         val savedReply = replyService.saveReply(replyDto, requester)
 
-        record.comments.toMutableList().add(savedReply)
+        val comments = record.comments.toMutableList()
+        comments.add(savedReply)
+        record.comments = comments
+
         orderRecordRepository.save(record)
     }
 
@@ -258,7 +265,7 @@ class OrderRecordService {
             }
             lastModified = Date()
             lastModifiedBy = requester.toBaseInfoOnly()
-            modifyHistory.toMutableList().add(history)
+            modifyHistory.add(history)
         }
 
         orderRecordRepository.save(record)
