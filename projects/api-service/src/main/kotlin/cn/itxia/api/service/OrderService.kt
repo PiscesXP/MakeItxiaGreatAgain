@@ -15,6 +15,8 @@ import cn.itxia.api.model.repository.OrderRepository
 import cn.itxia.api.response.Response
 import cn.itxia.api.response.ResponseCode
 import cn.itxia.api.vo.OrderQueryResultVo
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
@@ -44,6 +46,9 @@ class OrderService {
 
     @Autowired
     private lateinit var memberService: MemberService
+
+    @Autowired
+    private lateinit var chatBotLinkService: ChatBotLinkService
 
     @Autowired
     private lateinit var mongoTemplate: MongoTemplate
@@ -165,6 +170,9 @@ class OrderService {
             }
         }
 
+        GlobalScope.launch {
+            chatBotLinkService.notifyNewOrder(order)
+        }
 
         return ResponseCode.SUCCESS.withPayload(savedOrder)
     }
