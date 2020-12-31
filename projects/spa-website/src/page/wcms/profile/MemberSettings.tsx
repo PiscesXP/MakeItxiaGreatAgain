@@ -14,6 +14,7 @@ export const MemberSettings: React.FC = () => {
       campus: context.campus,
       email: context.email,
       group: context.group,
+      qq: context.qq,
       emailNotification: [] as string[],
     };
     const { emailNotification } = context;
@@ -73,6 +74,10 @@ export const MemberSettings: React.FC = () => {
           <Select.Option value={MemberGroupEnum.OP}>op</Select.Option>
           <Select.Option value={MemberGroupEnum.WEB}>web</Select.Option>
         </Select>
+      </Form.Item>
+
+      <Form.Item name="qq" label="QQ">
+        <Input />
       </Form.Item>
 
       <Form.Item
