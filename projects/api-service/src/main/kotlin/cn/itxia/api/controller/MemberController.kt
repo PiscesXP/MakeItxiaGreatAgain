@@ -7,6 +7,7 @@ import cn.itxia.api.enum.MemberRoleEnum
 import cn.itxia.api.model.ItxiaMember
 import cn.itxia.api.response.Response
 import cn.itxia.api.response.ResponseCode
+import cn.itxia.api.service.ChatBotLinkService
 import cn.itxia.api.service.MemberService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
@@ -18,6 +19,9 @@ class MemberController {
 
     @Autowired
     private lateinit var memberService: MemberService
+
+    @Autowired
+    private lateinit var chatBotLinkService: ChatBotLinkService
 
     /**
      * 修改密码.
@@ -152,6 +156,14 @@ class MemberController {
     @PostMapping("/member/recruit/register")
     fun registerNewMemberByRedeemCode(@RequestBody memberRecruitDto: MemberRecruitDto): Response {
         return memberService.registerNewMemberByRedeemCode(memberRecruitDto)
+    }
+
+    /**
+     * 用于给bot验证QQ账号.
+     * */
+    @PostMapping("/member/validate/qq")
+    fun validateMemberQQID(request: HttpServletRequest, @RequestBody dto: ValidateMemberQQDto): Boolean {
+        return chatBotLinkService.validateMemberQQID(request, dto)
     }
 
 }

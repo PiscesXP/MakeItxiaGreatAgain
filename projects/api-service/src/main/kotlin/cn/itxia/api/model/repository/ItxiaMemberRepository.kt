@@ -11,4 +11,6 @@ interface ItxiaMemberRepository : CrudRepository<ItxiaMember, String> {
 
     override fun findAll(): List<ItxiaMember>
 
+    fun existsByQqAndDisabledFalse(qq: String): Boolean
+
 }

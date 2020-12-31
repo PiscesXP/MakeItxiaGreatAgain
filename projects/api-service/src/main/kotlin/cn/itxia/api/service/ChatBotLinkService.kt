@@ -1,6 +1,8 @@
 package cn.itxia.api.service
 
+import cn.itxia.api.dto.ValidateMemberQQDto
 import cn.itxia.api.model.Order
+import cn.itxia.api.model.repository.ItxiaMemberRepository
 import cn.itxia.api.util.getLogger
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
@@ -8,9 +10,11 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.IOException
+import javax.servlet.http.HttpServletRequest
 
 @Service
 class ChatBotLinkService {
@@ -19,6 +23,9 @@ class ChatBotLinkService {
 
     @Value("\${itxia.bot.hook.token}")
     private lateinit var token: String
+
+    @Autowired
+    private lateinit var memberRepository: ItxiaMemberRepository
 
     private val client = OkHttpClient()
 
@@ -60,6 +67,10 @@ class ChatBotLinkService {
         } catch (e: IOException) {
             logger.error("调用bot hook失败:${e.message}")
         }
+    }
+
+    fun validateMemberQQID(request: HttpServletRequest, dto: ValidateMemberQQDto): Boolean {
+        return memberRepository.existsByQqAndDisabledFalse(dto.qq)
     }
 
 }
