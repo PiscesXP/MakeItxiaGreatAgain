@@ -21,8 +21,10 @@ class RequestLogService {
     /**
      * 记录成员请求记录.
      * */
-    fun logMemberActivity(request: ServletRequest, response: ServletResponse) {
-        val member = authenticationService.getMemberFromRequest(request as HttpServletRequest) ?: return
+    fun logMemberActivity(servletRequest: ServletRequest, servletResponse: ServletResponse) {
+        val request = servletRequest as HttpServletRequest
+
+        val member = authenticationService.getMemberFromRequest(request) ?: return
         requestLogRepository.save(
             RequestLog(
                 _id = ObjectId.get().toHexString(),
