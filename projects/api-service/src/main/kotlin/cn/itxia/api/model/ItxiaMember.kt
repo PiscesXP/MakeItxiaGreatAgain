@@ -41,6 +41,8 @@ data class ItxiaMember(
 
     var email: String? = null,
 
+    var qq: String? = null,
+
     var emailNotification: EmailNotificationSetting = EmailNotificationSetting(),
 
     /**

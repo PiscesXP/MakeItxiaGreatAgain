@@ -7,5 +7,7 @@ data class MemberProfileModifyDto(
 
     val email: String?,
 
+    val qq: String?,
+
     val emailNotification: List<String>?
 )
