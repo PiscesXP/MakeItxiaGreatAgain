@@ -73,6 +73,7 @@ class MemberService {
             val member = optional.get()
             member.campus = dto.campus.let { CampusEnum.parse(it) } ?: member.campus
             member.group = dto.group.let { MemberGroupEnum.parse(it) } ?: member.group
+            member.qq = dto.qq
             if (dto.email.isNullOrEmpty()) {
                 member.email = null
                 member.emailNotification.apply {
