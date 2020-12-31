@@ -70,7 +70,10 @@ class ChatBotLinkService {
     }
 
     fun validateMemberQQID(request: HttpServletRequest, dto: ValidateMemberQQDto): Boolean {
-        return memberRepository.existsByQqAndDisabledFalse(dto.qq)
+        if (request.getHeader("bot-token") == token) {
+            return memberRepository.existsByQqAndDisabledFalse(dto.qq)
+        }
+        return false
     }
 
 }
