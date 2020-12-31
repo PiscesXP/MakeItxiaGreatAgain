@@ -4,6 +4,7 @@ import cn.itxia.api.model.Order
 import cn.itxia.api.util.getLogger
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -31,7 +32,7 @@ class ChatBotLinkService {
     fun notifyNewOrder(order: Order) {
         val url = "http://${baseUri}/hook/newOrder"
 
-        val newOrderNotification = order.apply {
+        val newOrderNotification = order.run {
             NewOrderNotification(
                 name = name,
                 campus = campus.campusName,
@@ -42,7 +43,10 @@ class ChatBotLinkService {
         val request = Request.Builder()
             .url(url)
             .addHeader("bot-token", token)
-            .post(mapper.writeValueAsString(newOrderNotification).toRequestBody())
+            .post(
+                mapper.writeValueAsString(newOrderNotification)
+                    .toRequestBody("application/json; charset=utf-8".toMediaType())
+            )
             .build()
 
         try {
