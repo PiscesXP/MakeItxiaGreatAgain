@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Button, Checkbox, Col, Form, Input, Row, Select } from "antd";
+import { Alert, Button, Checkbox, Col, Form, Input, Row, Select } from "antd";
 import { CenterMeFlex } from "@/components/layout";
 import { useApiRequest } from "@/hook/useApiRequest";
 import { CampusFormItem } from "@/components/form/CampusFormItem";
@@ -76,7 +76,13 @@ export const MemberSettings: React.FC = () => {
         </Select>
       </Form.Item>
 
-      <Form.Item name="qq" label="QQ">
+      <Form.Item
+        name="qq"
+        label="QQ"
+        extra={
+          <Alert message="QQ机器人会用这个QQ号来进行权限认证." type="info" />
+        }
+      >
         <Input />
       </Form.Item>
 
