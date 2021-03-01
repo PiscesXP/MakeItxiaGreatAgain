@@ -9,55 +9,55 @@ private const val COLLECTION_NAME = "order_record"
 
 @Document(COLLECTION_NAME)
 data class OrderRecord(
-        @Id
-        val _id: String,
+    @Id
+    val _id: String,
 
-        @DBRef
-        val order: Order,
+    @DBRef
+    val order: Order,
 
-        @DBRef
-        var tags: Iterable<OrderRecordTag.Simple>,
+    @DBRef
+    var tags: Iterable<OrderRecordTag.Simple>,
 
-        var title: String,
+    var title: String,
 
-        var content: String,
+    var content: String,
 
-        @DBRef
-        val attachments: Iterable<Attachment>,
+    @DBRef
+    val attachments: Iterable<Attachment>,
 
-        @DBRef
-        val author: ItxiaMember.BaseInfoOnly,
+    @DBRef
+    val author: ItxiaMember.BaseInfoOnly,
 
-        val createTime: Date = Date(),
+    val createTime: Date = Date(),
 
-        var lastModified: Date? = null,
+    var lastModified: Date? = null,
 
-        @DBRef
-        var lastModifiedBy: ItxiaMember.BaseInfoOnly? = null,
+    @DBRef
+    var lastModifiedBy: ItxiaMember.BaseInfoOnly? = null,
 
-        @DBRef
-        var starBy: Iterable<ItxiaMember.BaseInfoOnly> = mutableListOf(),
+    @DBRef
+    var starBy: Iterable<ItxiaMember.BaseInfoOnly> = mutableListOf(),
 
-        @DBRef
-        var likeBy: Iterable<ItxiaMember.BaseInfoOnly> = mutableListOf(),
+    @DBRef
+    var likeBy: Iterable<ItxiaMember.BaseInfoOnly> = mutableListOf(),
 
-        @DBRef
-        var comments: Iterable<Reply> = mutableListOf(),
+    @DBRef
+    var comments: Iterable<Reply> = mutableListOf(),
 
-        val modifyHistory: MutableList<OrderRecordHistory> = mutableListOf()
+    val modifyHistory: MutableList<OrderRecordHistory> = mutableListOf()
 )
 
 
 data class OrderRecordHistory(
-        val modifyTime: Date,
+    val modifyTime: Date,
 
-        @DBRef
-        val author: ItxiaMember.BaseInfoOnly,
+    @DBRef
+    val author: ItxiaMember.BaseInfoOnly,
 
-        val title: String,
+    val title: String,
 
-        val content: String,
+    val content: String,
 
-        @DBRef
-        val tags: Iterable<OrderRecordTag.Simple>
+    @DBRef
+    val tags: Iterable<OrderRecordTag.Simple>
 )

@@ -19,8 +19,10 @@ class StatController {
 
     @GetMapping("/stat")
     @RequireItxiaMember
-    fun getStatData(@RequestParam(required = false) mine: String?,
-                    @CurrentItxiaMember itxiaMember: ItxiaMember): Response {
+    fun getStatData(
+        @RequestParam(required = false) mine: String?,
+        @CurrentItxiaMember itxiaMember: ItxiaMember
+    ): Response {
         return if (mine != null) {
             ResponseCode.SUCCESS.withPayload(statService.getStatByMember(itxiaMember))
         } else {

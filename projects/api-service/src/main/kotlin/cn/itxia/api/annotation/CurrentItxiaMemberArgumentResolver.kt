@@ -25,7 +25,12 @@ class CurrentItxiaMemberArgumentResolver : HandlerMethodArgumentResolver {
                 && parameter.hasParameterAnnotation(CurrentItxiaMember::class.java)
     }
 
-    override fun resolveArgument(parameter: MethodParameter, p1: ModelAndViewContainer?, nativeWebRequest: NativeWebRequest, p3: WebDataBinderFactory?): Any? {
+    override fun resolveArgument(
+        parameter: MethodParameter,
+        p1: ModelAndViewContainer?,
+        nativeWebRequest: NativeWebRequest,
+        p3: WebDataBinderFactory?
+    ): Any? {
         val httpServletRequest = nativeWebRequest.getNativeRequest(HttpServletRequest::class.java) ?: return null
         return authenticationService.getMemberFromRequest(httpServletRequest)
     }

@@ -1,6 +1,5 @@
 package cn.itxia.api.service
 
-import cn.itxia.api.model.ItxiaMember
 import cn.itxia.api.model.RequestLog
 import cn.itxia.api.model.repository.RequestLogRepository
 import org.bson.types.ObjectId
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Service
 import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 @Service
 class RequestLogService {
@@ -17,27 +15,23 @@ class RequestLogService {
     @Autowired
     private lateinit var requestLogRepository: RequestLogRepository
 
-    fun logRequest(request: HttpServletRequest,
-                   response: HttpServletResponse,
-                   itxiaMember: ItxiaMember? = null
-    ) {
-        val log = RequestLog(
+    @Autowired
+    private lateinit var authenticationService: AuthenticationService
+
+    /**
+     * 记录成员请求记录.
+     * */
+    fun logMemberActivity(servletRequest: ServletRequest, servletResponse: ServletResponse) {
+        val request = servletRequest as HttpServletRequest
+
+        val member = authenticationService.getMemberFromRequest(request) ?: return
+        requestLogRepository.save(
+            RequestLog(
                 _id = ObjectId.get().toHexString(),
                 uri = request.requestURI,
                 method = request.method,
-                member = itxiaMember?.toBaseInfoOnly()
-        )
-        requestLogRepository.save(log)
-    }
-
-    fun logRequest(request: ServletRequest,
-                   response: ServletResponse,
-                   itxiaMember: ItxiaMember? = null
-    ) {
-        return logRequest(
-                request as HttpServletRequest,
-                response as HttpServletResponse,
-                itxiaMember
+                member = member.toBaseInfoOnly()
+            )
         )
     }
 

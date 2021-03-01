@@ -8,7 +8,7 @@ interface OAuthRepository : CrudRepository<OAuth, String> {
 
     fun findByQqOpenID(qqOpenID: String): OAuth?
 
-    fun findByMember(member: ItxiaMember):OAuth?
+    fun findByMember(member: ItxiaMember): OAuth?
 
     fun deleteAllByMember(member: ItxiaMember)
 

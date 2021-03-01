@@ -6,11 +6,11 @@ import org.springframework.data.mongodb.core.mapping.Document
 
 @Document(collection = "oauth")
 data class OAuth(
-        @Id
-        val _id: String,
+    @Id
+    val _id: String,
 
-        @DBRef
-        val member: ItxiaMember,
+    @DBRef
+    val member: ItxiaMember,
 
-        val qqOpenID: String?
+    val qqOpenID: String?
 )

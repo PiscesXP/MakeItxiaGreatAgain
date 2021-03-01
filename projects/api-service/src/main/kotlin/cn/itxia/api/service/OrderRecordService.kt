@@ -52,16 +52,17 @@ class OrderRecordService {
     /**
      * 新增标签.
      * */
-    fun createTag(@RequestBody dto: OrderRecordTagCreateDto,
-                  @CurrentItxiaMember requester: ItxiaMember
+    fun createTag(
+        @RequestBody dto: OrderRecordTagCreateDto,
+        @CurrentItxiaMember requester: ItxiaMember
     ): Response {
         if (orderRecordTagRepository.existsByName(dto.name)) {
             return ResponseCode.ORDER_TAG_ALREADY_EXISTED.withoutPayload()
         }
         val tag = OrderRecordTag(
-                _id = ObjectId.get().toHexString(),
-                name = dto.name,
-                createBy = requester.toBaseInfoOnly()
+            _id = ObjectId.get().toHexString(),
+            name = dto.name,
+            createBy = requester.toBaseInfoOnly()
         )
         orderRecordTagRepository.save(tag)
         return ResponseCode.SUCCESS.withoutPayload()
@@ -77,12 +78,12 @@ class OrderRecordService {
             ResponseCode.SUCCESS.withPayload(allTags)
         } else {
             ResponseCode.SUCCESS.withPayload(
-                    allTags.map {
-                        OrderRecordTag.Simple(
-                                _id = it._id,
-                                name = it.name
-                        )
-                    }
+                allTags.map {
+                    OrderRecordTag.Simple(
+                        _id = it._id,
+                        name = it.name
+                    )
+                }
             )
         }
     }
@@ -114,8 +115,9 @@ class OrderRecordService {
     /**
      * 发布新记录.
      * */
-    fun postOrderRecord(dto: OrderRecordCreateDto,
-                        requester: ItxiaMember
+    fun postOrderRecord(
+        dto: OrderRecordCreateDto,
+        requester: ItxiaMember
     ): Response {
         val order = orderService.getOrderByID(dto.order) ?: return ResponseCode.NO_SUCH_ORDER.withoutPayload()
 
@@ -124,15 +126,15 @@ class OrderRecordService {
         val attachments = attachmentService.getAttachmentListByIDList(dto.attachments)
 
         val record = OrderRecord(
-                _id = ObjectId.get().toHexString(),
-                order = order,
-                tags = tags.map {
-                    it.toSimple()
-                },
-                title = dto.title,
-                content = dto.content,
-                author = requester.toBaseInfoOnly(),
-                attachments = attachments
+            _id = ObjectId.get().toHexString(),
+            order = order,
+            tags = tags.map {
+                it.toSimple()
+            },
+            title = dto.title,
+            content = dto.content,
+            author = requester.toBaseInfoOnly(),
+            attachments = attachments
         )
 
         val saved = orderRecordRepository.save(record)
@@ -145,12 +147,13 @@ class OrderRecordService {
         return ResponseCode.SUCCESS.withPayload(saved)
     }
 
-    fun getOrderRecords(page: Int?,
-                        size: Int?,
-                        onlyStar: String?,
-                        tags: String?,
-                        text: String?,
-                        requester: ItxiaMember
+    fun getOrderRecords(
+        page: Int?,
+        size: Int?,
+        onlyStar: String?,
+        tags: String?,
+        text: String?,
+        requester: ItxiaMember
     ): Response {
 
         val criteria = Criteria()
@@ -164,18 +167,18 @@ class OrderRecordService {
         }
         if (text != null) {
             criteria.orOperator(
-                    Criteria.where("title").regex(text, "i"),
-                    Criteria.where("content").regex(text, "i")
+                Criteria.where("title").regex(text, "i"),
+                Criteria.where("content").regex(text, "i")
             )
         }
 
         val result = PageRequestHelper.getPaginationResult(
-                page = page,
-                size = size,
-                criteria = criteria,
-                sort = Sort.by("createTime").descending(),
-                entityClass = OrderRecord::class.java,
-                mongoTemplate = mongoTemplate
+            page = page,
+            size = size,
+            criteria = criteria,
+            sort = Sort.by("createTime").descending(),
+            entityClass = OrderRecord::class.java,
+            mongoTemplate = mongoTemplate
         )
 
         return ResponseCode.SUCCESS.withPayload(result)
@@ -233,19 +236,20 @@ class OrderRecordService {
     /**
      * 更改记录.
      * */
-    fun modifyOrderRecord(dto: OrderRecordModifyDto,
-                          recordID: String,
-                          requester: ItxiaMember
+    fun modifyOrderRecord(
+        dto: OrderRecordModifyDto,
+        recordID: String,
+        requester: ItxiaMember
     ): Response {
         val record = orderRecordRepository.findByIdOrNull(recordID)
-                ?: return ResponseCode.NO_SUCH_ORDER_RECORD.withoutPayload()
+            ?: return ResponseCode.NO_SUCH_ORDER_RECORD.withoutPayload()
 
         val history = OrderRecordHistory(
-                modifyTime = record.lastModified ?: record.createTime,
-                author = record.author,
-                title = record.title,
-                content = record.content,
-                tags = record.tags
+            modifyTime = record.lastModified ?: record.createTime,
+            author = record.author,
+            title = record.title,
+            content = record.content,
+            tags = record.tags
         )
 
         //增减标签引用次数

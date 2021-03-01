@@ -27,7 +27,11 @@ class AuthenticationController {
 
 
     @PostMapping("/login")
-    fun login(request: HttpServletRequest, response: HttpServletResponse, @RequestBody @Validated loginDto: LoginDto): Response {
+    fun login(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        @RequestBody @Validated loginDto: LoginDto
+    ): Response {
         return authenticationService.loginByPassword(loginDto.loginName, loginDto.password, request, response)
     }
 

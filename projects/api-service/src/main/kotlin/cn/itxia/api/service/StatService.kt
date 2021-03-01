@@ -30,11 +30,19 @@ class StatService {
         val twoWeeksAgo = calendar.time
 
         return StatOfAllVo(
-                pendingCount = orderRepository.countByStatusAndDeletedFalse(OrderStatusEnum.PENDING),
-                handlingCount = orderRepository.countByStatusAndDeletedFalse(OrderStatusEnum.HANDLING),
-                doneCount = orderRepository.countByStatusAndDeletedFalse(OrderStatusEnum.DONE),
-                backlogXianlin = orderRepository.countByCampusAndStatusAndCreateTimeBeforeAndDeletedFalse(CampusEnum.XIANLIN, OrderStatusEnum.PENDING, twoWeeksAgo),
-                backlogGulou = orderRepository.countByCampusAndStatusAndCreateTimeBeforeAndDeletedFalse(CampusEnum.GULOU, OrderStatusEnum.PENDING, twoWeeksAgo)
+            pendingCount = orderRepository.countByStatusAndDeletedFalse(OrderStatusEnum.PENDING),
+            handlingCount = orderRepository.countByStatusAndDeletedFalse(OrderStatusEnum.HANDLING),
+            doneCount = orderRepository.countByStatusAndDeletedFalse(OrderStatusEnum.DONE),
+            backlogXianlin = orderRepository.countByCampusAndStatusAndCreateTimeBeforeAndDeletedFalse(
+                CampusEnum.XIANLIN,
+                OrderStatusEnum.PENDING,
+                twoWeeksAgo
+            ),
+            backlogGulou = orderRepository.countByCampusAndStatusAndCreateTimeBeforeAndDeletedFalse(
+                CampusEnum.GULOU,
+                OrderStatusEnum.PENDING,
+                twoWeeksAgo
+            )
         )
     }
 

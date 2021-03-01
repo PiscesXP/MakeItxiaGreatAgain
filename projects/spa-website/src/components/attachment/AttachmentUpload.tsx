@@ -100,7 +100,7 @@ const UploadInput: React.FC<{
   }
 
   function handleRemove() {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       Modal.confirm({
         title: "确认删除附件嘛",
         centered: true,

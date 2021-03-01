@@ -12,47 +12,49 @@ import java.util.*
 @Document(collection = "users")
 data class ItxiaMember(
 
-        @Id
-        val _id: String,
+    @Id
+    val _id: String,
 
-        @Indexed(unique = true)
-        val loginName: String,
+    @Indexed(unique = true)
+    val loginName: String,
 
-        val realName: String,
+    val realName: String,
 
-        var password: String,
+    var password: String,
 
-        var campus: CampusEnum,
+    var campus: CampusEnum,
 
-        var group: MemberGroupEnum? = null,
+    var group: MemberGroupEnum? = null,
 
-        var role: MemberRoleEnum,
+    var role: MemberRoleEnum,
 
-        var disabled: Boolean,
+    var disabled: Boolean,
 
-        var joinDate: Date,
+    var joinDate: Date,
 
-        var requirePasswordReset: Boolean,
+    var requirePasswordReset: Boolean,
 
-        @DBRef
-        var inviteBy: BaseInfoOnly?,
+    @DBRef
+    var inviteBy: BaseInfoOnly?,
 
-        var lastLogin: Date? = null,
+    var lastLogin: Date? = null,
 
-        var email: String? = null,
+    var email: String? = null,
 
-        var emailNotification: EmailNotificationSetting = EmailNotificationSetting(),
+    var qq: String? = null,
 
-        /**
-         * (被邀请的新成员)等待审核.
-         * */
-        val pendingAudit: Boolean = false
+    var emailNotification: EmailNotificationSetting = EmailNotificationSetting(),
+
+    /**
+     * (被邀请的新成员)等待审核.
+     * */
+    val pendingAudit: Boolean = false
 ) {
     @Document(collection = "users")
     data class BaseInfoOnly(
-            @Id
-            val _id: String,
-            val realName: String
+        @Id
+        val _id: String,
+        val realName: String
     )
 
     fun toBaseInfoOnly(): BaseInfoOnly {
@@ -65,7 +67,7 @@ data class ItxiaMember(
 }
 
 data class EmailNotificationSetting(
-        var onMyCampusHasNewOrder: Boolean = false,
-        var onMyOrderHasNewReply: Boolean = false
+    var onMyCampusHasNewOrder: Boolean = false,
+    var onMyOrderHasNewReply: Boolean = false
 )
 

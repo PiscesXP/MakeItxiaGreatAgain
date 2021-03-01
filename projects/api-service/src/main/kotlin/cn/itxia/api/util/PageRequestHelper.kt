@@ -10,14 +10,14 @@ class PageRequestHelper {
     companion object {
 
         fun <T> getPaginationResult(
-                page: Int?,
-                size: Int?,
-                criteria: Criteria,
-                sort: Sort? = null,
-                entityClass: Class<T>,
-                mongoTemplate: MongoTemplate,
-                defaultPage: Int = 1,
-                defaultSize: Int = 20
+            page: Int?,
+            size: Int?,
+            criteria: Criteria,
+            sort: Sort? = null,
+            entityClass: Class<T>,
+            mongoTemplate: MongoTemplate,
+            defaultPage: Int = 1,
+            defaultSize: Int = 20
         ): PaginationResult<T> {
             val requestPage = page ?: defaultPage
             val requestSize = size ?: defaultSize
@@ -42,17 +42,17 @@ class PageRequestHelper {
             }
 
             val data = mongoTemplate.find(
-                    query,
-                    entityClass
+                query,
+                entityClass
             )
 
             return PaginationResult(
-                    pagination = PaginationResult.Pagination(
-                            current = currentPage,
-                            total = totalCount,
-                            pageSize = requestSize
-                    ),
-                    data = data
+                pagination = PaginationResult.Pagination(
+                    current = currentPage,
+                    total = totalCount,
+                    pageSize = requestSize
+                ),
+                data = data
             )
         }
 
@@ -60,15 +60,15 @@ class PageRequestHelper {
 }
 
 data class PaginationResult<T>(
-        val pagination: Pagination,
-        val data: List<T>
+    val pagination: Pagination,
+    val data: List<T>
 ) {
     data class Pagination(
-            //当前页码，从1开始数
-            val current: Int,
-            //数据总数
-            val total: Int,
-            //每页条数
-            val pageSize: Int
+        //当前页码，从1开始数
+        val current: Int,
+        //数据总数
+        val total: Int,
+        //每页条数
+        val pageSize: Int
     )
 }

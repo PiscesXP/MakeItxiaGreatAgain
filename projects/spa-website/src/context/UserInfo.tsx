@@ -15,6 +15,7 @@ export interface WhoamiData {
   readonly realName: string;
   readonly role: MemberRoleEnum;
   readonly email: string;
+  readonly qq: string;
   readonly emailNotification: any;
   readonly requirePasswordReset: boolean;
   refresh: () => void;

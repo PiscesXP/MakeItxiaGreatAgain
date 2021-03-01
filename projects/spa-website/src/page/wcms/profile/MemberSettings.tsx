@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Button, Checkbox, Col, Form, Input, Row, Select } from "antd";
+import { Alert, Button, Checkbox, Col, Form, Input, Row, Select } from "antd";
 import { CenterMeFlex } from "@/components/layout";
 import { useApiRequest } from "@/hook/useApiRequest";
 import { CampusFormItem } from "@/components/form/CampusFormItem";
@@ -14,6 +14,7 @@ export const MemberSettings: React.FC = () => {
       campus: context.campus,
       email: context.email,
       group: context.group,
+      qq: context.qq,
       emailNotification: [] as string[],
     };
     const { emailNotification } = context;
@@ -73,6 +74,16 @@ export const MemberSettings: React.FC = () => {
           <Select.Option value={MemberGroupEnum.OP}>op</Select.Option>
           <Select.Option value={MemberGroupEnum.WEB}>web</Select.Option>
         </Select>
+      </Form.Item>
+
+      <Form.Item
+        name="qq"
+        label="QQ"
+        extra={
+          <Alert message="QQ机器人会用这个QQ号来进行权限认证." type="info" />
+        }
+      >
+        <Input />
       </Form.Item>
 
       <Form.Item

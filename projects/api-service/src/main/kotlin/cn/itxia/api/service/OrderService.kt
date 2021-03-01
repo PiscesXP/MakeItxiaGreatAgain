@@ -15,6 +15,8 @@ import cn.itxia.api.model.repository.OrderRepository
 import cn.itxia.api.response.Response
 import cn.itxia.api.response.ResponseCode
 import cn.itxia.api.vo.OrderQueryResultVo
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
@@ -46,22 +48,25 @@ class OrderService {
     private lateinit var memberService: MemberService
 
     @Autowired
+    private lateinit var chatBotLinkService: ChatBotLinkService
+
+    @Autowired
     private lateinit var mongoTemplate: MongoTemplate
 
     /**
      * 查询预约单.
      * */
     fun queryOrder(
-            page: Int,
-            size: Int,
-            onlyMine: Boolean = false,
-            campus: CampusEnum?,
-            status: OrderStatusEnum?,
-            text: String?,
-            startTime: String?,
-            endTime: String?,
-            showDeleted: Boolean = false,
-            itxiaMember: ItxiaMember
+        page: Int,
+        size: Int,
+        onlyMine: Boolean = false,
+        campus: CampusEnum?,
+        status: OrderStatusEnum?,
+        text: String?,
+        startTime: String?,
+        endTime: String?,
+        showDeleted: Boolean = false,
+        itxiaMember: ItxiaMember
     ): OrderQueryResultVo {
 
         val criteria = Criteria()
@@ -79,13 +84,13 @@ class OrderService {
         }
         if (text != null) {
             criteria.orOperator(
-                    Criteria.where("name").regex(text, "i"),
-                    Criteria.where("phone").regex(text, "i"),
-                    Criteria.where("email").regex(text, "i"),
-                    Criteria.where("qq").regex(text, "i"),
-                    Criteria.where("warranty").regex(text, "i"),
-                    Criteria.where("brandModel").regex(text, "i"),
-                    Criteria.where("description").regex(text, "i")
+                Criteria.where("name").regex(text, "i"),
+                Criteria.where("phone").regex(text, "i"),
+                Criteria.where("email").regex(text, "i"),
+                Criteria.where("qq").regex(text, "i"),
+                Criteria.where("warranty").regex(text, "i"),
+                Criteria.where("brandModel").regex(text, "i"),
+                Criteria.where("description").regex(text, "i")
             )
         }
         if (startTime != null && endTime != null) {
@@ -118,11 +123,17 @@ class OrderService {
         val sortByCreateTime = Sort.by("createTime").descending()
 
         val data = mongoTemplate.find(
-                Query.query(criteria).with(pageRequest).with(sortByCreateTime),
-                Order::class.java
+            Query.query(criteria).with(pageRequest).with(sortByCreateTime),
+            Order::class.java
         )
 
-        return OrderQueryResultVo(OrderQueryResultVo.Pagination(currentPage = currentPage, totalCount = totalCount, pageSize = size), data = data)
+        return OrderQueryResultVo(
+            OrderQueryResultVo.Pagination(
+                currentPage = currentPage,
+                totalCount = totalCount,
+                pageSize = size
+            ), data = data
+        )
     }
 
     /**
@@ -130,34 +141,38 @@ class OrderService {
      * */
     fun requestOrder(dto: RequestOrderDto): Response {
         val campus = CampusEnum.parse(dto.campus)
-                ?: return ResponseCode.INVALID_PARAM.withPayload("校区填写不正确")
+            ?: return ResponseCode.INVALID_PARAM.withPayload("校区填写不正确")
 
         val attachments = dto.attachments.mapNotNull { attachmentRepository.findById(it).orElse(null) }
 
         val order = Order(
-                _id = ObjectId.get().toHexString(),
-                name = dto.name,
-                phone = dto.phone,
-                qq = dto.qq,
-                email = dto.email,
-                os = dto.os,
-                brandModel = dto.brandModel,
-                warranty = dto.warranty,
-                campus = campus,
-                description = dto.description,
-                attachments = attachments,
-                acceptEmailNotification = dto.acceptEmailNotification
+            _id = ObjectId.get().toHexString(),
+            name = dto.name,
+            phone = dto.phone,
+            qq = dto.qq,
+            email = dto.email,
+            os = dto.os,
+            brandModel = dto.brandModel,
+            warranty = dto.warranty,
+            campus = campus,
+            description = dto.description,
+            attachments = attachments,
+            acceptEmailNotification = dto.acceptEmailNotification
         )
         val savedOrder = orderRepository.save(order)
 
         //提醒(接收邮件推送)的it侠，有新的预约单
         memberService.getAllMemberThatReceiveEmailNotification(
-                "onMyCampusHasNewOrder", savedOrder.campus).forEach { member ->
+            "onMyCampusHasNewOrder", savedOrder.campus
+        ).forEach { member ->
             member.email?.let { emailAddress ->
                 emailService.noticeItxiaMemberThatCampusHasNewOrder(emailAddress, savedOrder, member)
             }
         }
 
+        GlobalScope.launch {
+            chatBotLinkService.notifyNewOrder(order)
+        }
 
         return ResponseCode.SUCCESS.withPayload(savedOrder)
     }
@@ -167,7 +182,7 @@ class OrderService {
      * */
     fun getCustomOrder(orderID: String): Response {
         val order = orderRepository.findBy_idAndDeletedFalse(orderID)
-                ?: return ResponseCode.NO_SUCH_ORDER.withoutPayload()
+            ?: return ResponseCode.NO_SUCH_ORDER.withoutPayload()
         return ResponseCode.SUCCESS.withPayload(order)
     }
 
@@ -176,7 +191,7 @@ class OrderService {
      * */
     fun cancelOrder(orderID: String): Response {
         val order = orderRepository.findBy_idAndDeletedFalse(orderID)
-                ?: return ResponseCode.NO_SUCH_ORDER.withoutPayload()
+            ?: return ResponseCode.NO_SUCH_ORDER.withoutPayload()
         if (order.status == OrderStatusEnum.PENDING) {
             order.status = OrderStatusEnum.CANCELED
             orderRepository.save(order)
@@ -191,7 +206,7 @@ class OrderService {
      * */
     fun dealWithOrder(oid: String, action: OrderActionEnum, itxiaMember: ItxiaMember): Response {
         val order = orderRepository.findBy_idAndDeletedFalse(oid)
-                ?: return ResponseCode.NO_SUCH_ORDER.withPayload("请确认预约单是否存在")
+            ?: return ResponseCode.NO_SUCH_ORDER.withPayload("请确认预约单是否存在")
 
         //是否是自己的单子
         val isMyOrder = order.handler?._id == itxiaMember._id
@@ -262,10 +277,10 @@ class OrderService {
             //发送邮件提醒预约人，有新回复
             handler.email?.let {
                 emailService.noticeItxiaMemberThatOrderHasNewReply(
-                        address = it,
-                        order = order,
-                        reply = reply,
-                        itxiaMember = handler
+                    address = it,
+                    order = order,
+                    reply = reply,
+                    itxiaMember = handler
                 )
             }
         }
@@ -287,15 +302,15 @@ class OrderService {
      * */
     fun retrieveOrder(dto: RetrieveOrderDto): String? {
         val order = mongoTemplate.findOne(
-                Query.query(
-                        Criteria.where("name").`is`(dto.name)
-                                .and("phone").`is`(dto.phone)
-                                .and("deleted").ne(true)
-                )
-                        .with(
-                                Sort.by("createTime").descending()
-                        ),
-                Order::class.java
+            Query.query(
+                Criteria.where("name").`is`(dto.name)
+                    .and("phone").`is`(dto.phone)
+                    .and("deleted").ne(true)
+            )
+                .with(
+                    Sort.by("createTime").descending()
+                ),
+            Order::class.java
         )
         return order?._id
     }
@@ -312,11 +327,11 @@ class OrderService {
      * */
     fun getMyDoneOrdersWhichRequireRecord(requester: ItxiaMember): List<Order> {
         return mongoTemplate.find(
-                Query.query(
-                        Criteria.where("requireRecord").`is`(true)
-                                .and("handler").`is`(requester._id)
-                ),
-                Order::class.java
+            Query.query(
+                Criteria.where("requireRecord").`is`(true)
+                    .and("handler").`is`(requester._id)
+            ),
+            Order::class.java
         )
     }
 
@@ -325,11 +340,11 @@ class OrderService {
      * */
     fun setOrderAsRecorded(orderID: String, recordID: String) {
         mongoTemplate.updateFirst(
-                Query.query(
-                        Criteria.where("_id").`is`(orderID)
-                ),
-                Update.update("recordID", recordID).set("requireRecord", false),
-                Order::class.java
+            Query.query(
+                Criteria.where("_id").`is`(orderID)
+            ),
+            Update.update("recordID", recordID).set("requireRecord", false),
+            Order::class.java
         )
     }
 }

@@ -13,9 +13,12 @@ import javax.servlet.http.HttpServletResponse
 class FileSizeLimitExceededExceptionHandler {
 
     @ExceptionHandler(FileSizeLimitExceededException::class)
-    fun fileSizeLimitExceededExceptionHandler(exception: FileSizeLimitExceededException, response: HttpServletResponse) {
+    fun fileSizeLimitExceededExceptionHandler(
+        exception: FileSizeLimitExceededException,
+        response: HttpServletResponse
+    ) {
         ResponseUtil.writeToResponse(
-                response, ResponseCode.REQUEST_SIZE_EXCEEDED.withPayload("附件过大.")
+            response, ResponseCode.REQUEST_SIZE_EXCEEDED.withPayload("附件过大.")
         )
     }
 

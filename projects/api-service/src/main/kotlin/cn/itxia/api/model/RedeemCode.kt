@@ -9,23 +9,23 @@ import java.util.*
 @Document("redeem_code")
 data class RedeemCode(
 
-        @Id
-        val _id: String,
+    @Id
+    val _id: String,
 
-        val type: RedeemCodeTypeEnum,
+    val type: RedeemCodeTypeEnum,
 
-        @DBRef
-        val provider: ItxiaMember,
+    @DBRef
+    val provider: ItxiaMember,
 
-        val redeemCode: String,
+    val redeemCode: String,
 
-        /**
-         * 是否已经用过
-         * */
-        val hasRedeemed: Boolean,
+    /**
+     * 是否已经用过
+     * */
+    val hasRedeemed: Boolean,
 
-        @DBRef
-        var receiver: ItxiaMember? = null,
+    @DBRef
+    var receiver: ItxiaMember? = null,
 
-        val createTime: Date = Date()
+    val createTime: Date = Date()
 )

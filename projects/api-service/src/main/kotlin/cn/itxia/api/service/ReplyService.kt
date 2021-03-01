@@ -19,8 +19,9 @@ class ReplyService {
 
     fun saveReply(replyDto: ReplyDto, itxiaMember: ItxiaMember? = null): Reply {
         val attachmentList = attachmentService.getAttachmentListByIDList(replyDto.attachments)
-        val reply = Reply(_id = ObjectId.get().toHexString(), content = replyDto.content, attachments = attachmentList,
-                postBy = itxiaMember?.toBaseInfoOnly()
+        val reply = Reply(
+            _id = ObjectId.get().toHexString(), content = replyDto.content, attachments = attachmentList,
+            postBy = itxiaMember?.toBaseInfoOnly()
         )
         return replyRepository.save(reply)
     }

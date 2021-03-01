@@ -24,8 +24,9 @@ class OrderRecordController {
      * */
     @PostMapping("/orderRecordTag")
     @RequireItxiaMember
-    fun createTag(@RequestBody dto: OrderRecordTagCreateDto,
-                  @CurrentItxiaMember requester: ItxiaMember
+    fun createTag(
+        @RequestBody dto: OrderRecordTagCreateDto,
+        @CurrentItxiaMember requester: ItxiaMember
     ): Response {
         return orderRecordService.createTag(dto, requester)
     }
@@ -56,8 +57,9 @@ class OrderRecordController {
      * */
     @PostMapping("/orderRecord")
     @RequireItxiaMember
-    fun postOrderRecord(@RequestBody dto: OrderRecordCreateDto,
-                        @CurrentItxiaMember requester: ItxiaMember
+    fun postOrderRecord(
+        @RequestBody dto: OrderRecordCreateDto,
+        @CurrentItxiaMember requester: ItxiaMember
     ): Response {
         return orderRecordService.postOrderRecord(dto, requester)
     }
@@ -68,20 +70,21 @@ class OrderRecordController {
      * */
     @GetMapping("/orderRecord")
     @RequireItxiaMember
-    fun getOrderRecords(@RequestParam(required = false) page: Int?,
-                        @RequestParam(required = false) size: Int?,
-                        @RequestParam(required = false) onlyStar: String?,
-                        @RequestParam(required = false) tags: String?,
-                        @RequestParam(required = false) text: String?,
-                        @CurrentItxiaMember requester: ItxiaMember
+    fun getOrderRecords(
+        @RequestParam(required = false) page: Int?,
+        @RequestParam(required = false) size: Int?,
+        @RequestParam(required = false) onlyStar: String?,
+        @RequestParam(required = false) tags: String?,
+        @RequestParam(required = false) text: String?,
+        @CurrentItxiaMember requester: ItxiaMember
     ): Response {
         return orderRecordService.getOrderRecords(
-                page = page,
-                size = size,
-                onlyStar = onlyStar,
-                tags = tags,
-                text = text,
-                requester = requester
+            page = page,
+            size = size,
+            onlyStar = onlyStar,
+            tags = tags,
+            text = text,
+            requester = requester
         )
     }
 
@@ -90,9 +93,10 @@ class OrderRecordController {
      * */
     @PutMapping("/orderRecord/{recordID}")
     @RequireItxiaMember
-    fun modifyOrderRecord(@RequestBody dto: OrderRecordModifyDto,
-                          @PathVariable recordID: String,
-                          @CurrentItxiaMember requester: ItxiaMember
+    fun modifyOrderRecord(
+        @RequestBody dto: OrderRecordModifyDto,
+        @PathVariable recordID: String,
+        @CurrentItxiaMember requester: ItxiaMember
     ): Response {
         return orderRecordService.modifyOrderRecord(dto, recordID, requester)
     }
@@ -102,9 +106,10 @@ class OrderRecordController {
      * */
     @PostMapping("/orderRecord/{recordID}/comments")
     @RequireItxiaMember
-    fun postReply(@PathVariable recordID: String,
-                  @RequestBody replyDto: ReplyDto,
-                  @CurrentItxiaMember requester: ItxiaMember
+    fun postReply(
+        @PathVariable recordID: String,
+        @RequestBody replyDto: ReplyDto,
+        @CurrentItxiaMember requester: ItxiaMember
     ): Response {
         orderRecordService.postReplyToOrderRecord(recordID, replyDto, requester)
         return ResponseCode.SUCCESS.withoutPayload()
@@ -115,8 +120,9 @@ class OrderRecordController {
      * */
     @PutMapping("/orderRecord/{recordID}/star")
     @RequireItxiaMember
-    fun starOrderRecord(@PathVariable recordID: String,
-                        @CurrentItxiaMember requester: ItxiaMember
+    fun starOrderRecord(
+        @PathVariable recordID: String,
+        @CurrentItxiaMember requester: ItxiaMember
     ): Response {
         orderRecordService.starOrUnstarOrderRecord(recordID, requester, false)
         return ResponseCode.SUCCESS.withoutPayload()
@@ -127,8 +133,9 @@ class OrderRecordController {
      * */
     @PutMapping("/orderRecord/{recordID}/unstar")
     @RequireItxiaMember
-    fun unstarOrderRecord(@PathVariable recordID: String,
-                          @CurrentItxiaMember requester: ItxiaMember
+    fun unstarOrderRecord(
+        @PathVariable recordID: String,
+        @CurrentItxiaMember requester: ItxiaMember
     ): Response {
         orderRecordService.starOrUnstarOrderRecord(recordID, requester, true)
         return ResponseCode.SUCCESS.withoutPayload()
@@ -139,8 +146,9 @@ class OrderRecordController {
      * */
     @PutMapping("/orderRecord/{recordID}/like")
     @RequireItxiaMember
-    fun likeOrderRecord(@PathVariable recordID: String,
-                        @CurrentItxiaMember requester: ItxiaMember
+    fun likeOrderRecord(
+        @PathVariable recordID: String,
+        @CurrentItxiaMember requester: ItxiaMember
     ): Response {
         orderRecordService.likeOrUnlikeOrderRecord(recordID, requester, false)
         return ResponseCode.SUCCESS.withoutPayload()
@@ -151,8 +159,9 @@ class OrderRecordController {
      * */
     @PutMapping("/orderRecord/{recordID}/unlike")
     @RequireItxiaMember
-    fun unlikeOrderRecord(@PathVariable recordID: String,
-                          @CurrentItxiaMember requester: ItxiaMember
+    fun unlikeOrderRecord(
+        @PathVariable recordID: String,
+        @CurrentItxiaMember requester: ItxiaMember
     ): Response {
         orderRecordService.likeOrUnlikeOrderRecord(recordID, requester, true)
         return ResponseCode.SUCCESS.withoutPayload()

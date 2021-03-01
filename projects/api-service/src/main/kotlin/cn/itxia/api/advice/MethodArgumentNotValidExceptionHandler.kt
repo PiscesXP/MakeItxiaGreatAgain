@@ -13,10 +13,13 @@ import javax.servlet.http.HttpServletResponse
 class MethodArgumentNotValidExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun methodArgumentNotValidExceptionHandler(exception: MethodArgumentNotValidException, response: HttpServletResponse) {
+    fun methodArgumentNotValidExceptionHandler(
+        exception: MethodArgumentNotValidException,
+        response: HttpServletResponse
+    ) {
         val message = exception.bindingResult.fieldError?.defaultMessage ?: "参数校验失败"
         ResponseUtil.writeToResponse(
-                response, ResponseCode.INCORRECT_PARAM_FORMAT.withPayload(message)
+            response, ResponseCode.INCORRECT_PARAM_FORMAT.withPayload(message)
         )
     }
 

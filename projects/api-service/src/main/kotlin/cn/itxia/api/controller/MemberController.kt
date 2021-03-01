@@ -7,6 +7,7 @@ import cn.itxia.api.enum.MemberRoleEnum
 import cn.itxia.api.model.ItxiaMember
 import cn.itxia.api.response.Response
 import cn.itxia.api.response.ResponseCode
+import cn.itxia.api.service.ChatBotLinkService
 import cn.itxia.api.service.MemberService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
@@ -19,15 +20,18 @@ class MemberController {
     @Autowired
     private lateinit var memberService: MemberService
 
+    @Autowired
+    private lateinit var chatBotLinkService: ChatBotLinkService
+
     /**
      * 修改密码.
      * */
     @PutMapping("/member/me/password")
     @RequireItxiaMember
     fun modifyPassword(
-            @RequestBody @Validated dto: PasswordModifyDto,
-            @CurrentItxiaMember requester: ItxiaMember,
-            request: HttpServletRequest
+        @RequestBody @Validated dto: PasswordModifyDto,
+        @CurrentItxiaMember requester: ItxiaMember,
+        request: HttpServletRequest
     ): Response {
         if (dto.password != dto.confirmPassword) {
             return ResponseCode.INVALID_PARAM.withPayload("两次输入的密码不一致.")
@@ -45,8 +49,9 @@ class MemberController {
     @PutMapping("/member/me/profile")
     @RequireItxiaMember
     fun modifyProfile(
-            @RequestBody @Validated memberProfileModifyDto: MemberProfileModifyDto,
-            @CurrentItxiaMember itxiaMember: ItxiaMember): Response {
+        @RequestBody @Validated memberProfileModifyDto: MemberProfileModifyDto,
+        @CurrentItxiaMember itxiaMember: ItxiaMember
+    ): Response {
         memberService.modifyProfile(memberProfileModifyDto, itxiaMember)
         return ResponseCode.SUCCESS.withoutPayload()
     }
@@ -59,9 +64,11 @@ class MemberController {
 
     @PutMapping("/member/{memberID}/role")
     @RequireItxiaMember(MemberRoleEnum.ADMIN)
-    fun changeMemberRole(@PathVariable memberID: String,
-                         @RequestBody dto: MemberRoleChangeDto,
-                         @CurrentItxiaMember itxiaMember: ItxiaMember): Response {
+    fun changeMemberRole(
+        @PathVariable memberID: String,
+        @RequestBody dto: MemberRoleChangeDto,
+        @CurrentItxiaMember itxiaMember: ItxiaMember
+    ): Response {
         if (memberService.changeMemberRole(memberID, dto, itxiaMember)) {
             return ResponseCode.SUCCESS.withoutPayload()
         }
@@ -70,9 +77,11 @@ class MemberController {
 
     @PutMapping("/member/{memberID}/disabled")
     @RequireItxiaMember(MemberRoleEnum.ADMIN)
-    fun changeMemberDisabledStatus(@PathVariable memberID: String,
-                                   @RequestBody dto: MemberDisabledStatusChangeDto,
-                                   @CurrentItxiaMember itxiaMember: ItxiaMember): Response {
+    fun changeMemberDisabledStatus(
+        @PathVariable memberID: String,
+        @RequestBody dto: MemberDisabledStatusChangeDto,
+        @CurrentItxiaMember itxiaMember: ItxiaMember
+    ): Response {
         if (memberService.changeMemberDisabledStatus(memberID, dto, itxiaMember)) {
             return ResponseCode.SUCCESS.withoutPayload()
         }
@@ -85,8 +94,10 @@ class MemberController {
      * */
     @PostMapping("/member/{memberID}/password")
     @RequireItxiaMember(MemberRoleEnum.ADMIN)
-    fun resetMemberPassword(@PathVariable memberID: String,
-                            @CurrentItxiaMember requester: ItxiaMember): Response {
+    fun resetMemberPassword(
+        @PathVariable memberID: String,
+        @CurrentItxiaMember requester: ItxiaMember
+    ): Response {
         return memberService.resetMemberPassword(memberID, requester)
     }
 
@@ -145,6 +156,14 @@ class MemberController {
     @PostMapping("/member/recruit/register")
     fun registerNewMemberByRedeemCode(@RequestBody memberRecruitDto: MemberRecruitDto): Response {
         return memberService.registerNewMemberByRedeemCode(memberRecruitDto)
+    }
+
+    /**
+     * 用于给bot验证QQ账号.
+     * */
+    @PostMapping("/member/validate/qq")
+    fun validateMemberQQID(request: HttpServletRequest, @RequestBody dto: ValidateMemberQQDto): Boolean {
+        return chatBotLinkService.validateMemberQQID(request, dto)
     }
 
 }

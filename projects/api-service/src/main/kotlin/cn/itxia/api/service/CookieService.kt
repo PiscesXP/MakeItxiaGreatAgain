@@ -31,7 +31,12 @@ class CookieService {
         return cookieMaxAge
     }
 
-    private fun setCookie(cookieValue: String, maxAge: Int, request: HttpServletRequest, response: HttpServletResponse) {
+    private fun setCookie(
+        cookieValue: String,
+        maxAge: Int,
+        request: HttpServletRequest,
+        response: HttpServletResponse
+    ) {
         var value = """
             |${cookieName}=${cookieValue};
             |Max-Age=${maxAge};
