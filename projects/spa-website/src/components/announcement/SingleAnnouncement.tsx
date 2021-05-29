@@ -85,7 +85,7 @@ export const SingleAnnouncement: React.FC<SingleAnnouncementProps> = (
           createTime
         )}`}
       />
-      <ReactMarkdown source={content} />
+      <ReactMarkdown>{content}</ReactMarkdown>
       <AttachmentList data={attachments} />
       <ReplyList
         visible={showReply}

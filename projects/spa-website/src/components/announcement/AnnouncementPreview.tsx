@@ -15,7 +15,7 @@ export const AnnouncementPreview: React.FC<{
     <List.Item>
       <List.Item.Meta title={title} description={description} />
       <br />
-      <ReactMarkdown source={content} />
+      <ReactMarkdown>{content}</ReactMarkdown>
     </List.Item>
   );
 };
