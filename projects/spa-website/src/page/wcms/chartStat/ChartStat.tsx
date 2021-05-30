@@ -1,10 +1,12 @@
 import React from "react";
-import { useApiRequest } from "@/hook";
+import { useApiRequest, useTitleWCMS } from "@/hook";
 import { Loading } from "@/components/loading";
 import "./chartStat.css";
 import { EChartComponent } from "./EChartComponent";
 
 export const ChartStat = () => {
+  useTitleWCMS("统计信息");
+
   const { loading, payload } = useApiRequest({
     path: "/stats/charts",
   });
