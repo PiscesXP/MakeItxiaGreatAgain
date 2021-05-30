@@ -103,7 +103,8 @@ class StatService {
     fun getOrderCountsByDates(): Pair<ChartsStatVo.OrderCountsByDate, ChartsStatVo.OrderCountsByDate> {
         val startTime = System.currentTimeMillis()
 
-        val orderList = orderRepository.findAllByDeletedFalse().sortedBy { it.createTime.time }
+        val orderList = orderRepository.findAllByDeletedFalseAndStatusIsNot(OrderStatusEnum.CANCELED)
+            .sortedBy { it.createTime.time }
         val startDate = orderList[0].createTime
         val endDate = orderList[orderList.size - 1].createTime
 
