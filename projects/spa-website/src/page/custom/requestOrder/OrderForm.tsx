@@ -109,13 +109,13 @@ export const OrderForm: React.FC = () => {
       title={
         <span>
           你好,请提交你的维修预约 （已有预约?
-          <Button
-            type="link"
-            style={{ padding: "0 0 0 0.5em " }}
+          <button
+            className="link-like-button"
+            type="button"
             onClick={handleRetrieveOrder}
           >
             找回预约单
-          </Button>
+          </button>
           ）
         </span>
       }

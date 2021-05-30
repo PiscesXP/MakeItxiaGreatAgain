@@ -32,13 +32,13 @@ export const CustomHomePage: React.FC = () => {
       {!customContext.hasOrder() && (
         <li>
           已有预约？
-          <Button
-            type="link"
-            style={{ height: 0, padding: 0 }}
+          <button
+            className="link-like-button"
+            type="button"
             onClick={handleRetrieveOrder}
           >
             找回预约单
-          </Button>
+          </button>
         </li>
       )}
       <li>
