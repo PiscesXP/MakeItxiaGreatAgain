@@ -1,4 +1,4 @@
-import { Divider } from "antd";
+import { Card, Divider } from "antd";
 import React from "react";
 import { AnnouncementList } from "@/components/announcement";
 import { OrderStat } from "./OrderStat";
@@ -18,7 +18,9 @@ export const DashBoardPage = () => {
       </div>
       <div id="dash-space" />
       <div id="dash-anno">
-        <AnnouncementList type={AnnouncementType.INTERNAL} />
+        <Card title="公告栏">
+          <AnnouncementList type={AnnouncementType.INTERNAL} />
+        </Card>
         <Divider />
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, List, Spin } from "antd";
+import { List, Spin } from "antd";
 import { SingleAnnouncement } from "./SingleAnnouncement";
 import { AnnouncementType } from "@/util/enum";
 import { useApiRequest } from "@/hook/useApiRequest";
@@ -24,7 +24,7 @@ export const AnnouncementList: React.FC<{
     path = `/custom/announcement`;
   }
 
-  const { code, payload, sendRequest } = useApiRequest({
+  const { loading, payload, sendRequest } = useApiRequest({
     path,
     formatResult: (data) => {
       //最近的公告排在前面
@@ -45,26 +45,24 @@ export const AnnouncementList: React.FC<{
     sendRequest();
   }
 
+  if (loading) {
+    return <Spin />;
+  }
+
   return (
-    <Card title="公告栏">
-      {code !== 0 ? (
-        <Spin />
-      ) : (
-        <List
-          itemLayout="vertical"
-          size="default"
-          split
-          dataSource={payload}
-          renderItem={(announceData) => (
-            <SingleAnnouncement
-              // id={announceData._id}
-              data={announceData}
-              refresh={handleUpdate}
-              showActions={showActions}
-            />
-          )}
+    <List
+      itemLayout="vertical"
+      size="default"
+      split
+      dataSource={payload}
+      renderItem={(announceData) => (
+        <SingleAnnouncement
+          // id={announceData._id}
+          data={announceData}
+          refresh={handleUpdate}
+          showActions={showActions}
         />
       )}
-    </Card>
+    />
   );
 };

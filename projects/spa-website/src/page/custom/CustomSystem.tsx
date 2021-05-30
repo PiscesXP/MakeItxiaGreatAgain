@@ -7,7 +7,7 @@ import {
   HomeOutlined,
   SolutionOutlined,
 } from "@ant-design/icons";
-import { Divider, Layout, Menu } from "antd";
+import { Card, Divider, Layout, Menu } from "antd";
 import { Footer as MyFooter } from "@/components/footer";
 import { CustomHomePage } from "./home";
 import { RequestOrderPage } from "./requestOrder";
@@ -58,7 +58,9 @@ function CustomSystem() {
           <CenterMeResponsive small>
             <CustomRouter />
             <Divider dashed />
-            <AnnouncementList type={AnnouncementType.EXTERNAL} />
+            <Card title="公告栏">
+              <AnnouncementList type={AnnouncementType.EXTERNAL} />
+            </Card>
           </CenterMeResponsive>
         </Content>
         <Footer>
