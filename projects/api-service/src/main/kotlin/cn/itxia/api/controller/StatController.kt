@@ -2,6 +2,7 @@ package cn.itxia.api.controller
 
 import cn.itxia.api.annotation.CurrentItxiaMember
 import cn.itxia.api.annotation.RequireItxiaMember
+import cn.itxia.api.enum.MemberRoleEnum
 import cn.itxia.api.model.ItxiaMember
 import cn.itxia.api.response.Response
 import cn.itxia.api.response.ResponseCode
@@ -21,13 +22,21 @@ class StatController {
     @RequireItxiaMember
     fun getStatData(
         @RequestParam(required = false) mine: String?,
-        @CurrentItxiaMember itxiaMember: ItxiaMember
+        @CurrentItxiaMember itxiaMember: ItxiaMember,
     ): Response {
         return if (mine != null) {
             ResponseCode.SUCCESS.withPayload(statService.getStatByMember(itxiaMember))
         } else {
             ResponseCode.SUCCESS.withPayload(statService.getAllStat())
         }
+    }
+
+    @GetMapping("/stats/charts")
+    @RequireItxiaMember(MemberRoleEnum.ADMIN)
+    fun getOrderCountsByDay(): Response {
+        return ResponseCode.SUCCESS.withPayload(
+            statService.getChartsStat()
+        )
     }
 
 }
