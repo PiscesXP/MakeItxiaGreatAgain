@@ -1,5 +1,5 @@
 import { Alert, Button, Card, Checkbox, Form, Input, Modal } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AttachmentUpload } from "@/components/attachment";
 import { CenterMeFlex } from "@/components/layout";
 import { useHistory } from "react-router-dom";
@@ -9,6 +9,8 @@ import { useLocalStorageState } from "@/hook/useLocalStorageState";
 import { useThrottle } from "@/hook/useThrottle";
 import { CampusFormItem } from "@/components/form/CampusFormItem";
 import { useCustomContext } from "@/page/custom/CustomContext";
+import { AnnouncementList } from "@/components/announcement";
+import { AnnouncementType } from "@/util/enum";
 
 //好傻的变量名...
 const descriptionFieldAlertDescription = (
@@ -100,6 +102,16 @@ export const OrderForm: React.FC = () => {
     history.push(routePath.custom.RETRIEVE);
   }
 
+  const [modalVisible, setModalVisible] = useState(true);
+
+  function handleHideAnnouncement() {
+    setModalVisible(false);
+  }
+
+  function handleBack() {
+    history.goBack();
+  }
+
   const formItemLayout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 14 },
@@ -120,6 +132,19 @@ export const OrderForm: React.FC = () => {
         </span>
       }
     >
+      <Modal
+        title="公告栏"
+        visible={modalVisible}
+        centered={true}
+        okText="我已知晓"
+        cancelText="返回"
+        closable={false}
+        onOk={handleHideAnnouncement}
+        onCancel={handleBack}
+      >
+        <Alert message={"在预约之前，请确认最近的公告信息。"} />
+        <AnnouncementList type={AnnouncementType.EXTERNAL} />
+      </Modal>
       <Form
         {...formItemLayout}
         form={form}
@@ -127,6 +152,33 @@ export const OrderForm: React.FC = () => {
         onFinish={handleSubmit}
         onValuesChange={saveDraft}
       >
+        <Form.Item
+          name="agreement"
+          label="预约须知"
+          valuePropName="checked"
+          initialValue={false}
+          rules={[
+            {
+              validator: async (rule, value) => {
+                if (value !== true) {
+                  return Promise.reject("请先阅读预约须知");
+                }
+              },
+            },
+          ]}
+        >
+          <Checkbox>
+            我已了解并同意
+            <a
+              href="https://itxia.club/service#TOS"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              预约须知和服务条款
+            </a>
+          </Checkbox>
+        </Form.Item>
+
         <Form.Item
           name="name"
           label="姓名"
@@ -245,33 +297,6 @@ export const OrderForm: React.FC = () => {
           name="attachments"
           extra={<Alert type="info" message="单个附件最大10MB." />}
         />
-
-        <Form.Item
-          name="agreement"
-          label="预约须知"
-          valuePropName="checked"
-          initialValue={false}
-          rules={[
-            {
-              validator: async (rule, value) => {
-                if (value !== true) {
-                  return Promise.reject("请先阅读预约须知");
-                }
-              },
-            },
-          ]}
-        >
-          <Checkbox>
-            我已了解并同意
-            <a
-              href="https://itxia.club/service#TOS"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              预约须知和服务条款
-            </a>
-          </Checkbox>
-        </Form.Item>
 
         <Form.Item wrapperCol={{ span: 24, offset: 0 }}>
           <CenterMeFlex>
