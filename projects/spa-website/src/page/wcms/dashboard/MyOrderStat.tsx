@@ -7,7 +7,7 @@ import { useApiRequest } from "@/hook/useApiRequest";
  * 个人预约单数量统计.
  * */
 export const MyOrderStat: React.FC = () => {
-  const { code, payload } = useApiRequest({ path: "/stat?mine" });
+  const { code, payload } = useApiRequest({ path: "/itxiaStat/me" });
   if (code !== 0) {
     return <Loading />;
   }

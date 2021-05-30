@@ -8,7 +8,7 @@ export const ChartStat = () => {
   useTitleWCMS("统计信息");
 
   const { loading, payload } = useApiRequest({
-    path: "/stats/charts",
+    path: "/itxiaStat/charts",
   });
 
   if (loading) {

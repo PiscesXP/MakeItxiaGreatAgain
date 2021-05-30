@@ -5,7 +5,7 @@ import * as timeUtil from "@/util/time";
 import { useApiRequest } from "@/hook/useApiRequest";
 
 export const OrderStat: React.FC = () => {
-  const { code, payload: data } = useApiRequest({ path: "/stat" });
+  const { code, payload: data } = useApiRequest({ path: "/itxiaStat/all" });
   if (code !== 0) {
     return <Loading />;
   }
