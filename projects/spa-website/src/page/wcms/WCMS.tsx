@@ -16,7 +16,9 @@ import { JoinPage } from "@/page/wcms/join";
 import {
   CalendarOutlined,
   DashboardOutlined,
+  ExperimentOutlined,
   FormOutlined,
+  LineChartOutlined,
   MenuOutlined,
   ReadOutlined,
   SmileOutlined,
@@ -25,6 +27,7 @@ import {
 import { LogoutButton } from "@/components/logout";
 import "./index.css";
 import { OrderRecordPage } from "@/page/wcms/orderRecord";
+import { ChartStat } from "@/page/wcms/chartStat";
 
 const { Header, Content, Footer } = Layout;
 
@@ -101,6 +104,9 @@ function WCMSRouter() {
       <Route path={routePath.wcms.MEMBER_MANAGE}>
         <MemberManage />
       </Route>
+      <Route path={routePath.wcms.CHART_STAT}>
+        <ChartStat />
+      </Route>
       <Route>
         <PageNotFound />
       </Route>
@@ -174,15 +180,22 @@ function NavigateBar() {
           <Link to={routePath.wcms.MEMBER_MANAGE} />
         </Menu.Item>
       )}
-      {/*<Menu.SubMenu
+      <Menu.SubMenu
         title={
           <span>
-            <Icon type="experiment" />
+            <ExperimentOutlined />
             实验功能
           </span>
         }
-      ></Menu.SubMenu>*/}
-      <Menu.Item>
+        key={"wtf"}
+      >
+        <Menu.Item key={routePath.wcms.CHART_STAT}>
+          <LineChartOutlined />
+          图表统计
+          <Link to={routePath.wcms.CHART_STAT} />
+        </Menu.Item>
+      </Menu.SubMenu>
+      <Menu.Item key={"logout"}>
         <LogoutButton />
       </Menu.Item>
     </Menu>

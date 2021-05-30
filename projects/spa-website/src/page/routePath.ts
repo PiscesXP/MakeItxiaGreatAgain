@@ -18,6 +18,7 @@ const routePath = {
     SELF_PROFILE: "/wcms/profile",
     MEMBER_MANAGE: "/wcms/member-manage",
     EXP: "/wcms/exp",
+    CHART_STAT: "/wcms/stat",
   },
   OAUTH: "/oauth",
 };
