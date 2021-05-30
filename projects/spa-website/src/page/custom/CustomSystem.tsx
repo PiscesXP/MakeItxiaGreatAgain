@@ -82,6 +82,7 @@ function CustomNavigate() {
             预约系统
           </span>
         }
+        key="wtf"
       >
         <Menu.Item key={routePath.custom.HOME}>
           <HomeOutlined />
