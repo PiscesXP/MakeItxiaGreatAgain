@@ -23,3 +23,7 @@
 .ant-descriptions-item-label {
   white-space: nowrap;
 }
+
+.ant-menu .anticon svg {
+  margin-right: 4px;
+}
