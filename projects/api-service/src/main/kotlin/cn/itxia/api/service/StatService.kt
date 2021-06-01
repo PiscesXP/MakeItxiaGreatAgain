@@ -106,7 +106,6 @@ class StatService {
         val orderList = orderRepository.findAllByDeletedFalseAndStatusIsNot(OrderStatusEnum.CANCELED)
             .sortedBy { it.createTime.time }
         val startDate = orderList[0].createTime
-        val endDate = orderList[orderList.size - 1].createTime
 
         var index = 0
 
@@ -117,9 +116,9 @@ class StatService {
         currentCalendar.set(Calendar.SECOND, 0)
         currentCalendar.set(Calendar.MILLISECOND, 0)
 
-        val endCalendar = Calendar.getInstance()
-        endCalendar.time = endDate
-        endCalendar.add(Calendar.DAY_OF_MONTH, 1)
+        //以明天为界限，一直统计到今天为止
+        val tomorrow = Calendar.getInstance()
+        tomorrow.add(Calendar.DAY_OF_MONTH, 1)
 
         val byDay = ChartsStatVo.OrderCountsByDate()
         val byMonth = ChartsStatVo.OrderCountsByDate()
@@ -132,7 +131,7 @@ class StatService {
         var byMonthCountOfGuLou = 0
         var byMonthCountOfXianLin = 0
 
-        while (currentCalendar.before(endCalendar)) {
+        while (currentCalendar.before(tomorrow)) {
             var countOfGuLou = 0
             var countOfXianLin = 0
 
