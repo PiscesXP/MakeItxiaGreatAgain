@@ -3,6 +3,9 @@ import { useApiRequest, useTitleWCMS } from "@/hook";
 import { Loading } from "@/components/loading";
 import "./chartStat.css";
 import { EChartComponent } from "./EChartComponent";
+import { Alert, Card } from "antd";
+import { CenterMeFlex } from "@/components/layout";
+import { utcDateToText } from "@/util/time";
 
 function sumArray(...arrays: [number][]) {
   const size = arrays[0].length;
@@ -268,9 +271,20 @@ export const ChartStat = () => {
 
   return (
     <div className="charts-container">
+      <Card>
+        <Alert type="info" message="图表功能测试中，欢迎提出修改意见😊。" />
+        <br />
+        <Alert
+          type="warning"
+          message="预约单数据仍存在一些重复(统计出来可能有200-300单😳)，因此数据和实际值会有一些偏差。后续将会把这些重复单子删除，部分同学的预约单统计数据将会减少。"
+        />
+      </Card>
       <EChartComponent options={orderCountsByDayOptions} />
       <EChartComponent options={orderCountsByMonthOptions} />
       <EChartComponent options={tagStatOptions} />
+      <CenterMeFlex>
+        <span>统计更新时间：{utcDateToText(payload["updateTime"])}</span>
+      </CenterMeFlex>
     </div>
   );
 };
