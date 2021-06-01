@@ -109,12 +109,12 @@ class StatService {
 
         var index = 0
 
-        val currentCalendar = Calendar.getInstance()
-        currentCalendar.time = startDate
-        currentCalendar.set(Calendar.HOUR_OF_DAY, 0)
-        currentCalendar.set(Calendar.MINUTE, 0)
-        currentCalendar.set(Calendar.SECOND, 0)
-        currentCalendar.set(Calendar.MILLISECOND, 0)
+        val currentDay = Calendar.getInstance()
+        currentDay.time = startDate
+        currentDay.set(Calendar.HOUR_OF_DAY, 0)
+        currentDay.set(Calendar.MINUTE, 0)
+        currentDay.set(Calendar.SECOND, 0)
+        currentDay.set(Calendar.MILLISECOND, 0)
 
         //以明天为界限，一直统计到今天为止
         val tomorrow = Calendar.getInstance()
@@ -131,15 +131,15 @@ class StatService {
         var byMonthCountOfGuLou = 0
         var byMonthCountOfXianLin = 0
 
-        while (currentCalendar.before(tomorrow)) {
+        while (currentDay.before(tomorrow)) {
             var countOfGuLou = 0
             var countOfXianLin = 0
 
-            val dayOfMonth = currentCalendar.get(Calendar.DAY_OF_MONTH)
-            currentCalendar.add(Calendar.DAY_OF_MONTH, 1)
-            val nextDayOfMonth = currentCalendar.get(Calendar.DAY_OF_MONTH)
+            val monthOfCurrentDay = currentDay.get(Calendar.DAY_OF_MONTH)
+            currentDay.add(Calendar.DAY_OF_MONTH, 1)
+            val monthOfNextDay = currentDay.get(Calendar.DAY_OF_MONTH)
 
-            while (index < orderList.size && orderList[index].createTime.before(currentCalendar.time)) {
+            while (index < orderList.size && orderList[index].createTime.before(currentDay.time)) {
                 if (orderList[index].campus == CampusEnum.GULOU) {
                     ++countOfGuLou
                 } else {
@@ -149,7 +149,7 @@ class StatService {
             }
 
             byDay.append(
-                byDayFormatter.format(currentCalendar.time),
+                byDayFormatter.format(currentDay.time),
                 guLouCount = countOfGuLou,
                 xianLinCount = countOfXianLin
             )
@@ -157,10 +157,10 @@ class StatService {
             byMonthCountOfGuLou += countOfGuLou
             byMonthCountOfXianLin += countOfXianLin
 
-            if (nextDayOfMonth < dayOfMonth) {
+            if (monthOfNextDay < monthOfCurrentDay) {
                 //今天是当月最后一天，记录下当月数据
                 byMonth.append(
-                    byMonthFormatter.format(currentCalendar.time),
+                    byMonthFormatter.format(currentDay.time),
                     guLouCount = byMonthCountOfGuLou,
                     xianLinCount = byMonthCountOfXianLin
                 )
@@ -170,7 +170,7 @@ class StatService {
         }
         //现在这个月的数据
         byMonth.append(
-            byMonthFormatter.format(currentCalendar.time),
+            byMonthFormatter.format(currentDay.time),
             guLouCount = byMonthCountOfGuLou,
             xianLinCount = byMonthCountOfXianLin
         )
