@@ -135,13 +135,10 @@ class StatService {
             var countOfGuLou = 0
             var countOfXianLin = 0
 
-            val monthOfCurrentDay = currentDay.get(Calendar.DAY_OF_MONTH)
 
             val nextDay = Calendar.getInstance()
             nextDay.time = currentDay.time
             nextDay.add(Calendar.DAY_OF_MONTH, 1)
-
-            val monthOfNextDay = currentDay.get(Calendar.DAY_OF_MONTH)
 
             while (index < orderList.size && orderList[index].createTime.before(nextDay.time)) {
                 if (orderList[index].campus == CampusEnum.GULOU) {
@@ -161,7 +158,7 @@ class StatService {
             byMonthCountOfGuLou += countOfGuLou
             byMonthCountOfXianLin += countOfXianLin
 
-            if (monthOfNextDay < monthOfCurrentDay) {
+            if (nextDay.get(Calendar.DAY_OF_MONTH) < currentDay.get(Calendar.DAY_OF_MONTH)) {
                 //今天是当月最后一天，记录下当月数据
                 byMonth.append(
                     byMonthFormatter.format(currentDay.time),
@@ -174,12 +171,15 @@ class StatService {
 
             currentDay.add(Calendar.DAY_OF_MONTH, 1)
         }
-        //现在这个月的数据
-        byMonth.append(
-            byMonthFormatter.format(currentDay.time),
-            guLouCount = byMonthCountOfGuLou,
-            xianLinCount = byMonthCountOfXianLin
-        )
+        
+        if (currentDay.get(Calendar.DAY_OF_MONTH) != 1) {
+            //现在这个月的数据
+            byMonth.append(
+                byMonthFormatter.format(currentDay.time),
+                guLouCount = byMonthCountOfGuLou,
+                xianLinCount = byMonthCountOfXianLin
+            )
+        }
 
         val endTime = System.currentTimeMillis()
         logger.info("Time spent ${endTime - startTime}ms.")
