@@ -136,10 +136,14 @@ class StatService {
             var countOfXianLin = 0
 
             val monthOfCurrentDay = currentDay.get(Calendar.DAY_OF_MONTH)
-            currentDay.add(Calendar.DAY_OF_MONTH, 1)
+
+            val nextDay = Calendar.getInstance()
+            nextDay.time = currentDay.time
+            nextDay.add(Calendar.DAY_OF_MONTH, 1)
+
             val monthOfNextDay = currentDay.get(Calendar.DAY_OF_MONTH)
 
-            while (index < orderList.size && orderList[index].createTime.before(currentDay.time)) {
+            while (index < orderList.size && orderList[index].createTime.before(nextDay.time)) {
                 if (orderList[index].campus == CampusEnum.GULOU) {
                     ++countOfGuLou
                 } else {
@@ -167,6 +171,8 @@ class StatService {
                 byMonthCountOfGuLou = 0
                 byMonthCountOfXianLin = 0
             }
+
+            currentDay.add(Calendar.DAY_OF_MONTH, 1)
         }
         //现在这个月的数据
         byMonth.append(
