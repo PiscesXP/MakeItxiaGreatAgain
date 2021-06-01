@@ -116,7 +116,10 @@ class StatService {
 
         //以明天为界限，一直统计到今天为止
         val tomorrow = Calendar.getInstance()
-        tomorrow.time = currentDay.time
+        tomorrow.set(Calendar.HOUR_OF_DAY, 0)
+        tomorrow.set(Calendar.MINUTE, 0)
+        tomorrow.set(Calendar.SECOND, 0)
+        tomorrow.set(Calendar.MILLISECOND, 0)
         tomorrow.add(Calendar.DAY_OF_MONTH, 1)
 
         val byDay = ChartsStatVo.OrderCountsByDate()
