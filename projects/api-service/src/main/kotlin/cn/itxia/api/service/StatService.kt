@@ -107,8 +107,6 @@ class StatService {
             .sortedBy { it.createTime.time }
         val startDate = orderList[0].createTime
 
-        var index = 0
-
         val currentDay = Calendar.getInstance()
         currentDay.time = startDate
         currentDay.set(Calendar.HOUR_OF_DAY, 0)
@@ -118,6 +116,7 @@ class StatService {
 
         //以明天为界限，一直统计到今天为止
         val tomorrow = Calendar.getInstance()
+        tomorrow.time = currentDay.time
         tomorrow.add(Calendar.DAY_OF_MONTH, 1)
 
         val byDay = ChartsStatVo.OrderCountsByDate()
@@ -131,22 +130,22 @@ class StatService {
         var byMonthCountOfGuLou = 0
         var byMonthCountOfXianLin = 0
 
+        var orderListIndex = 0
         while (currentDay.before(tomorrow)) {
             var countOfGuLou = 0
             var countOfXianLin = 0
-
 
             val nextDay = Calendar.getInstance()
             nextDay.time = currentDay.time
             nextDay.add(Calendar.DAY_OF_MONTH, 1)
 
-            while (index < orderList.size && orderList[index].createTime.before(nextDay.time)) {
-                if (orderList[index].campus == CampusEnum.GULOU) {
+            while (orderListIndex < orderList.size && orderList[orderListIndex].createTime.before(nextDay.time)) {
+                if (orderList[orderListIndex].campus == CampusEnum.GULOU) {
                     ++countOfGuLou
                 } else {
                     ++countOfXianLin
                 }
-                ++index
+                ++orderListIndex
             }
 
             byDay.append(
@@ -171,7 +170,7 @@ class StatService {
 
             currentDay.add(Calendar.DAY_OF_MONTH, 1)
         }
-        
+
         if (currentDay.get(Calendar.DAY_OF_MONTH) != 1) {
             //现在这个月的数据
             byMonth.append(
