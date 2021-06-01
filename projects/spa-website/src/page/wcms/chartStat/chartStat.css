@@ -1,0 +1,7 @@
+.echarts-dom {
+  height: 500px;
+  width: 100%;
+}
+.charts-container > * {
+  margin-bottom: 32px;
+}

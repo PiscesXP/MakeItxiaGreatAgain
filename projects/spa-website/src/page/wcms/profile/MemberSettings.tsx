@@ -29,7 +29,7 @@ export const MemberSettings: React.FC = () => {
       }
     }
     return result;
-  }, [context.campus, context.email, context.group, context.emailNotification]);
+  }, [context]);
 
   const { loading, sendRequest } = useApiRequest({
     path: "/member/me/profile",

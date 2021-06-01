@@ -23,3 +23,17 @@
 .ant-descriptions-item-label {
   white-space: nowrap;
 }
+
+.ant-menu .anticon svg {
+  margin-right: 4px;
+}
+
+.link-like-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: inline;
+  margin: 0;
+  padding: 0;
+  color: #1890ff;
+}

@@ -29,6 +29,7 @@ interface OrderRepository : PagingAndSortingRepository<Order, String> {
 
     fun findAllByDeletedFalse(): List<Order>
 
+    fun findAllByDeletedFalseAndStatusIsNot(status: OrderStatusEnum):List<Order>
 
     fun findByCampusInAndStatusInAndDeletedFalse(
         campus: Collection<CampusEnum>,

@@ -12,6 +12,7 @@ function usePersistFn<T extends noop>(fn: T) {
 
   ref.current = fn;
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   return useCallback(((...args) => ref.current(...args)) as T, []);
 }
 
