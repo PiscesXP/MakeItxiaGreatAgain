@@ -114,7 +114,7 @@ HTTP代理服务器，同时具有监控、日志功能。
 
 ## 开发文档
 
-(需要加入内部语雀用户组)
+(需要加入IT侠内部语雀空间的知识库成员用户组，请向Web管理层申请)
 
-请参考[语雀文档](https://www.yuque.com/itxiaadmin/gitbook-lyh50o/vv0z15)。
+请参考[语雀文档](https://itxia.yuque.com/mcbc35/web/vv0z15)。
 
